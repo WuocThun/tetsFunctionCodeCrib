@@ -2,10 +2,21 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PermissionController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::prefix('/admin')->name("admin.")->group(function (){
+    Route::get("/",[AdminController::class, 'index'])->name('index');
+    Route::get("/addRole",[PermissionController::class, 'index'])->name('addRole');
+    Route::post('/permissions/{user}/assign-role', [PermissionController::class, 'assignRole'])->name('assignRole');
+    Route::post('/permissions/{user}/revoke-role', [PermissionController::class, 'revokeRole'])->name('revokeRole');
+
+});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
