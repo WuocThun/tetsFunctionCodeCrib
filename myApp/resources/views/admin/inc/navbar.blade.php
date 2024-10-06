@@ -5,16 +5,24 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-{{--                    <a href="{{ route('admin/index') }}">--}}
+{{--                    <a href="{{ route('/') }}">--}}
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
 {{--                    </a>--}}
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    @role('admin')
                     <x-nav-link  >
                         {{ __('Admin') }}
                     </x-nav-link>
+                    @endrole
+                    @role('houseRenter')
+                    <x-nav-link  >
+                        {{ __('Người cho thuê nhà') }}
+                    </x-nav-link>
+                    @endrole
+
                 </div>
             </div>
 
@@ -108,10 +116,15 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link active" href="/admin/addRole">Phân quyền <span class="sr-only">(current)</span></a>
+                <a class="nav-link active" href="{{route('admin.index')}}">Trang chủ quản lý <span class="sr-only">(current)</span></a>
             </li>
+            @role('admin')
+            <li class="nav-item active">
+                <a class="nav-link active" href="{{route('admin.addRole')}}">Phân quyền <span class="sr-only">(current)</span></a>
+            </li>
+            @endrole
             <li class="nav-item">
-                <a class="nav-link active" href="/admin/blog">Viết Blog</a>
+                <a class="nav-link active" href="{{route('admin.blogs.index')}}">Viết Blog</a>
             </li>
 
         </ul>

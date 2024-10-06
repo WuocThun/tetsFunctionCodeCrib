@@ -7,8 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 class PermissionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('role:admin'); // Chỉ cho phép admin truy cập
+
+    }
     public function index()
     {
         $users = User::all(); // Lấy danh sách người dùng với vai trò của
