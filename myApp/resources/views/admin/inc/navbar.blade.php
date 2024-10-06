@@ -22,7 +22,6 @@
                         {{ __('Người cho thuê nhà') }}
                     </x-nav-link>
                     @endrole
-
                 </div>
             </div>
 

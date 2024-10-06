@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests\Auth;
 
 class Blogs extends Model
 {
@@ -15,10 +16,12 @@ class Blogs extends Model
     protected $fillable
         = [
             'title',
-            'customer_id',
-            'nick_id',
-            'total',
+            'slug',
+            'description',
+            'content',
+            'image',
             'status',
+            'user_id',
         ];
 
     use HasFactory;
