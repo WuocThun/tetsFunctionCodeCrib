@@ -6,10 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\Blogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 
-class BlogsController extends Controller
+use function Pest\Laravel\withMiddleware;
+
+class BlogsController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+
+    {
+        return [
+            'auth',
+            new Middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
+                ['only' => ['index', 'show']]),
+            new Middleware('permission:add blogs',
+                ['only' => ['create', 'store']]),
+            new Middleware('permission:edit blogs',
+                ['only' => ['edit', 'update']]),
+            new Middleware('permission:delete blogs', ['only' => ['destroy']]),
+        ];
+//
+//                $this->middleware('permission:add blogs|edit blogs|delete blogs|publish blogs', ['only' => ['index', 'show']]);
+//                $this->middleware('permission:add blogs', ['only' => ['create', 'store']]);
+//                $this->middleware('permission:edit blogs', ['only' => ['edit', 'update']]);
+//                $this->middleware('permission:delete blogs', ['only' => ['destroy']]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -17,6 +41,7 @@ class BlogsController extends Controller
     public function index()
     {
         $blog = Blogs::all();
+
         return view('admin.content.blogs.index', compact('blog'));
     }
 
@@ -51,20 +76,21 @@ class BlogsController extends Controller
         $blog->title       = $data['title'];
         $blog->description = $data['description'];
         $blog->status      = $data['status'];
-        $blog->user_id      = auth()->id();
+        $blog->user_id     = auth()->id();
         $blog->slug        = $data['slug'];
-        $blog->content        = $data['content'];
-        $get_image          = $request->image;
-        $path               = 'uploads/blogs/';
-        $get_name_image     = $get_image->getClientOriginalName();
-        $name_image         = current(explode('.', $get_name_image));
-        $new_image          = $name_image . rand(0, 99) . '.'
-                              . $get_image->getClientOriginalExtension();
+        $blog->content     = $data['content'];
+        $get_image         = $request->image;
+        $path              = 'uploads/blogs/';
+        $get_name_image    = $get_image->getClientOriginalName();
+        $name_image        = current(explode('.', $get_name_image));
+        $new_image         = $name_image . rand(0, 99) . '.'
+                             . $get_image->getClientOriginalExtension();
         $get_image->move($path, $new_image);
         $blog->image = $new_image;
         $blog->save();
 
-        $blog->created_at  = Carbon::now();
+        $blog->created_at = Carbon::now();
+
         return redirect()->route('admin.blogs.index')
                          ->with('status', 'Thêm thành công');
     }
