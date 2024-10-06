@@ -12,14 +12,9 @@ Route::get('/', function () {
 
 Route::prefix('/admin')->name("admin.")->group(function () {
     Route::get("/", [AdminController::class, 'index'])->name('index');
-    Route::get("/addRole", [PermissionController::class, 'index'])
-         ->name('addRole')->middleware('role:admin');
-    Route::post('/permissions/{user}/assign-role',
-        [PermissionController::class, 'assignRole'])->name('assignRole')
-         ->middleware('role:admin');
-    Route::post('/permissions/{user}/revoke-role',
-        [PermissionController::class, 'revokeRole'])->name('revokeRole')
-         ->middleware('role:admin');
+    Route::get("/addRole", [PermissionController::class, 'index'])->name('addRole');
+    Route::post('/permissions/{user}/assign-role', [PermissionController::class, 'assignRole'])->name('assignRole');
+    Route::post('/permissions/{user}/revoke-role', [PermissionController::class, 'revokeRole'])->name('revokeRole');
     Route::resource('/blogs', BlogsController::class)->names('blogs');
 
 });

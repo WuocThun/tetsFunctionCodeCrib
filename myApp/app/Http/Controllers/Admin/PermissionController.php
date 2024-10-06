@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Auth;
 class PermissionController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('role:admin'); // Chỉ cho phép admin truy cập
-
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('role:admin'); // Chỉ cho phép admin truy cập
+//
+//    }
     public function index()
     {
+//        dd(Auth::user()->hasRole($role))
         $users = User::all(); // Lấy danh sách người dùng với vai trò của
         $roles = Role::all();
         return view('admin.content.permissions.index', compact('users','roles',));
