@@ -19,6 +19,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next): Response
     {
 //        if ( ! Auth::check() || ! Auth::user()->hasRole($role)) {
+////            dd($role);
 //            // Nếu không có quyền, chuyển hướng đến trang không có quyền
 //            return redirect('/')->with('error',
 //                'You do not have access to this resource.');
@@ -26,11 +27,5 @@ class RoleMiddleware
 
         return $next($request);
     }
-
-    protected $routeMiddleware
-        = [
-            // Middleware khác
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
-        ];
 
 }

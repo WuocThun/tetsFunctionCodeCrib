@@ -3,59 +3,55 @@
     @include('admin.inc.navbar')
 @endsection
 @section('main')
-    <div class="container">
-        <h1 class="text-2xl">Phân Quền</h1>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">Danh sách tất cả người dùng</div>
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        <a href="{{route('admin.user.create')}}" class="btn btn-success"> Thêm người dùng </a>
+                        <table class="table table-striped table-responsive">
+                            <thead>
+                            <tr>
+                                <table id="myTable" class="table">
+                                    <thead>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tên User</th>
+                                    <th scope="col">Email</th>
+{{--                                    <th scope="col">Password</th>--}}
+                                    <th scope="col">Vai trò (roles)</th>
+                                    <th scope="col">Quyền (permission)</th>
+                                    <th scope="col">Quản lý</th>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($user as $key =>$us)
+                                    <tr>
+                                        <th>{{$us->id}}</th>
+                                        <th>{{$us->name}}</th>
+                                        <th>{{$us->email}}</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th>
+                                            <a href="{{route('admin.assgin',$us->id)}}" class="btn btn-warning">Phân vai trò</a>
+                                            <a href="{{route('admin.permission',$us->id)}}" class="btn btn-success">Phân thêm quyền</a>
+                                        </th>
+                                    </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                </th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
-        @endif
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Người dùng</th>
-                <th>Quyền</th>
-                <th>Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>
-                        @foreach($user->roles as $role)
-                            <span class="">{{ $role->name }}|</span>
-                        @endforeach
-                    </td>
-                    <td>
-                        <form action="{{ route('admin.assignRole', $user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                            <select name="role" required>
-                                <option value="">Cấp quyền</option>
-                                @foreach($roles as $role1)
-                                    <option value="{{ $role1->name }}">{{ $role1->name }}</option>
-                                @endforeach
-                            </select>
-                            <button type="submit" class="btn btn-primary">Cấp quyền</button>
-                        </form>
-
-                        <form action="{{ route('admin.revokeRole', $user->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            <select name="role" required>
-                                <option value="">Gỡ quyền</option>
-                                @foreach($user->roles as $role)
-                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                            <button type="submit" class="btn btn-danger">Gỡ</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+        </div>
     </div>
-
 @endsection

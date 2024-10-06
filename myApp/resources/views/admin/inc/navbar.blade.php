@@ -117,16 +117,26 @@
             <li class="nav-item active">
                 <a class="nav-link active" href="{{route('admin.index')}}">Trang chủ quản lý <span class="sr-only">(current)</span></a>
             </li>
-            @role('admin')
-            <li class="nav-item active">
-                <a class="nav-link active" href="{{route('admin.addRole')}}">Phân quyền <span class="sr-only">(current)</span></a>
-            </li>
-            @endrole
+
+            @role('admin|houseRenter|viewer')
             <li class="nav-item">
                 <a class="nav-link active" href="{{route('admin.blogs.index')}}">Viết Blog</a>
             </li>
-
+            @endrole
         </ul>
+        @role('admin')
+        <div class="dropdown">
+            <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Toàn quyền
+            </a>
+
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{route('admin.allUser')}}">Tất cả người dùng</a></li>
+                <li><a class="dropdown-item" href="{{route('admin.addRole')}}">Phân quyền</a></li>
+            </ul>
+        </div>
+        @endrole
+
 
     </div>
 </nav>

@@ -58,6 +58,7 @@
                                                      src="{{asset('uploads/blogs/'.$cate->image)}}" alt=""></td>
                                             <TD>
                                                 <a class="btn btn-warning"  href="{{route('admin.blogs.edit',$cate->id)}}">Sửa</a>
+{{--                                                @can('')--}}
                                                 <form method="post"  action="{{route('admin.blogs.destroy',[$cate->id])}}">
                                                     @method('DELETE')
                                                     @csrf

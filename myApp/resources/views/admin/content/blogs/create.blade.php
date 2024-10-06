@@ -62,7 +62,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Gửi</button>
                             @endrole
-                            @role('houseRenter')
+                            @role('houseRenter|viewer')
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Status</label>
                                <input name="status" hidden="" type="number"  value="2">
@@ -76,4 +76,5 @@
                 </div>
             </div>
         </div>
-    </div>@endsection
+    </div>
+@endsection
