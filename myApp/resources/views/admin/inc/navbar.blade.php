@@ -119,9 +119,19 @@
             </li>
 
             @role('admin|houseRenter|viewer')
-            <li class="nav-item">
-                <a class="nav-link active" href="{{route('admin.blogs.index')}}">Viết Blog</a>
-            </li>
+
+            <div class="dropdown">
+                <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Danh sách Blog
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{route('admin.blogs.index')}}">Tât cả blogs</a></li>
+                    @can('manage blogs')
+                    <li><a class="dropdown-item" href="{{route('admin.get_pending_blogs')}}">Duyệt bài Blogs</a></li>
+                        @endcan
+                </ul>
+            </div>
             @endrole
         </ul>
         @role('admin')
@@ -132,7 +142,7 @@
 
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{route('admin.allUser')}}">Tất cả người dùng</a></li>
-                <li><a class="dropdown-item" href="{{route('admin.addRole')}}">Phân quyền</a></li>
+                <li><a class="dropdown-item" href="{{route('admin.addRole')}}">Gỡ vai trò</a></li>
             </ul>
         </div>
         @endrole
