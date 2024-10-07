@@ -24,24 +24,36 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Tên User</th>
                                     <th scope="col">Email</th>
-{{--                                    <th scope="col">Password</th>--}}
+                                    {{--                                    <th scope="col">Password</th>--}}
                                     <th scope="col">Vai trò (roles)</th>
                                     <th scope="col">Quyền (permission)</th>
                                     <th scope="col">Quản lý</th>
                                     </thead>
                                     <tbody>
                                     @foreach($user as $key =>$us)
-                                    <tr>
-                                        <th>{{$us->id}}</th>
-                                        <th>{{$us->name}}</th>
-                                        <th>{{$us->email}}</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th>
-                                            <a href="{{route('admin.assgin',$us->id)}}" class="btn btn-warning">Phân vai trò</a>
-                                            <a href="{{route('admin.permission',$us->id)}}" class="btn btn-success">Phân thêm quyền</a>
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th>{{$us->id}}</th>
+                                            <th>{{$us->name}}</th>
+                                            <th>{{$us->email}}</th>
+                                            <th>
+                                                @foreach($us->roles as $key1 => $roles)
+                                                    <span class="badge bg-primary">{{$roles->name}}</span>
+
+
+                                                @endforeach
+                                            </th>
+                                            <th>
+                                                @foreach($roles->permissions as $key2 => $permissions)
+                                                    <span class="badge bg-warning text-dark">{{$permissions->name}}</span>
+                                                @endforeach
+                                            </th>
+                                            <th>
+                                                <a href="{{route('admin.assgin',$us->id)}}" class="btn btn-warning">Phân
+                                                    vai trò</a>
+                                                <a href="{{route('admin.permission',$us->id)}}" class="btn btn-success">Phân
+                                                    thêm quyền</a>
+                                            </th>
+                                        </tr>
                                     @endforeach
                                     </tbody>
                                 </table>

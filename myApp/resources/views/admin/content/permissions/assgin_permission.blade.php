@@ -16,7 +16,14 @@
                     @endif
                     @foreach($permission as $key => $per)
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" name="permission[]" multiple value="{{$per->name}}"
+                            <input type="checkbox" class="form-check-input"
+                                   @foreach(@$get_permission_via_role as $key1 => $get)
+                                       @if($get->id == $per->id)
+                                           checked
+                                   @endif
+
+                                   @endforeach
+                                   name="permission[]" multiple value="{{$per->name}}"
                                    id="{{$per->id}}">
                             <label class="form-check-label" for="{{$per->id}}">
                                 {{$per->name}}
@@ -29,5 +36,24 @@
                 </form>
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    Thêm quyền cho user
+                </div>
+                <form action="{{route('admin.add_permisission')}}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Thêm quyền</label>
+                        <input type="text" name="permission" class="form-control" placeholder="....">
+                    </div>
+
+                    <br>
+
+                    <input type="submit" name="insertRole" value="Thêm quyền" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
     </div>
+
 @endsection

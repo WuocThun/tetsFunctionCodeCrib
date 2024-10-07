@@ -30,16 +30,16 @@
                         @endforeach
                     </td>
                     <td>
-                        <form action="{{ route('admin.assignRole', $user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                            <select name="role" required>
-                                <option value="">Cấp quyền</option>
-                                @foreach($roles as $role1)
-                                    <option value="{{ $role1->name }}">{{ $role1->name }}</option>
-                                @endforeach
-                            </select>
-                            <button type="submit" class="btn btn-primary">Cấp quyền</button>
-                        </form>
+{{--                        <form action="{{ route('admin.assignRole', $user->id) }}" method="POST" style="display: inline;">--}}
+{{--                        @csrf--}}
+{{--                            <select name="role" required>--}}
+{{--                                <option value="">Cấp quyền</option>--}}
+{{--                                @foreach($roles as $role1)--}}
+{{--                                    <option value="{{ $role1->name }}">{{ $role1->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                            <button type="submit" class="btn btn-primary">Cấp quyền</button>--}}
+{{--                        </form>--}}
 
                         <form action="{{ route('admin.revokeRole', $user->id) }}" method="POST" style="display: inline;">
                             @csrf
