@@ -13,25 +13,41 @@ use Illuminate\Support\Facades\Auth;
 class PermissionController extends Controller
 {
 
-    public function permission($id)
-    {
-        $user       = User::find($id);
-        $permission = Permission::all();
-        $name_roles = $user->roles->first()->name;
-
-        return view('admin.content.permissions.assgin_permission',
-            compact('user', 'permission', 'name_roles'));
-    }
-
-    public function insert_permission(Request $request,$id)
+    public function add_permisission(Request $request)
     {
         $data = $request->all();
-        $user = User::find($id);
-        $role_id = $user->roles->first()->id;
-        $role = Role::find($role_id);
-        $role->syncPermissions($data['permission']);
+        $permission = new Permission();
+        $permission->name = $data['permission'];
+        $permission->save();
+//        Permission::create(['name' => $data['permission']]);
+        return redirect()->back()->with('status','Thêm quyền thành công');
+}
 
-        return redirect()->back()->with('status', 'Thêm quyền cho user trò thành công');    }
+    public function permission($id)
+    {
+        $user                    = User::find($id);
+        $permission              = Permission::all();
+        $name_roles              = $user->roles->first()->name;
+        $get_permission_via_role = $user->getPermissionsViaRoles();
+
+        return view('admin.content.permissions.assgin_permission',
+            compact('user', 'permission', 'name_roles',
+                'get_permission_via_role'));
+    }
+
+    public function insert_permission(Request $request, $id)
+    {
+        $data    = $request->all();
+        $user    = User::find($id);
+        $role_id = $user->roles->first()->id;
+        $role    = Role::find($role_id);
+        $role->syncPermissions($data['permission']);
+        $get_permission_via_role = $user->getPermissionsViaRoles();
+
+        return redirect()->back()
+                         ->with('status', 'Thêm quyền cho user trò thành công',
+                             compact('get_permission_via_role'));
+    }
 
     public function insert_roles(Request $request, $id)
     {
@@ -39,6 +55,7 @@ class PermissionController extends Controller
         $data = $request->all();
         $user = User::find($id);
         $user->syncRoles($data['role']);
+
         return redirect()->back()->with('status', 'Thêm vai trò thành công');
     }
 
@@ -50,7 +67,6 @@ class PermissionController extends Controller
         $role             = Role::orderBy('id', 'desc')->get();
         $name_roles       = $user->roles->first();
         $all_collum_roles = $user->roles->first();
-
         return view('admin.content.permissions.assgin',
             compact('user', 'role', 'all_collum_roles', 'name_roles',
                 'permission'));
@@ -58,7 +74,8 @@ class PermissionController extends Controller
 
     public function getAllUser()
     {
-        $user = User::orderBy('id', 'desc')->get();
+
+        $user = User::with('roles','permissions')->get();
 
         return view('admin.content.permissions.index', compact('user'));
     }

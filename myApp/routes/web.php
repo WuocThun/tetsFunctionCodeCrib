@@ -15,28 +15,30 @@ Route::get('/', function () {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
     Route::get("/", [AdminController::class, 'index'])->name('index');
-
+//Phân quyền đành cho ADMIN
     Route::get('/addRole', [PermissionController::class, 'getAssgin'])
          ->name('addRole')->middleware('permission:create role');
     Route::get('/allUser', [PermissionController::class, 'getAllUser'])
          ->name('allUser')->middleware('permission:create role');
     Route::get('/getAssgin/{id}', [PermissionController::class, 'assgin'])
          ->name('assgin')->middleware('permission:assign role');
-     Route::post('/insert_roles/{id}', [PermissionController::class, 'insert_roles'])
+    Route::post('/insert_roles/{id}',
+        [PermissionController::class, 'insert_roles'])
          ->name('insert_roles')->middleware('permission:assign role');
-Route::get('/permission/{id}', [PermissionController::class, 'permission'])
+    Route::get('/permission/{id}', [PermissionController::class, 'permission'])
          ->name('permission')->middleware('permission:assign role');
-Route::post('/insert_permission/{id}', [PermissionController::class, 'insert_permission'])
+    Route::post('/insert_permission/{id}',
+        [PermissionController::class, 'insert_permission'])
          ->name('insert_permission')->middleware('permission:assign role');
-
+    Route::post('/insert_permission',
+        [PermissionController::class, 'add_permisission'])
+         ->name('add_permisission')->middleware('permission:assign role');
     Route::resource('/createUser', PermissionController::class)
          ->names('user')->middleware('permission:create role');
-
     Route::post('/permissions/{user}/assign-role',
         [PermissionController::class, 'assignRole'])
          ->name('assignRole')
          ->middleware('permission:assign role');
-
     Route::post('/permissions/{user}/revoke-role',
         [PermissionController::class, 'revokeRole'])
          ->name('revokeRole')
