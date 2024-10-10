@@ -56,7 +56,9 @@
 
                                             <td><img width="200px" height="100px"
                                                      src="{{asset('uploads/blogs/'.$cate->image)}}" alt=""></td>
-                                            <TD>
+                                            <td>
+                                                <a class="btn btn-secondary"
+                                                   href="{{route('admin.blogs.preview_blogs',$cate->id)}}">xem Blogs</a>
                                                 <a class="btn btn-warning"  href="{{route('admin.blogs.edit',$cate->id)}}">Sửa</a>
 {{--                                                @can('')--}}
                                                 <form method="post"  action="{{route('admin.blogs.destroy',[$cate->id])}}">
@@ -64,7 +66,7 @@
                                                     @csrf
                                                     <button onclick="return confirm('Bạn có muốn xoá?')" class="btn btn-danger">Xoá</button>
                                                 </form>
-                                            </TD>
+                                            </td>
                                         </tr>
                                     @endforeach
                                     </tbody>

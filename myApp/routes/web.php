@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         [BlogsController::class, 'get_pending_blogs'])
          ->name('get_pending_blogs')->middleware('permission:manager blogs');
     Route::get('blogs/preview_blogs/{id}', [BlogsController::class, 'preview_blogs'])
-         ->name('preview_blogs')->middleware('permission:manager blogs');
+         ->name('blogs.preview_blogs')->middleware('permission:manager blogs');
 
     // Resource route cho BlogsController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
