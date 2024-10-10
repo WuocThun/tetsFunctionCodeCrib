@@ -15,7 +15,7 @@ Route::get('/', function () {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
     Route::get("/", [AdminController::class, 'index'])->name('index');
-//Phân quyền đành cho ADMIN
+    //Phân quyền đành cho ADMIN
     Route::get('/addRole', [PermissionController::class, 'getAssgin'])
          ->name('addRole')->middleware('permission:create role');
     Route::get('/allUser', [PermissionController::class, 'getAllUser'])
@@ -43,17 +43,36 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         [PermissionController::class, 'revokeRole'])
          ->name('revokeRole')
          ->middleware('permission:revoke role');
+    Route::get('blogs/get_pending_blogs',
+        [BlogsController::class, 'get_pending_blogs'])
+         ->name('get_pending_blogs')->middleware('permission:manager blogs');
+    Route::get('blogs/preview_blogs/{id}', [BlogsController::class, 'preview_blogs'])
+         ->name('blogs.preview_blogs')->middleware('permission:manager blogs');
 
     // Resource route cho BlogsController, kiểm tra quyền truy cập
-    Route::resource('/blogs', BlogsController::class)
-         ->names('blogs')
-         ->middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
-             [
-                 'only' => [
-                     'index',
-                     'show',
-                 ],
-             ]); // Kiểm tra quyền cho tất cả các route của blogs
+    Route::group(['middleware' => ['auth']], function () {
+        // Route cho quyền 'add blogs' với phương thức 'GET' cho 'create' và 'POST' cho 'store'
+        Route::get('/blogs/index', [BlogsController::class, 'index'])
+             ->name('blogs.index')->middleware('permission:add blogs');
+        Route::get('blogs/create', [BlogsController::class, 'create'])
+             ->name('blogs.create')->middleware('permission:add blogs');
+        Route::post('/admin/blogs', [BlogsController::class, 'store'])
+             ->name('blogs.store')->middleware('permission:add blogs');
+
+        // Route cho quyền 'edit blogs' với phương thức 'GET' cho 'edit' và 'PUT/PATCH' cho 'update'
+        Route::get('blogs/{blog}/edit', [BlogsController::class, 'edit'])
+             ->name('blogs.edit')->middleware('permission:edit blogs');
+        Route::put('blogs/{blog}', [BlogsController::class, 'update'])
+             ->name('blogs.update')->middleware('permission:edit blogs');
+        Route::patch('blogs/{blog}', [BlogsController::class, 'update'])
+             ->name('blogs.update')->middleware('permission:edit blogs');
+
+        // Route cho quyền 'delete blogs' với phương thức 'DELETE'
+        Route::delete('blogs/{blog}',
+            [BlogsController::class, 'destroy'])->name('blogs.destroy')
+             ->middleware('permission:delete blogs');
+    });
+
 });
 
 //Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {

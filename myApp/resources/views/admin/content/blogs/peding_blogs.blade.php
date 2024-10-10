@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('navbar')
-@include('admin.inc.navbar')
+    @include('admin.inc.navbar')
 @endsection
 @section('main')
     <div class="container-fluid">
@@ -22,6 +22,7 @@
                                 <table id="myTable" class="table">
                                     <thead>
                                     <th scope="col">ID</th>
+                                    <th scope="col">Người đăng</th>
                                     <th scope="col">Tên danh mục</th>
                                     <th scope="col">Mô tả</th>
                                     <th scope="col">Hiển thị</th>
@@ -31,40 +32,42 @@
                                     <th scope="col">Hành động</th>
                                     </thead>
                                     <tbody>
-                                    @foreach($blog as $key =>$cate )
+                                    @foreach($blog as $key =>$penBlogs )
                                         <tr>
                                             <th scope="row">{{$key+1}}</th>
-                                            <td>{{$cate->title}}</td>
-                                            <td>{{ \Illuminate\Support\Str::limit($cate->description, 50, '...') }}</td>
+                                            <th scope="row">{{$penBlogs->user_id}}</th>
+                                            <td scope="row">{{$penBlogs->title}}</td>
+                                            <td>{{ \Illuminate\Support\Str::limit($penBlogs->description, 50, '...') }}</td>
                                             <td>
-                                                @if($cate->status == 1)
-                                                    <p class="text-success btn">  Hiển thị </p>
-                                                @elseif($cate->status == 0)
-                                                    <p class="text-danger btn">  Không hiện thị </p>
+                                                @if($penBlogs->status == 1)
+                                                    <p class="text-success btn"> Hiển thị </p>
+                                                @elseif($penBlogs->status == 0)
+                                                    <p class="text-danger btn"> Không hiện thị </p>
                                                 @else
-                                               <p class="text-warning btn"> Đang đợi duyệt</p>
+                                                    <p class="text-warning btn"> Đang đợi duyệt</p>
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($cate->kind_of_blog == "blogs")
+                                                @if($penBlogs->kind_of_blog == "blogs")
                                                     Blog
                                                 @else
                                                     Hướng dẫn
                                                 @endif
                                             </td>
-                                            <td>{{$cate->created_at}}</td>
+                                            <td>{{$penBlogs->created_at}}</td>
 
                                             <td><img width="200px" height="100px"
-                                                     src="{{asset('uploads/blogs/'.$cate->image)}}" alt=""></td>
+                                                     src="{{asset('uploads/blogs/'.$penBlogs->image)}}" alt=""></td>
                                             <td>
-                                                <a class="btn btn-secondary"
-                                                   href="{{route('admin.blogs.preview_blogs',$cate->id)}}">xem Blogs</a>
-                                                <a class="btn btn-warning"  href="{{route('admin.blogs.edit',$cate->id)}}">Sửa</a>
-{{--                                                @can('')--}}
-                                                <form method="post"  action="{{route('admin.blogs.destroy',[$cate->id])}}">
+                                                <a class="btn btn-warning"
+                                                   href="{{route('admin.blogs.preview_blogs',$penBlogs->id)}}">xem Blogs</a>
+                                                <form method="post"
+                                                      action="{{route('admin.blogs.destroy',[$penBlogs->id])}}">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button onclick="return confirm('Bạn có muốn xoá?')" class="btn btn-danger">Xoá</button>
+                                                    <button onclick="return confirm('Bạn có muốn xoá?')"
+                                                            class="btn btn-danger">Xoá
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -75,8 +78,8 @@
                             </tr>
                             </thead>
                         </table>
-{{--                                                    {{$category->links('pagination::boostrap-4')}}--}}
-{{--                        {{$blog->links('pagination::bootstrap-4')}}--}}
+                        {{--                                                    {{$penBlogsgory->links('pagination::boostrap-4')}}--}}
+                        {{--                        {{$blog->links('pagination::bootstrap-4')}}--}}
 
 
                     </div>

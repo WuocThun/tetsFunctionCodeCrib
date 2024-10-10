@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 
 use function Pest\Laravel\withMiddleware;
@@ -22,17 +23,35 @@ class BlogsController extends Controller implements HasMiddleware
             'auth',
             new Middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
                 ['only' => ['index', 'show']]),
+//            only: ['index','show']),
             new Middleware('permission:add blogs',
                 ['only' => ['create', 'store']]),
             new Middleware('permission:edit blogs',
                 ['only' => ['edit', 'update']]),
             new Middleware('permission:delete blogs', ['only' => ['destroy']]),
         ];
-//
-//                $this->middleware('permission:add blogs|edit blogs|delete blogs|publish blogs', ['only' => ['index', 'show']]);
-//                $this->middleware('permission:add blogs', ['only' => ['create', 'store']]);
-//                $this->middleware('permission:edit blogs', ['only' => ['edit', 'update']]);
-//                $this->middleware('permission:delete blogs', ['only' => ['destroy']]);
+    }
+    public function preview_blogs(string $id)
+    {
+        $blog = Blogs::find($id);
+//        dd($blog);
+        return view('admin.content.blogs.preview_blogs',compact('blog'));
+    }
+    public function get_pending_blogs()
+    {
+        $blog = Blogs::where('status','=','2')->get();
+        return view('admin.content.blogs.peding_blogs',compact('blog'));
+    }
+
+    public function __construct()
+    {
+        $this->middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
+            ['only' => ['index', 'show']]);
+        $this->middleware('permission:add blogs',
+            ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit blogs',
+            ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete blogs', ['only' => ['destroy']]);
     }
 
     /**
