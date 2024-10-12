@@ -124,27 +124,26 @@
             <li class="nav-item active">
                 <a class="nav-link active" href="{{route('admin.index')}}">Trang chủ quản lý <span class="sr-only">(current)</span></a>
             </li>
-
-            @role('admin|houseRenter|viewer')
-
+            @role('admin')
+            <li class="nav-item active">
+                <a class="nav-link active" href="{{route('admin.rooms_classification.index')}}">Danh mục phòng <span class="sr-only">(current)</span></a>
+            </li>
+            @endrole
             <div class="dropdown">
                 <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Danh sách Blog
                 </a>
-
                 <ul class="dropdown-menu">
                     @role('admin')
                     <li><a class="dropdown-item" href="{{route('admin.blogs.index')}}">Tât cả blogs</a></li>
                     @endrole
                     <li><a class="dropdown-item" href="{{route('admin.blogs.myblogs')}}">Bài viết của tôi</a></li>
-
                     @can('manage blogs')
                         <li><a class="dropdown-item" href="{{route('admin.get_pending_blogs')}}">Duyệt bài Blogs</a>
                         </li>
                     @endcan
                 </ul>
             </div>
-            @endrole
         </ul>
         @role('admin')
         <div class="dropdown">

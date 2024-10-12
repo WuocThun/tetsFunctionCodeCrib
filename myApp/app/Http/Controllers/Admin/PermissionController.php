@@ -44,7 +44,7 @@ class PermissionController extends Controller
 
     public function insert_permission(Request $request, $id)
     {
-
+        $data = $request->all();
         $user    = User::find($id);
         $role_id = $user->roles->first()->id;
         $role    = Role::find($role_id);
