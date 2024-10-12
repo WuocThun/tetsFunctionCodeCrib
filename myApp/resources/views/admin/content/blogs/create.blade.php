@@ -23,7 +23,12 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('admin.blogs.index')}}" class="btn btn-success">Danh sách blog </a>
+                        @role('admin')
+                            <a href="{{route('admin.blogs.index')}}" class="btn btn-warning">Tất cả bài viết </a>
+                            @endrole
+                            @role('admin|houseRenter|viewer')
+                            <a href="{{route('admin.blogs.myblogs')}}" class="btn btn-success">Bài viết của tôi </a>
+                            @endrole
                         <form action="{{route('admin.blogs.store')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
@@ -68,7 +73,6 @@
                                <input name="status" hidden="" type="number"  value="2">
                             </div>
                             <button type="submit" class="btn btn-warning">Gửi bài cho quản trị viên</button>
-
                             @endrole
                         </form>
 

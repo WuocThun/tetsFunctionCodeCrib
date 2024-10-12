@@ -48,12 +48,14 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
          ->name('get_pending_blogs')->middleware('permission:manager blogs');
     Route::get('blogs/preview_blogs/{id}', [BlogsController::class, 'preview_blogs'])
          ->name('blogs.preview_blogs')->middleware('permission:manager blogs');
-
+//? BLOGS CONTROLLER
     // Resource route cho BlogsController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
         // Route cho quyền 'add blogs' với phương thức 'GET' cho 'create' và 'POST' cho 'store'
         Route::get('/blogs/index', [BlogsController::class, 'index'])
-             ->name('blogs.index')->middleware('permission:add blogs');
+             ->name('blogs.index')->middleware('permission:all blogs');
+        Route::get('/blogs/myblogs', [BlogsController::class, 'myblogs'])
+             ->name('blogs.myblogs')->middleware('permission:view my blogs');
         Route::get('blogs/create', [BlogsController::class, 'create'])
              ->name('blogs.create')->middleware('permission:add blogs');
         Route::post('/admin/blogs', [BlogsController::class, 'store'])
@@ -72,6 +74,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
             [BlogsController::class, 'destroy'])->name('blogs.destroy')
              ->middleware('permission:delete blogs');
     });
+//? END BLOGS CONTROLLER
 
 });
 

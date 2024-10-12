@@ -15,11 +15,18 @@ class PermissionController extends Controller
 
     public function add_permisission(Request $request)
     {
-        $data = $request->all();
+        $data = $request->validate([
+            'name' => 'required|max:255|unique:permissions',
+        ], [
+            'name.unique' => 'Tên quyền đã có',
+            'name.required' => 'Vui lòng nhập quyền vào',
+        ]);
+
+        // Không cần gọi lại $request->all(), dùng dữ liệu đã validate
         $permission = new Permission();
-        $permission->name = $data['permission'];
+        $permission->name = $data['name']; // Dùng $data['name'] đã được validate
         $permission->save();
-//        Permission::create(['name' => $data['permission']]);
+
         return redirect()->back()->with('status','Thêm quyền thành công');
 }
 
@@ -37,7 +44,7 @@ class PermissionController extends Controller
 
     public function insert_permission(Request $request, $id)
     {
-        $data    = $request->all();
+
         $user    = User::find($id);
         $role_id = $user->roles->first()->id;
         $role    = Role::find($role_id);
