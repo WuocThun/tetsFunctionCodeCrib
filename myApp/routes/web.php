@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\BlogsController;
+use App\Http\Controllers\Admin\RoomsClassificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -75,6 +76,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
              ->middleware('permission:delete blogs');
     });
 //? END BLOGS CONTROLLER
+// manager rooms_classification
+    Route::resource('/rooms_classification', RoomsClassificationController::class)
+         ->names('rooms_classification')->middleware('permission:manager rooms_classification');
+// END manager rooms_classification
 
 });
 
