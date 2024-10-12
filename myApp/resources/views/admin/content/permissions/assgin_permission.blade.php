@@ -42,10 +42,19 @@
                     Thêm quyền cho user
                 </div>
                 <form action="{{route('admin.add_permisission')}}" method="post">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     @csrf
                     <div class="form-group">
                         <label for="exampleInputEmail1">Thêm quyền</label>
-                        <input type="text" name="permission" class="form-control" placeholder="....">
+                        <input type="text" name="name" class="form-control" placeholder="....">
                     </div>
 
                     <br>

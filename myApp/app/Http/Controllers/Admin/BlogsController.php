@@ -43,16 +43,6 @@ class BlogsController extends Controller implements HasMiddleware
         return view('admin.content.blogs.peding_blogs',compact('blog'));
     }
 
-    public function __construct()
-    {
-        $this->middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
-            ['only' => ['index', 'show']]);
-        $this->middleware('permission:add blogs',
-            ['only' => ['create', 'store']]);
-        $this->middleware('permission:edit blogs',
-            ['only' => ['edit', 'update']]);
-        $this->middleware('permission:delete blogs', ['only' => ['destroy']]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -110,7 +100,7 @@ class BlogsController extends Controller implements HasMiddleware
 
         $blog->created_at = Carbon::now();
 
-        return redirect()->route('admin.blogs.index')
+        return redirect()->route('admin.blogs.myblogs')
                          ->with('status', 'Thêm thành công');
     }
 
@@ -127,7 +117,8 @@ class BlogsController extends Controller implements HasMiddleware
      */
     public function edit(string $id)
     {
-        //
+        $blog = Blogs::find($id);
+        return view('admin.content.blogs.edit', compact('blog'));
     }
 
     /**
@@ -135,7 +126,39 @@ class BlogsController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data              = $request->validate([
+            'title'       => 'required|max:255',
+            'slug'        => 'required',
+            'content'     => 'required',
+            'description' => 'required',
+        ],
+            [
+                'description.required' => 'Mô tả đã tồn tại, hãy nhập mô tả',
+            ]);
+        $data = $request->all();
+        $blog = Blogs::find($id);
+        $blog->title = $data['title'];
+        $blog->description = $data['description'];
+        $blog->status = $data['status'];
+        $blog->slug = $data['slug'];
+        $blog->content = $data['content'];
+        $get_image = $request->image;
+        if ($get_image) {
+            $path_unlink = 'uploads/blogs/' . $blog->image;
+            if (file_exists($path_unlink)) {
+                unlink($path_unlink);
+            }
+            $path           = 'uploads/blogs/';
+            $get_name_image = $get_image->getClientOriginalName();
+            $name_image     = current(explode('.', $get_name_image));
+            $new_image      = $name_image . rand(0, 99) . '.'
+                              . $get_image->getClientOriginalExtension();
+            $get_image->move($path, $new_image);
+            $blog->image = $new_image;
+        }
+        $blog->save();
+        return redirect()->back()->with('status', 'Cập nhật thành công');
+
     }
 
     /**
@@ -143,7 +166,19 @@ class BlogsController extends Controller implements HasMiddleware
      */
     public function destroy(string $id)
     {
-        //
-    }
+        $blog        = Blogs::find($id);
+        $path_unlink = 'uploads/blogs/' . $blog->image;
+        if (file_exists($path_unlink)) {
+            unlink($path_unlink);
+        }
+        $blog->delete();
 
+        return redirect()->back();
+    }
+    public function myblogs()
+    {
+        $user_id = auth()->id();
+        $blog = Blogs::where('user_id', $user_id)->get();
+        return view('admin.content.blogs.myblogs',compact('blog'));
+    }
 }

@@ -3,27 +3,29 @@
     @include('admin.inc.navbar')
 @endsection
 @section('main')
-    <div class="container-fluid">
+    <div class="container-fluid ">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">Xem trước bài viết</div>
 
-                    <div class="card-body">
+                    <div class="card-body  ">
 
                         <p>{{$blog->title}}</p>
                         @php
                         echo $blog->description
                         @endphp
+                        <br>
+                        Trạng thái:
                             @if($blog->status == 1)
-                                <p class="text-success btn"> Hiển thị </p>
+                                <p class="text-success "> Hiển thị </p>
                             @elseif($blog->status == 0)
-                                <p class="text-danger btn"> Không hiện thị </p>
+                                <p class="text-danger "> Không hiện thị </p>
                             @else
-                                <p class="text-warning btn"> Đang đợi duyệt</p>
+                                <p class="text-warning "> Đang đợi duyệt</p>
                             @endif
-
-                            {{$blog->created_at}}
+                        <br>
+                            Ngày đăng {{$blog->created_at}}
 
                             <img width="200px" height="100px"
                                  src="{{asset('uploads/blogs/'.$blog->image)}}" alt="">
