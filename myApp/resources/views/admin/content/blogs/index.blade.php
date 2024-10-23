@@ -25,7 +25,6 @@
                                     <th scope="col">Tên danh mục</th>
                                     <th scope="col">Mô tả</th>
                                     <th scope="col">Hiển thị</th>
-                                    <th scope="col">Loại tin</th>
                                     <th scope="col">Ngày đăng</th>
                                     <th scope="col">Hình ảnh</th>
                                     <th scope="col">Hành động</th>
@@ -38,20 +37,16 @@
                                             <td>{{ \Illuminate\Support\Str::limit($cate->description, 50, '...') }}</td>
                                             <td>
                                                 @if($cate->status == 1)
-                                                    <p class="text-success btn">  Hiển thị </p>
+                                                    <p class="text-success btn">Hiển thị </p>
                                                 @elseif($cate->status == 0)
-                                                    <p class="text-danger btn">  Không hiện thị </p>
-                                                @else
-                                               <p class="text-warning btn"> Đang đợi duyệt</p>
+                                                    <p class="text-danger btn">Không hiện thị </p>
+                                                @elseif($cate->status == 3)
+                                               <p class="text-danger btn">Từ chối</p>
+                                                    @else
+                                               <p class="text-warning btn">Đợi duyệt</p>
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($cate->kind_of_blog == "blogs")
-                                                    Blog
-                                                @else
-                                                    Hướng dẫn
-                                                @endif
-                                            </td>
+
                                             <td>{{$cate->created_at}}</td>
 
                                             <td><img width="200px" height="100px"

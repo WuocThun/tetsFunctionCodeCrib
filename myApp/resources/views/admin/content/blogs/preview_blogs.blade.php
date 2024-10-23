@@ -8,15 +8,14 @@
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">Xem trước bài viết</div>
+                        <div class="card-body  ">
 
-                    <div class="card-body  ">
-
-                        <p>{{$blog->title}}</p>
-                        @php
-                        echo $blog->description
-                        @endphp
-                        <br>
-                        Trạng thái:
+                            <p>{{$blog->title}}</p>
+                            @php
+                                echo $blog->description
+                            @endphp
+                            <br>
+                            Trạng thái:
                             @if($blog->status == 1)
                                 <p class="text-success "> Hiển thị </p>
                             @elseif($blog->status == 0)
@@ -24,33 +23,40 @@
                             @else
                                 <p class="text-warning "> Đang đợi duyệt</p>
                             @endif
-                        <br>
+                            <br>
                             Ngày đăng {{$blog->created_at}}
 
                             <img width="200px" height="100px"
-                                 src="{{asset('uploads/blogs/'.$blog->image)}}" alt="">
+                                 src="{{asset('uploads/blogs/'.$blog->image)}}" alt=""> <br>
+                            @hasanyrole('houseRenter|viewer')
+                            <a class="btn btn-warning"
+                               href="{{route('admin.blogs.myblogs')}}">Quay lại</a>
+                            @endrole
+                            @role('admin')
                             <a class="btn btn-warning"
                                href="{{route('admin.get_pending_blogs')}}">Quay lại</a>
-                        <a class="btn btn-primary"
-                           href="{{route('admin.get_pending_blogs')}}">Xác nhận duyệt bài</a>
-                        <a class="btn btn-danger"
-                           href="{{route('admin.get_pending_blogs')}}">Từ chối</a>
+                            <form action="{{ route('admin.blogs.accept_blog', $blog->id) }}" method="POST">
+                                @method('PUT')
+                                @csrf
+                                <div class="form-group">
+                                    <input name="status" type="hidden" value="1">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Xác nhận duyệt bài</button>
+                            </form>
+                            <form action="{{ route('admin.blogs.decline_blog', $blog->id) }}" method="POST">
+                                @method('PUT')
+                                @csrf
+                                <div class="form-group">
+                                    <input name="status" type="hidden" value="3">
+                                </div>
+                                <button type="submit" class="btn btn-danger">Từ chối</button>
+                            </form>
 
-                        {{--                                                <form method="post"--}}
-                            {{--                                                      action="{{route('admin.blogs.destroy',[$blog->id])}}">--}}
-                            {{--                                                    @method('DELETE')--}}
-                            {{--                                                    @csrf--}}
-                            {{--                                                    <button onclick="return confirm('Bạn có muốn xoá?')"--}}
-                            {{--                                                            class="btn btn-danger">Xoá--}}
-                            {{--                                                    </button>--}}
-                            {{--                                                </form>--}}
-                        {{--                                                    {{$bloggory->links('pagination::boostrap-4')}}--}}
-                        {{--                        {{$blog->links('pagination::bootstrap-4')}}--}}
+@endrole
 
-
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 @endsection

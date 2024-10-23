@@ -47,9 +47,14 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('blogs/get_pending_blogs',
         [BlogsController::class, 'get_pending_blogs'])
          ->name('get_pending_blogs')->middleware('permission:manager blogs');
+    Route::PUT('blogs/accept_blog/{id}',[BlogsController::class, 'accept_blog'])
+         ->name('blogs.accept_blog')->middleware('permission:manager blogs');
+    Route::PUT('blogs/decline_blog/{id}',[BlogsController::class, 'decline_blog'])
+         ->name('blogs.decline_blog')->middleware('permission:manager blogs');
     Route::get('blogs/preview_blogs/{id}', [BlogsController::class, 'preview_blogs'])
-         ->name('blogs.preview_blogs')->middleware('permission:manager blogs');
+         ->name('blogs.preview_blogs')->middleware('permission:add blogs');
 //? BLOGS CONTROLLER
+
     // Resource route cho BlogsController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
         // Route cho quyền 'add blogs' với phương thức 'GET' cho 'create' và 'POST' cho 'store'

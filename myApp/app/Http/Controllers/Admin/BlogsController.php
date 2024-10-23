@@ -23,7 +23,7 @@ class BlogsController extends Controller implements HasMiddleware
             'auth',
             new Middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
                 ['only' => ['index', 'show']]),
-//            only: ['index','show']),
+            //            only: ['index','show']),
             new Middleware('permission:add blogs',
                 ['only' => ['create', 'store']]),
             new Middleware('permission:edit blogs',
@@ -31,18 +31,41 @@ class BlogsController extends Controller implements HasMiddleware
             new Middleware('permission:delete blogs', ['only' => ['destroy']]),
         ];
     }
+
+    public function accept_blog(Request $request, $id)
+    {
+        $data         = $request->all();
+        $blog         = Blogs::find($id);
+        $blog->status = $data['status'];
+        $blog->save();
+
+        return redirect()->back();
+    }
+
+    public function decline_blog(Request $request, $id)
+    {
+        $data         = $request->all();
+        $blog         = Blogs::find($id);
+        $blog->status = $data['status'];
+        $blog->save();
+
+        return redirect()->back();
+    }
+
     public function preview_blogs(string $id)
     {
         $blog = Blogs::find($id);
-//        dd($blog);
-        return view('admin.content.blogs.preview_blogs',compact('blog'));
-    }
-    public function get_pending_blogs()
-    {
-        $blog = Blogs::where('status','=','2')->get();
-        return view('admin.content.blogs.peding_blogs',compact('blog'));
+
+        //        dd($blog);
+        return view('admin.content.blogs.preview_blogs', compact('blog'));
     }
 
+    public function get_pending_blogs()
+    {
+        $blog = Blogs::where('status', '=', '2')->get();
+
+        return view('admin.content.blogs.peding_blogs', compact('blog'));
+    }
 
     /**
      * Display a listing of the resource.
@@ -118,6 +141,7 @@ class BlogsController extends Controller implements HasMiddleware
     public function edit(string $id)
     {
         $blog = Blogs::find($id);
+
         return view('admin.content.blogs.edit', compact('blog'));
     }
 
@@ -135,14 +159,14 @@ class BlogsController extends Controller implements HasMiddleware
             [
                 'description.required' => 'Mô tả đã tồn tại, hãy nhập mô tả',
             ]);
-        $data = $request->all();
-        $blog = Blogs::find($id);
-        $blog->title = $data['title'];
+        $data              = $request->all();
+        $blog              = Blogs::find($id);
+        $blog->title       = $data['title'];
         $blog->description = $data['description'];
-        $blog->status = $data['status'];
-        $blog->slug = $data['slug'];
-        $blog->content = $data['content'];
-        $get_image = $request->image;
+        $blog->status      = $data['status'];
+        $blog->slug        = $data['slug'];
+        $blog->content     = $data['content'];
+        $get_image         = $request->image;
         if ($get_image) {
             $path_unlink = 'uploads/blogs/' . $blog->image;
             if (file_exists($path_unlink)) {
@@ -157,6 +181,7 @@ class BlogsController extends Controller implements HasMiddleware
             $blog->image = $new_image;
         }
         $blog->save();
+
         return redirect()->back()->with('status', 'Cập nhật thành công');
 
     }
@@ -175,10 +200,13 @@ class BlogsController extends Controller implements HasMiddleware
 
         return redirect()->back();
     }
+
     public function myblogs()
     {
         $user_id = auth()->id();
-        $blog = Blogs::where('user_id', $user_id)->get();
-        return view('admin.content.blogs.myblogs',compact('blog'));
+        $blog    = Blogs::where('user_id', $user_id)->get();
+
+        return view('admin.content.blogs.myblogs', compact('blog'));
     }
+
 }
