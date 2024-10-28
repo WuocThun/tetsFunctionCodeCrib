@@ -70,9 +70,6 @@
                             </tr>
                             </thead>
                         </table>
-{{--                                                    {{$category->links('pagination::boostrap-4')}}--}}
-{{--                        {{$blog->links('pagination::bootstrap-4')}}--}}
-
 
                     </div>
                 </div>

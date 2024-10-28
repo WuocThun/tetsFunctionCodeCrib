@@ -26,7 +26,6 @@
                                     <th scope="col">Tên danh mục</th>
                                     <th scope="col">Mô tả</th>
                                     <th scope="col">Hiển thị</th>
-                                    <th scope="col">Loại tin</th>
                                     <th scope="col">Ngày đăng</th>
                                     <th scope="col">Hình ảnh</th>
                                     <th scope="col">Hành động</th>
@@ -43,17 +42,13 @@
                                                     <p class="text-success btn"> Hiển thị </p>
                                                 @elseif($penBlogs->status == 0)
                                                     <p class="text-danger btn"> Không hiện thị </p>
+                                                @elseif($penBlogs->status == 3)
+                                                    <p class="text-danger btn"> Từ chối </p>
                                                 @else
                                                     <p class="text-warning btn"> Đang đợi duyệt</p>
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($penBlogs->kind_of_blog == "blogs")
-                                                    Blog
-                                                @else
-                                                    Hướng dẫn
-                                                @endif
-                                            </td>
+
                                             <td>{{$penBlogs->created_at}}</td>
 
                                             <td><img width="200px" height="100px"

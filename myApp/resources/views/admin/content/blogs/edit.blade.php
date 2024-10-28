@@ -23,7 +23,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        @role('admin')
+                            @if($blog->status == 3)
+                                <p class="text-danger">Lý do từ chối: {{ $blog->reject_reason }}</p>
+                            @endif
+
+                            @role('admin')
                             <a href="{{route('admin.blogs.index')}}" class="btn btn-info">Danh sách bài viết </a>
                             @endrole
                             @role('houseRenter|viewer')
@@ -77,7 +81,11 @@
                             </div>
                             @endrole
                             <br>
-                            <button type="submit" class="btn btn-primary">Sửa</button>
+                            @if($blog->status == 3 )
+                            <button type="submit" class="btn btn-danger">Sửa lỗi</button>
+                            @else
+                                <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+                            @endif
                         </form>
 
                     </div>

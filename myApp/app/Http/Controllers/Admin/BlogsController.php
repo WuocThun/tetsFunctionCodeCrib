@@ -44,13 +44,26 @@ class BlogsController extends Controller implements HasMiddleware
 
     public function decline_blog(Request $request, $id)
     {
-        $data         = $request->all();
-        $blog         = Blogs::find($id);
-        $blog->status = $data['status'];
+        // Lấy tất cả dữ liệu từ form
+        $data = $request->all();
+
+        // Tìm bài viết theo ID
+        $blog = Blogs::find($id);
+
+        // Nếu không tìm thấy bài viết, trả về với thông báo lỗi
+        if (!$blog) {
+            return redirect()->back()->with('error', 'Bài viết không tồn tại.');
+        }
+
+        // Cập nhật trạng thái và lý do từ chối
+        $blog->status = $data['status']; // Cập nhật trạng thái thành "từ chối"
+        $blog->reject_reason = $data['reason']; // Lưu lý do từ chối
         $blog->save();
 
-        return redirect()->back();
+        // Trả về trang trước với thông báo thành công
+        return redirect()->back()->with('success', 'Bài viết đã bị từ chối.');
     }
+
 
     public function preview_blogs(string $id)
     {
