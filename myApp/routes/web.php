@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\BlogsController;
 use App\Http\Controllers\Admin\RoomsClassificationController;
+use App\Http\Controllers\Admin\RoomController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -79,23 +80,17 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::delete('blogs/{blog}',
             [BlogsController::class, 'destroy'])->name('blogs.destroy')
              ->middleware('permission:delete blogs');
+        Route::get('/rooms/index', [RoomController::class, 'index'])
+             ->name('rooms.index')->middleware('permission:all blogs');
     });
-//? END BLOGS CONTROLLER
-// manager rooms_classification
+    Route::get('/rooms/create', [RoomController::class, 'create'])
+         ->name('rooms.create')->middleware('permission:all blogs');
     Route::resource('/rooms_classification', RoomsClassificationController::class)
          ->names('rooms_classification')->middleware('permission:manager rooms_classification');
-// END manager rooms_classification
+    });
 
-});
+//? END BLOGS CONTROLLER
 
-//Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
-//    Route::get("/", [AdminController::class, 'index'])->name('index');
-//    Route::get("/addRole", [PermissionController::class, 'index'])->name('addRole');
-//    Route::post('/permissions/{user}/assign-role', [PermissionController::class, 'assignRole'])->name('assignRole');
-//    Route::post('/permissions/{user}/revoke-role', [PermissionController::class, 'revokeRole'])->name('revokeRole');
-//
-//    // Resource route cho BlogsController
-//});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
