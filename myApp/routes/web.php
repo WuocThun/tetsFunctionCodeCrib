@@ -48,13 +48,16 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('blogs/get_pending_blogs',
         [BlogsController::class, 'get_pending_blogs'])
          ->name('get_pending_blogs')->middleware('permission:manager blogs');
-    Route::PUT('blogs/accept_blog/{id}',[BlogsController::class, 'accept_blog'])
+    Route::PUT('blogs/accept_blog/{id}',
+        [BlogsController::class, 'accept_blog'])
          ->name('blogs.accept_blog')->middleware('permission:manager blogs');
-    Route::PUT('blogs/decline_blog/{id}',[BlogsController::class, 'decline_blog'])
+    Route::PUT('blogs/decline_blog/{id}',
+        [BlogsController::class, 'decline_blog'])
          ->name('blogs.decline_blog')->middleware('permission:manager blogs');
-    Route::get('blogs/preview_blogs/{id}', [BlogsController::class, 'preview_blogs'])
+    Route::get('blogs/preview_blogs/{id}',
+        [BlogsController::class, 'preview_blogs'])
          ->name('blogs.preview_blogs')->middleware('permission:add blogs');
-//? BLOGS CONTROLLER
+    //? BLOGS CONTROLLER
 
     // Resource route cho BlogsController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
@@ -80,17 +83,36 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::delete('blogs/{blog}',
             [BlogsController::class, 'destroy'])->name('blogs.destroy')
              ->middleware('permission:delete blogs');
+
         Route::get('/rooms/index', [RoomController::class, 'index'])
              ->name('rooms.index')->middleware('permission:all blogs');
     });
     Route::get('/rooms/create', [RoomController::class, 'create'])
          ->name('rooms.create')->middleware('permission:all blogs');
-    Route::resource('/rooms_classification', RoomsClassificationController::class)
-         ->names('rooms_classification')->middleware('permission:manager rooms_classification');
-    });
+    Route::get('/rooms/getPendingRooms', [RoomController::class, 'getPendingRooms'])
+         ->name('rooms.getPendingRooms')->middleware('permission:all blogs');
+    Route::get('/rooms/viewPendingRooms/{room}', [RoomController::class, 'viewPendingRooms'])
+         ->name('rooms.viewPendingRooms')->middleware('permission:all blogs');
+    Route::get('/rooms/allRooms', [RoomController::class, 'allRooms'])
+         ->name('rooms.allRooms')->middleware('permission:all blogs');
+    Route::get('/rooms/myRooms', [RoomController::class, 'myRooms'])
+         ->name('rooms.myRooms')->middleware('permission:all blogs');
+    Route::post('/rooms/store', [RoomController::class, 'store'])
+         ->name('rooms.store')->middleware('permission:all blogs');
+        Route::get('rooms/{blog}/edit', [RoomController::class, 'edit'])
+         ->name('rooms.edit')->middleware('permission:all blogs');
+    Route::put('rooms/{blog}', [RoomController::class, 'update'])
+         ->name('rooms.update')->middleware('permission:edit blogs');
+    Route::delete('rooms/{blog}',
+        [RoomController::class, 'destroy'])->name('rooms.destroy')
+         ->middleware('permission:delete blogs');
+    Route::resource('/rooms_classification',
+        RoomsClassificationController::class)
+         ->names('rooms_classification')
+         ->middleware('permission:manager rooms_classification');
+});
 
 //? END BLOGS CONTROLLER
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
