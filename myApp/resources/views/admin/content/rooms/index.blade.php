@@ -15,7 +15,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('admin.blogs.create')}}" class="btn btn-success"> Thêm Blog </a>
+                        <a href="{{route('admin.rooms.create')}}" class="btn btn-success"> Thêm phòng </a>
                         <table class="table">
                             <thead>
                             <tr>
