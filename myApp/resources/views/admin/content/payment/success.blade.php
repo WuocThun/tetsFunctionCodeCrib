@@ -15,7 +15,7 @@
         Nếu có bất kỳ câu hỏi nào, hãy gửi email tới
         <a href="mailto:support@payos.vn">support@payos.vn</a>
     </p>
-    <a href="/" id="return-page-btn"
+    <a href="{{route('admin.user.paymentIndex')}}" id="return-page-btn"
     >Trở về trang Tạo Link thanh toán</a
     >
 </div>

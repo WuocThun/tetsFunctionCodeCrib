@@ -53,7 +53,7 @@ buttonContainer.addEventListener("click", async (event) => {
     changeButton();
 });
 
-document.getElementById("create-payment-link-btn").addEventListener("click", function() {
+document.getElementById("create-payment-link-btn").addEventListener("click", function () {
     // Make an AJAX request to your Laravel backend to generate the payment link
     fetch('/admin/create-payment-link', {
         method: 'GET',
@@ -71,7 +71,6 @@ document.getElementById("create-payment-link-btn").addEventListener("click", fun
         })
         .catch(error => console.error('Error:', error));
 });
-
 
 const getPaymentLink = async () => {
     const response = await fetch(
@@ -124,3 +123,68 @@ const changeButton = () => {
     `;
     }
 };
+    function convertAmount() {
+    const amountInput = document.getElementById("amount").value;
+    const amountTextElement = document.getElementById("amountText");
+
+    if (amountInput && Number(amountInput) < 10000000) {
+    amountTextElement.textContent = `${convertToVietnameseCurrencyText(Number(amountInput))} đồng`;
+} else {
+    amountTextElement.textContent = "";
+}
+}
+
+    function convertToVietnameseCurrencyText(number) {
+    if (number === 0) return "không";
+
+    const units = ["", "nghìn", "triệu", "tỷ"];
+    let parts = [];
+    let unitIndex = 0;
+
+    while (number > 0) {
+    const segment = number % 1000;
+    if (segment > 0) {
+    parts.unshift(segmentToWords(segment) + (units[unitIndex] ? " " + units[unitIndex] : ""));
+}
+    number = Math.floor(number / 1000);
+    unitIndex++;
+}
+
+    return parts.join(" ").trim();
+}
+
+    function segmentToWords(segment) {
+    const words = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
+    let result = "";
+    const hundreds = Math.floor(segment / 100);
+    const tens = Math.floor((segment % 100) / 10);
+    const ones = segment % 10;
+
+    if (hundreds > 0) {
+    result += words[hundreds] + " trăm ";
+} else if (tens > 0 || ones > 0) {
+    result += " ";
+}
+
+    if (tens > 1) {
+    result += words[tens] + " mươi ";
+    if (ones === 1) {
+    result += "mốt ";
+} else if (ones > 0) {
+    result += words[ones] + " ";
+}
+} else if (tens === 1) {
+    result += "mười ";
+    if (ones > 0) {
+    result += words[ones] + " ";
+}
+} else if (ones > 0) {
+    if (ones === 5 && segment >= 10) {
+    result += "lăm ";
+} else {
+    result += words[ones] + " ";
+}
+}
+
+    return result.trim();
+}

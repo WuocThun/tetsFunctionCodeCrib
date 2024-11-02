@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="main-box">
-    <h4 class="payment-titlte">Thanh toán thất bại</h4>
+    <h4 class="payment-titlte">Đã bị huỷ</h4>
     <p>
         Nếu có bất kỳ câu hỏi nào, hãy gửi email tới
         <a href="mailto:support@payos.vn">support@payos.vn</a>
