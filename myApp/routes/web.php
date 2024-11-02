@@ -137,10 +137,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
         Route::prefix('payment')->group(function () {
             Route::get('mbbank', [PaymentController::class, 'index'])->name('payment.mbbank');
-            Route::post('/create-payment-link', [PaymentController::class, 'createPaymentLink'])->name('payment.mbbank.createPaymentLink');
+            Route::post('mbbank/createPaymentLink', [PaymentController::class, 'createPaymentLink'])->name('payment.mbbank.createPaymentLink');
             Route::get('mbbank/success', [PaymentController::class, 'successPayment'])->name('payment.mbbank.success');
             Route::post('mbbank/success', [PaymentController::class, 'successPayment'])->name('payment.mbbank.success');
-            Route::get('mbbank/cancel', [PaymentController::class, 'cancelPayment'])->name('payment.mbbank.success');
+            Route::get('mbbank/cancel', [PaymentController::class, 'cancelPayment'])->name('payment.mbbank.cancel');
             Route::post('mbbank/create',[PaymentController::class,'createOrder'])->name('payment.mbbank.create');
             Route::get('mbbank/create/{id}', [PaymentController::class, 'getPaymentLinkInfoOfOrder']);
             Route::put('mbbank/create/{id}', [PaymentController::class, 'cancelPaymentLinkOfOrder']);
