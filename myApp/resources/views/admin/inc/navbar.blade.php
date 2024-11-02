@@ -161,6 +161,23 @@
                     @endcan
                 </ul>
             </div>
+            <div class="dropdown">
+                <a class="btn  dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Nạp tiền vào tài khoản
+                </a>
+                <ul class="dropdown-menu">
+                    @role('admin')
+                    <li><a class="dropdown-item" href="{{route('admin.rooms.allRooms')}}">Kiểm tra toàn hệ thống (admin) --chưa update</a></li>
+                    @endrole
+                    <li><a class="dropdown-item" href="{{route('admin.user.paymentIndex')}}">Nạp tiền</a></li>
+                    <li><a class="dropdown-item" href="{{route('admin.user.paymentIndex')}}">Lịch sử nạp tiền</a></li>
+{{--                    <li><a class="dropdown-item" href="{{route('admin.rooms.create')}}">Đăng bài phòng</a></li>--}}
+{{--                    @can('manage blogs')--}}
+{{--                        <li><a class="dropdown-item" href="{{route('admin.rooms.getPendingRooms')}}">Tất cả bài cần duyệt</a>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
+                </ul>
+            </div>
         </ul>
         @role('admin')
         <div class="dropdown">
