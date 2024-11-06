@@ -18,10 +18,91 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function __construct(VietMapProviders $vietnamMapService)
     {
         $this->VietMapProviders = $vietnamMapService;
     }
+    public function createCore()
+    {
+        $getAllClassRoom = RoomsClassification::all();
+        //        dd($getAllClassRoom);
+        $getIdUser = \auth()->id();
+        $userData  = User::find($getIdUser);
+        $provinces = $this->VietMapProviders->getProvinces();
+
+        return view('admin_core.content.rooms.create',
+            compact('provinces', 'userData', 'getAllClassRoom'));        }
+    public function storeCore(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $data = $request->validate([
+            'title'          => 'required|unique:rooms|max:255',
+            'description'    => 'required|',
+            'image'          => 'required|array|min:2',
+            // yêu cầu tối thiểu 2 ảnh
+            'price'          => 'required|numeric',
+            'area'           => 'required|string',
+            'slug'           => 'required|string',
+            'status'         => 'required|integer',
+            'full_address'   => 'required|string',
+            'rooms_class_id' => 'required|integer',
+            'gender_rental'  => 'required|integer',
+            'video'          => 'nullable|mimes:mp4,mov,avi,wmv|max:20480',
+            'video_url'      => 'nullable|url',
+        ], [
+                'title.required'       => 'Vui lòng nhập tên tiêu đề',
+                'description.required' => 'Vui lòng nhập mô tả phòng',
+                'price.required'       => 'Vui lòng giá phòng ',
+                'area.required'        => 'Vui lòng nhập diện tích phòng ',
+                'image.required'       => 'Vui lòng thêm hình ảnh',
+
+                'image.min'               => 'Vui lòng tải lên ít nhất 2 hình ảnh',
+                'rooms_class_id.required' => 'Vui lòng chọn kiểu phòng ',
+
+            ]
+        );
+        //
+        $room                 = new Rooms();
+        $room->user_id        = \auth()->id();
+        $room->title          = $data['title'];
+        $data['province'] = $request->input('province');
+        $room->province          = $data['province'];
+        $data['district'] = $request->input('district');
+        $room->district          = $data['district'];
+        //        $room->district          = $data['district'];
+        $room->slug           = $data['slug'];
+        $room->status         = $data['status'];
+        $room->full_address   = $data['full_address'];
+        $room->description    = $data['description'];
+        $room->price          = $data['price'];
+        $room->rooms_class_id = $data['rooms_class_id'];
+        $room->gender_rental  = $data['gender_rental'];
+        $room->area           = $data['area'];
+        $room->video          = $data['video'] ?? null;
+        $room->video_url      = $data['video_url'] ?? null;
+        // Handle image upload
+        $images = [];
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $img) {
+                $path           = 'uploads/rooms/';
+                $get_name_image = $img->getClientOriginalName();
+                $name_image     = current(explode('.', $get_name_image));
+                $new_image      = $name_image . rand(0, 99) . '.'
+                                  . $img->getClientOriginalExtension();
+                $img->move($path, $new_image);
+                $images[] = $new_image;  // Add each image to the array
+            }
+            $room->image = json_encode($images);  // Save images as JSON
+        }
+
+        //        // Save the room to the database
+        $room->save();
+
+        return redirect()->route('admin.rooms.myRooms')
+                         ->with('status', 'Thêm thành công');
+    }
+
+
 
     public function index()
     {

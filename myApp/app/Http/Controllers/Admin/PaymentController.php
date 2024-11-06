@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use PayOS\PayOS;
-
+use App\Models\OrderPayment;
 class PaymentController extends Controller
 {
 
@@ -21,21 +21,30 @@ class PaymentController extends Controller
     public function createPaymentLink(Request $request)
     {
         $data         = $request->all();
+        $orderCode    = intval(substr(strval(microtime(true) * 10000), -6));
         $getAmount    = intval($data['amount']);
         $getUserId    = auth()->id();
         $getUserPhone = substr(auth()->user()->phone_number, -3);
-        $cancelUrl = route('admin.payment.mbbank.cancel');
-//        $successUrl = route('admin.payment.mbbank.success');
-        $YOUR_DOMAIN  = $request->getSchemeAndHttpHost();
-        $data         = [
-            "orderCode"   => intval(substr(strval(microtime(true) * 10000),
-                -6)),
+        $description = "Crib " . $getUserId . " " . $getUserPhone;
+        $orderPayment = new OrderPayment();
+        $orderPayment->amount = $getAmount;
+        $orderPayment->payment_status = '0';
+        $orderPayment->description = $description;
+        $orderPayment->order_code = $orderCode;
+        $orderPayment->user_id = $getUserId;
+        $orderPayment->save();
+        $cancelUrl    = route('admin.payment.mbbank.cancel');
+//                $returnUrl = route('admin.payment.mbbank.success');
+        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
+        $data        = [
+            "orderCode"   => $orderCode,
             "amount"      => $getAmount,
-            "description" => "Crib " . $getUserId . " " . $getUserPhone,
-//            "returnUrl"   => $YOUR_DOMAIN . "/admin/payment/mbbank/success",
-            "returnUrl"   => $YOUR_DOMAIN . "/admin/payment/mbbank/success?amount={$getAmount}",
-//            "cancelUrl"   => $YOUR_DOMAIN . "/admin/payment/mbbank/cancel",
-            "cancelUrl"   => $cancelUrl,
+            "description" => $description,
+            "returnUrl"   => $YOUR_DOMAIN
+                             . "/admin/payment/mbbank/success?amount={$getAmount}&payment_status=1&order_code={$orderCode}",
+            "cancelUrl"   => $YOUR_DOMAIN
+                             . "/admin/payment/mbbank/cancel?order_code={$orderCode}",
+//            "cancelUrl"   => $cancelUrl,
         ];
         error_log($data['orderCode']);
 
@@ -148,63 +157,46 @@ class PaymentController extends Controller
 
     public function successPayment(Request $request)
     {
+        $payment_status = intval($request->get('payment_status'));
+        $order_code = $request->get('orderCode');
+        $orderPayment = OrderPayment::where('order_code',$order_code)->first();
+        $orderPayment->payment_status = $payment_status;
+//        dd($orderPayment);
+        $orderPayment->save();
         $amount = intval($request->get('amount'));
-        $user = auth()->user();
+        $user   = auth()->user();
 
         // Update the user's balance
         $user->balance += $amount; // Assuming you have a 'balance' field in your users table
         $user->save();
+
         return view('admin.content.payment.success');
 
     }
 
-    public function cancelPayment()
+    public function cancelPayment(Request $request)
     {
+        $order_code = $request->get('order_code');
+        $orderPayment = OrderPayment::where('order_code',$order_code)->first();
+        $orderPayment->payment_status = '2';
+        $orderPayment->save();
         return view('admin.content.payment.cancel');
 
     }
 
     public function index(Request $request)
     {
-        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
-        echo $YOUR_DOMAIN;
+//        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
+//        echo $YOUR_DOMAIN;
 
         return view('admin.content.payment.checkout');
     }
 
-    public function createPayment()
-    {
-        // Retrieve PayOS credentials from .env
-
-        // Initialize PayOS
-        $payOS = new PayOS($this->payOSClientId, $this->payOSApiKey,
-            $this->payOSChecksumKey);
-
-        $YOUR_DOMAIN
-            = route('admin.user.paymentIndex'); // Use Laravel's url() helper to get the base URL
-
-        // Prepare data
-        $data = [
-            "orderCode"   => intval(substr(strval(microtime(true) * 10000),
-                -6)),
-            "amount"      => 2000,
-            "description" => "Thanh toán đơn hàng",
-            "items"       => [
-                [
-                    'name'     => 'Mì tôm Hảo Hảo ly',
-                    'price'    => 2000,
-                    'quantity' => 1,
-                ],
-            ],
-            "returnUrl"   => $YOUR_DOMAIN,
-            "cancelUrl"   => $YOUR_DOMAIN,
-        ];
-
-        // Create the payment link
-        $response = $payOS->createPaymentLink($data);
-
-        // Redirect to the payment page
-        return redirect()->to($response['checkoutUrl']);
-    }
+   public function getHistoryPayment()
+   {
+       $getUserId = auth()->id();
+       $orderPayment = OrderPayment::where('user_id',$getUserId)->get();
+       return view('admin.content.payment.history', compact('orderPayment'));
+   }
 
 }

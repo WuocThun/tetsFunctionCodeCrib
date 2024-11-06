@@ -6,31 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Blogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Facades\Auth;
 
-use function Pest\Laravel\withMiddleware;
 
-class BlogsController extends Controller implements HasMiddleware
+
+class BlogsController
 {
 
-    public static function middleware(): array
-
-    {
-        return [
-            'auth',
-            new Middleware('permission:add blogs|edit blogs|delete blogs|publish blogs',
-                ['only' => ['index', 'show']]),
-            //            only: ['index','show']),
-            new Middleware('permission:add blogs',
-                ['only' => ['create', 'store']]),
-            new Middleware('permission:edit blogs',
-                ['only' => ['edit', 'update']]),
-            new Middleware('permission:delete blogs', ['only' => ['destroy']]),
-        ];
-    }
 
     public function accept_blog(Request $request, $id)
     {
