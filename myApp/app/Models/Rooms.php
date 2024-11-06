@@ -28,5 +28,15 @@ class Rooms extends Model
             'video',
             'video_url',
         ];
-
+    public function vipPurchases()
+    {
+        return $this->hasMany(VIPPurchase::class);
+    }
+    public function hasActiveVIP()
+    {
+        return $this->vipPurchases()
+                    ->where('status', 'active')
+                    ->where('end_date', '>=', now())
+                    ->exists();
+    }
 }

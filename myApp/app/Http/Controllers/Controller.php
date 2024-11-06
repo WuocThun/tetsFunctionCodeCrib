@@ -22,12 +22,12 @@ class Controller extends BaseController
         );
     }
 
-    protected function handleException(\Throwable $th)
-    {
-        return response()->json([
-            "error" => $th->getCode(),
-            "message" => $th->getMessage(),
-            "data" => null
-        ]);
-    }
+//    protected function handleException(\Throwable $th)
+//    {
+//        return response()->json([
+//            "error" => $th->getCode(),
+//            "message" => $th->getMessage(),
+//            "data" => null
+//        ]);
+//    }
 }

@@ -36,7 +36,8 @@
                                             <td>{{$cate->title}}</td>
                                             <td>{{ \Illuminate\Support\Str::limit($cate->description, 50, '...') }}</td>
                                             <td>
-                                                @if($cate->status == 1)
+
+                                                    @if($cate->status == 1)
                                                     <p class="text-success btn">Hiển thị </p>
                                                 @elseif($cate->status == 0)
                                                     <p class="text-danger btn">Không hiện thị </p>

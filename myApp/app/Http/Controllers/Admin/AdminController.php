@@ -12,4 +12,8 @@ class AdminController extends Controller
     {
         return view("admin.inc.index");
     }
+    public  function adminCore()
+    {
+        return view("admin_core.content.index");
+    }
 }

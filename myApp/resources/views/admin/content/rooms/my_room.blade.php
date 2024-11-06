@@ -87,6 +87,8 @@
 {{--                                               <a class="btn btn-secondary"--}}
 {{--                                                  href="{{route('admin.blogs.preview_blogs',$myroom->id)}}">xem Blogs</a>--}}
                                                <a class="btn btn-warning"  href="{{route('admin.rooms.edit',$myroom->id)}}">Sửa</a>
+                                               <a class="btn btn-primary"  href="{{route('admin.vip.packages',$myroom->id)}}">Kích hoạt vip</a>
+
                                                <form method="post"  action="{{route('admin.rooms.destroy',[$myroom->id])}}">
                                                    @method('DELETE')
                                                    @csrf
