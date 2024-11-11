@@ -1,4 +1,5 @@
 @extends('fe.layouts.app')
+@section('title','Tin tức')
 @section('header')
     @include('fe.inc.header')
 @endsection
@@ -43,7 +44,7 @@
                 </div>
             </div>
 
-           @include('fe.inc.search_left')
+           @include('fe.inc.fitler_blogs_right')
 
         </div>
 

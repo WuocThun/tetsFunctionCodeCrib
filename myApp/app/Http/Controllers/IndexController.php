@@ -9,14 +9,20 @@ use App\Models\User;
 use App\Providers\VietMapProviders;
 use Carbon\Carbon;
 use App\Models\RoomsClassification;
+use App\Models\VIPPackage;
+use Illuminate\Support\Facades\View;
 
 class IndexController extends Controller
 
 {
-    public function getAllClassRoom()
+//    public function getAllClassRoom()
+//    {
+//        $clasRoom =RoomsClassification::take(3)->get();
+//        return view ('fe.inc.header',compact('clasRoom'));
+//    }
+    public function fitlerPrice()
     {
-        $clasRoom =RoomsClassification::take(3)->get();
-        return view ('fe.inc.header',compact('clasRoom'));
+        return view('fe.fitler_price');
     }
     public  function  dichvu()
     {
@@ -28,7 +34,7 @@ class IndexController extends Controller
     }
     public function index()
     {
-        $rooms = Rooms::all();
+        $rooms = Rooms::orderByDesc('vip_package_id')->orderByDesc('created_at')->get();
 
         return view('fe.index',compact('rooms'));
     }
@@ -39,9 +45,11 @@ class IndexController extends Controller
     public function getRoom($slug)
     {
         $room = Rooms::where('slug',$slug)->first();
+
         $getUserId = $room->user_id;
         $getClassRoom = $room->rooms_class_id;
-
+        $getVipPackages =$room->vip_package_id;
+        $vipPackages = VIPPackage::find($getVipPackages);
         $ClassRoom = RoomsClassification::find($getClassRoom);
         $findUser = User::find($getUserId)->first();
         $createdDate = Carbon::parse($room->created_at);
@@ -53,13 +61,12 @@ class IndexController extends Controller
             // Nếu trên 24 giờ, hiển thị số ngày
             $timePosted = (int) $createdDate->diffInDays($now) . ' ngày trước';
         }
+
         $getProvince = $this->VietMapProviders->getProvinceData($room->province);
         $getDistrict = $this->VietMapProviders->getDistrictData($room->province);
-        //        $districtData = json_encode($getDistrict->getContent(),true);
         $provinceData = json_decode($getProvince->getContent(), true);
 
-        return view('fe.chitiet',compact('room','findUser','timePosted','ClassRoom','provinceData','getDistrict'));
-//        return view('fe.chitiet');
+        return view('fe.chitiet',compact('room','findUser','timePosted','ClassRoom','provinceData','getDistrict','vipPackages'));
     }
     public function getBlog($slug)
     {
