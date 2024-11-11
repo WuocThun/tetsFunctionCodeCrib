@@ -18,6 +18,7 @@ Route::get('/tin-tuc',[IndexController::class,'indexBlog'])->name('indexBlog');
 //Route::get('/{room-slug}',[IndexController::class,'getRoom'])->name('getRoom');
 Route::get('/phong/{slug}',[IndexController::class,'getRoom'])->name('getRoom');
 Route::get('/dich-vu',[IndexController::class,'dichvu'])->name('dichvu');
+Route::get('/bo-loc/phong',[IndexController::class,'fitlerPrice'])->name('boloc');
 Route::get('/tin-tuc/{slug}',[IndexController::class,'getBlog'])->name('getBlog');
 
 // Route group với middleware 'auth' và tiền tố 'admin'
@@ -164,7 +165,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         });
         Route::group(['middleware' => ['auth']], function () {
             Route::get('/rooms/{room}/vip-packages', [VIPController::class, 'showVIPPackages'])->name('vip.packages');
-            Route::post('/rooms/{room}/vip-purchase', [VIPController::class, 'purchaseVIPPackage'])->name('vip.purchase');
+            Route::post('/rooms/{room}/vip-purchase/{vipPackageId}', [VIPController::class, 'purchaseVIPPackage'])->name('vip.purchase');
 
         });
     });

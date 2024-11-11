@@ -1,107 +1,140 @@
 @extends('fe.layouts.app')
 @section('header')
-@include('fe.inc.header')
+    @include('fe.inc.header')
 @endsection
-@section('searchBar')
-@include('fe.inc.search_bar')
-@endsection
-@section('hotZone')
-@include('fe.inc.hot_zone')
-@endsection
+{{--@section('searchBar')--}}
+{{--@include('fe.inc.search_bar')--}}
+{{--@endsection--}}
+{{--@section('hotZone')--}}
+{{--@include('fe.inc.hot_zone')--}}
+{{--@endsection--}}
 @section('main')
     @php
         $images = json_decode($room->image, true);
+            $styles = $room->vipPackage->getDisplayStyles();
     @endphp
 
-<section class="search-results">
-    <div class="container search-results-container">
-        <div class="results-left">
-            <div class="item-detail">
-                @if (!empty($images))
-                    <!-- Carousel -->
-                    <div id="demo" class="carousel slide" data-bs-ride="carousel">
-                        <!-- Indicators/dots -->
-                        <div class="carousel-indicators">
-                            @foreach ($images as $index => $img)
-                                <button
-                                    type="button"
-                                    data-bs-target="#demo"
-                                    data-bs-slide-to="{{ $index }}"
-                                    class="{{ $index == 0 ? 'active' : '' }}"
-                                ></button>
-                            @endforeach
-                        </div>
 
-                        <!-- The slideshow/carousel -->
-                        <div class="carousel-inner">
-                            @foreach ($images as $index => $img)
-                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                    <img
-                                        src="{{ asset('uploads/rooms/' . $img) }}"
-                                        alt="Room Image {{ $index + 1 }}"
-                                        class="d-block h-100"
-                                        style="width: 100%"
-                                    />
-                                </div>
-                            @endforeach
-                        </div>
 
-                        <!-- Left and right controls/icons -->
-                        <button
-                            class="carousel-control-prev"
-                            type="button"
-                            data-bs-target="#demo"
-                            data-bs-slide="prev"
-                        >
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button
-                            class="carousel-control-next"
-                            type="button"
-                            data-bs-target="#demo"
-                            data-bs-slide="next"
-                        >
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    </div>
-                @else
-                    <p>No images available</p>
-                @endif
+    <section class="search-results">
 
-                <b style="font-size: 20px;">
-                   {{$room->title}}
-                </b>
+        <div class="container search-results-container">
 
-                <div class="address">
-                    <div class="iconaddress"></div>
-                    <span style="margin-left: 10px">Địa chỉ: {{$room->full_address}} </span>
+            <div class="results-left">
+                <div id="breadcrumb">
+                    <ol class="clearfix">
+                        <li class="first link">
+                            <a href="#" title="Cho thuê phòng trọ">
+                                <span>{{$ClassRoom->title}}</span>
+                            </a>
+                        </li>
+                        <li class="link link">
+                            <a href="#" title="{{$provinceData['province_name']}}">
+                                <span>{{$provinceData['province_name']}}</span>
+                            </a>
+                        </li>
+                        <li class="link link">
+                            <a href="#" title="{{$getDistrict}}">
+                                <span>{{$getDistrict}}</span>
+
+                            </a>
+                        </li>
+                        <li class="link last">
+                            <span>{{$room->title}}</span>
+                        </li>
+                    </ol>
                 </div>
 
-                <div class="attributes">
-                    <div class="iconprice"></div>
-                    <span
-                        style="
+                <div class="item-detail">
+                    @if (!empty($images))
+                        <!-- Carousel -->
+                        <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                            <!-- Indicators/dots -->
+                            <div class="carousel-indicators">
+                                @foreach ($images as $index => $img)
+                                    <button
+                                        type="button"
+                                        data-bs-target="#demo"
+                                        data-bs-slide-to="{{ $index }}"
+                                        class="{{ $index == 0 ? 'active' : '' }}"
+                                    ></button>
+                                @endforeach
+                            </div>
+
+                            <!-- The slideshow/carousel -->
+                            <div class="carousel-inner">
+                                @foreach ($images as $index => $img)
+                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img
+                                            src="{{ asset('uploads/rooms/' . $img) }}"
+                                            alt="Room Image {{ $index + 1 }}"
+                                            class="d-block h-100"
+                                            style="width: 100%"
+                                        />
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Left and right controls/icons -->
+                            <button
+                                class="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#demo"
+                                data-bs-slide="prev"
+                            >
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button
+                                class="carousel-control-next"
+                                type="button"
+                                data-bs-target="#demo"
+                                data-bs-slide="next"
+                            >
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    @else
+                        <p>No images available</p>
+                    @endif
+
+                    <b class="title_room" style="font-size: 20px;">
+                        {{$room->title}}
+                    </b>
+
+                    <div class="address">
+                        <div class="iconaddress"></div>
+                        <span>
+                    <img class="addr_icone" id="addr_icone" width="10px" height="10px" src="{{asset('uploads/maps-and-flags.png')}}">
+                        </span>
+                        <span style="margin-left: 10px">Địa chỉ: {{$room->full_address}} </span>
+                    </div>
+
+                    <div class="attributes">
+                        <div class="iconprice"></div>
+                        <span
+                            style="
                   color: #16c784;
                   font-weight: bold;
                   font-size: 18px;
                   margin-left: 10px;
-                ">{{$room->price}} triệu/tháng</span>
-                    <div class="iconacreage"></div>
-                    <span style="margin-left: 10px"> {{$room->area}} m <sup>2</sup></span>
-                    <div class="iconclock"></div>
-                    <span style="margin-left: 10px">{{ $timePosted }}</span>
-                    <div class="iconhastag"></div>
-                    <span style="margin-left: 10px">{{$room->id}}</span>
-                </div>
-                <h3 style="margin-top: 20px">Thông tin mô tả</h3>
-                <div>
-                    @php
-                        echo($room->description);
-                    @endphp                </div>
+                ">{{number_format($room->price,0,',', '.')}} nghìn/tháng</span>
+                        <div class="iconacreage"></div>
+                        <span style="margin-left: 10px"> {{$room->area}} m <sup>2</sup></span>
+                        <div class="iconclock"></div>
+                        <span style="margin-left: 10px">{{ $timePosted }}</span>
+                        <div class="iconhastag"></div>
+                        <span style="margin-left: 10px">Mã phòng: {{$room->id}}</span>
+                    </div>
+
+                    <h3 style="margin-top: 20px">Thông tin mô tả</h3>
+                    <div>
+                        @php
+                            echo($room->description);
+                        @endphp                </div>
                     <table class="table table table-striped">
                         <tbody>
                         <tr>
-                            <td class="name">Mã tin:</td>
+                            <td class="name">Mã phòng:</td>
                             <td>{{$room->id}}</td>
                         </tr>
                         <tr>
@@ -109,8 +142,8 @@
                             <td>
                                 <a
                                     style="text-decoration: underline"
-                                    title="Phòng trọ Quận 2"
-                                    href="page2.html"><strong>Cho thuê phòng trọ {{$getDistrict}}</strong></a>
+                                    title="{{$getDistrict}}"
+                                    href="#"><strong>Cho thuê phòng trọ {{$getDistrict}}</strong></a>
                             </td>
                         </tr>
                         <tr>
@@ -134,11 +167,10 @@
                             @else
                                 <td>Nữ</td>
                             @endif
-
                         </tr>
                         <tr>
                             <td class="name">Gói tin:</td>
-                            <td><span style="color: #e13427">Tin VIP nổi bật</span></td>
+                            <td><span style="color: #e13427">{{$vipPackages->name}}</span></td>
                         </tr>
                         <tr>
                             <td class="name">Ngày đăng:</td>
@@ -156,171 +188,67 @@
                         </tr>
                         </tbody>
                     </table>
-                <h3>Thông tin liên hệ</h3>
-                <table class="table table table-striped">
-                    <tr>
-                        <td class="name">Liên hệ:</td>
-                        <td>{{$findUser->name}}</td>
-                    </tr>
-                    <tr>
-                        <td class="name">Điện thoại:</td>
-                        <td>{{$findUser->phone_number}}</td>
-                    </tr>
-                    <tr>
-                        <td class="name">Zalo</td>
-                        <td>{{$findUser->phone_number}}</td>
-                    </tr>
-                </table>
-
-                <iframe
-                    src="https://maps.google.com/maps?&hl=en&q=${{$room->full_address}}&t=&z=12&ie=UTF8&iwloc=B&output=embed"
-                    width="850"
-                    height="450"
-                    style="border: 0"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+                    <h3>Thông tin liên hệ</h3>
+                    <table class="table table table-striped">
+                        <tr>
+                            <td class="name">Liên hệ:</td>
+                            <td>{{$findUser->name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="name">Điện thoại:</td>
+                            <td>{{$findUser->phone_number}}</td>
+                        </tr>
+                        <tr>
+                            <td class="name">Zalo</td>
+                            <td>{{$findUser->phone_number}}</td>
+                        </tr>
+                    </table>
+                    <iframe
+                        src="https://maps.google.com/maps?&hl=en&q=${{$room->full_address}}&t=&z=12&ie=UTF8&iwloc=B&output=embed"
+                        width="850"
+                        height="450"
+                        style="border: 0"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                     <p>Bạn đang xem nội dung tin đăng: "{{$room->title}} - Mã
-                        tin: #{{$room->id}}". Mọi thông tin liên quan đến tin đăng này chỉ mang tính chất tham khảo. Nếu bạn có phản
+                        tin: #{{$room->id}}". Mọi thông tin liên quan đến tin đăng này chỉ mang tính chất tham khảo. Nếu
+                        bạn có phản
                         hồi với tin đăng này (báo xấu, tin đã cho thuê, không liên lạc được,...), vui lòng thông báo để
                         CodeCrib có thể xử lý.</p>
-            </div>
+                </div>
 
-            <div class="pagination">
-{{--                <a href="{{route('getRoom',$room1->slug)}}" style="text-decoration: none;">--}}
-{{--                    <div class="result-item">--}}
-{{--                        @php--}}
-{{--                            $images = json_decode($room1->image, true);--}}
-{{--                        @endphp--}}
-{{--                        <img src="{{asset('uploads/fe/img/room1.jpg')}}" alt="Ký túc xá Tân Bình">--}}
-{{--                        <div class="result-info">--}}
-{{--                            <h3>{{$room1->title}}</h3>--}}
-{{--                            <p>{{$room1->price}}triệu/tháng - {{$room1->area}}m² </p>--}}
-{{--                            <p>{{$room1->full_address}}</p>--}}
+                <div class="pagination">
+                    {{--                <a href="{{route('getRoom',$room1->slug)}}" style="text-decoration: none;">--}}
+                    {{--                    <div class="result-item">--}}
+                    {{--                        @php--}}
+                    {{--                            $images = json_decode($room1->image, true);--}}
+                    {{--                        @endphp--}}
+                    {{--                        <img src="{{asset('uploads/fe/img/room1.jpg')}}" alt="Ký túc xá Tân Bình">--}}
+                    {{--                        <div class="result-info">--}}
+                    {{--                            <h3>{{$room1->title}}</h3>--}}
+                    {{--                            <p>{{$room1->price}}triệu/tháng - {{$room1->area}}m² </p>--}}
+                    {{--                            <p>{{$room1->full_address}}</p>--}}
 
-{{--                            --}}{{--                            <p>{{ \Illuminate\Support\Str::limit($room1->description, 15, '...') }}</p>--}}
-{{--                            <div class="contact-options">--}}
-{{--                                <button class="btn call-success">Gọi {{$room1->phone_number}}</button>--}}
-{{--                                --}}{{--                                <button class="btn zalo-btn">Nhắn Zalo</button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </a>--}}
+                    {{--                            --}}{{--                            <p>{{ \Illuminate\Support\Str::limit($room1->description, 15, '...') }}</p>--}}
+                    {{--                            <div class="contact-options">--}}
+                    {{--                                <button class="btn call-success">Gọi {{$room1->phone_number}}</button>--}}
+                    {{--                                --}}{{--                                <button class="btn zalo-btn">Nhắn Zalo</button>--}}
+                    {{--                            </div>--}}
+                    {{--                        </div>--}}
+                    {{--                    </div>--}}
+                    {{--                </a>--}}
+                </div>
             </div>
+@include('fe.inc.fitler_price_right')
         </div>
-
-        <div class="results-right1">
-            <div class="filter-section">
-                <h3>Danh mục cho thuê</h3>
-                <ul>
-                    <li>Cho thuê phòng trọ (77,318)</li>
-                    <li>Cho thuê nhà nguyên căn (11,863)</li>
-                    <li>Cho thuê căn hộ (13,604)</li>
-                    <li>Cho thuê căn hộ mini (3,048)</li>
-                    <li>Cho thuê căn hộ dịch vụ (7,810)</li>
-                    <li>Cho thuê mặt bằng (2,390)</li>
-                    <li>Tìm người ở ghép (15,847)</li>
-                </ul>
-            </div>
-            <div class="filter-section">
-                <h3>Xem theo giá</h3>
-                <ul>
-                    <li>Dưới 1 triệu</li>
-                    <li>Từ 1 - 2 triệu</li>
-                    <li>Từ 2 - 3 triệu</li>
-                    <li>Từ 3 - 5 triệu</li>
-                    <li>Từ 5 - 7 triệu</li>
-                    <li>Từ 7 - 10 triệu</li>
-                    <li>Từ 10 - 15 triệu</li>
-                    <li>Trên 15 triệu</li>
-                </ul>
-            </div>
-
-            <div class="filter-section">
-                <h3>Xem theo diện tích</h3>
-                <ul>
-                    <li>Dưới 20m²</li>
-                    <li>Từ 20 - 30m²</li>
-                    <li>Từ 30 - 50m²</li>
-                    <li>Từ 50 - 70m²</li>
-                    <li>Từ 70 - 90m²</li>
-                    <li>Trên 90m²</li>
-                </ul>
-            </div>
-            <div class="newstr">
-                <h3>Tin đăng mới</h3>
-                <ul>
-                    <li>
-                        <a href="#">
-                            <img src="img/room1.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                                <span class="post-price">2.5 triệu/tháng</span>
-                                <span class="post-time">Đăng 2 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="img/room1.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                                <span class="post-price">2.5 triệu/tháng</span>
-                                <span class="post-time">Đăng 2 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="img/room1.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                                <span class="post-price">2.5 triệu/tháng</span>
-                                <span class="post-time">Đăng 2 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="img/room1.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                                <span class="post-price">2.5 triệu/tháng</span>
-                                <span class="post-time">Đăng 2 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="img/room1.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                                <span class="post-price">2.5 triệu/tháng</span>
-                                <span class="post-time">Đăng 2 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img src="img/room2.jpg" alt="Phòng trọ mới" />
-                            <div>
-                                <span class="post-meta">Phòng trọ gần Đại học Kinh Tế</span>
-                                <span class="post-price">3.0 triệu/tháng</span>
-                                <span class="post-time">Đăng 5 giờ trước</span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 @endsection
 @section('overView')
-@include('fe.inc.over_view')
+    @include('fe.inc.over_view')
 @endsection
 @section('footer')
-@include('fe.inc.footer')
+    @include('fe.inc.footer')
 @endsection
 

@@ -6,11 +6,9 @@
         <nav class="main-nav">
             <ul>
                 <li><a href="{{route('welcome')}}">Trang chủ</a></li>
-{{--                @foreach($clasRoom as $class => $cl)--}}
-{{--                <li><a href="page1.html">{{$cl->title}}</a></li>--}}
-{{--                <li><a href="page2.html">Cho thuê căn hộ</a></li>--}}
-{{--                <li><a href="page3.html">Tìm người ở ghép</a></li>--}}
-{{--                @endforeach--}}
+                @foreach($clasRoom as $class => $cl)
+                <li><a href="#">{{$cl->title}}</a></li>
+                @endforeach
                 <li><a href="{{route('indexBlog')}}">Tin tức</a></li>
                 <li><a href="{{route('dichvu')}}">Dịch vụ</a></li>
             </ul>

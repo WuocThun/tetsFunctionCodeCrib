@@ -1,8 +1,10 @@
 <section class="search-bar">
     <div class="container search-container">
         <select>
-            <option value="phong-tro">Phòng trọ, nhà trọ</option>
-            <option value="can-ho">Căn hộ</option>
+{{--            <option value="phong-tro">Phòng trọ, nhà trọ</option>--}}
+            @foreach($clasRoom as $class => $cl)
+                <option href="#">{{$cl->title}}</option>
+            @endforeach
         </select>
         <select>
             <option value="toan-quoc">Toàn quốc</option>

@@ -46,4 +46,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function deductBalance($amount)
+    {
+        $this->balance -= $amount;
+        $this->save();
+    }
+    public function activateVIPStatus()
+    {
+        $this->is_vip = true;
+        $this->save();
+    }
 }
