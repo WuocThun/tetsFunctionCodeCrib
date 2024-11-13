@@ -7,7 +7,7 @@
             <ul>
                 <li><a href="{{route('welcome')}}">Trang chủ</a></li>
                 @foreach($clasRoom as $class => $cl)
-                <li><a href="#">{{$cl->title}}</a></li>
+                <li><a href="{{ route('laydichvu', $cl->slug)}}">{{$cl->title}}</a></li>
                 @endforeach
                 <li><a href="{{route('indexBlog')}}">Tin tức</a></li>
                 <li><a href="{{route('dichvu')}}">Dịch vụ</a></li>

@@ -51,15 +51,33 @@
                     </div>
                 </a>
                 @endforeach
+{{--                <div class="pagination">--}}
+{{--                    <button class="prev">« Trang trước</button>--}}
+{{--                    <button class="active">1</button>--}}
+{{--                    <button>1</button>--}}
+{{--                    <button>3</button>--}}
+{{--                    <button>4</button>--}}
+{{--                    <button>5</button>--}}
+{{--                    <button class="next">» Trang sau »</button>--}}
+{{--                </div>--}}
                 <div class="pagination">
-                    <button class="prev">« Trang trước</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>4</button>
-                    <button>5</button>
-                    <button class="next">» Trang sau »</button>
+                    @if ($rooms->onFirstPage())
+                        <button class="prev" disabled>« Trang trước</button>
+                    @else
+                        <a href="{{ $rooms->previousPageUrl() }}" class="prev">« Trang trước</a>
+                    @endif
+
+                    @for ($page = 1; $page <= $rooms->lastPage(); $page++)
+                        <a href="{{ $rooms->url($page) }}" class="page {{ $page == $rooms->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                    @endfor
+
+                    @if ($rooms->hasMorePages())
+                        <a href="{{ $rooms->nextPageUrl() }}" class="next">Trang sau »</a>
+                    @else
+                        <button class="next" disabled>Trang sau »</button>
+                    @endif
                 </div>
+
             </div>
 
 @include('fe.inc.fitler_blogs_right')

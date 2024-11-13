@@ -12,18 +12,20 @@
     </div>
 
     <div class="newstr">
-        <h3>Tin đăng mới</h3>
+        <h3>Phòng ngẫu nhiên</h3>
         <ul>
+                @foreach($randomRooms as $room)
             <li>
-                <a href="#">
+                <a href="{{route('getRoom',$room->slug)}}">
                     <img src=" {{asset('uploads/fe/img/room1.jpg')}} " alt="Phòng trọ mới" />
                     <div>
-                        <span class="post-meta">Phòng trọ tiện nghi Q1</span>
-                        <span class="post-price">2.5 triệu/tháng</span>
-                        <span class="post-time">Đăng 2 giờ trước</span>
+                        <span class="post-meta">{{ \Illuminate\Support\Str::limit($room->title, 15, '...') }}</span>
+                        <span class="post-price">{{number_format($room->price,0,',', '.')}} nghìn/tháng</span>
+{{--                        <span class="post-time">{{$room->}}</span>--}}
                     </div>
                 </a>
             </li>
+            @endforeach
 
         </ul>
     </div>

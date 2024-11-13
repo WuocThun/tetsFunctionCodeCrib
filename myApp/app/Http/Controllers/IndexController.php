@@ -28,18 +28,26 @@ class IndexController extends Controller
     {
         return view('fe.dichvu');
     }
+    public function getClassIndex($slug)
+    {
+
+//        $rooms = Rooms::where('slug',$slug)->first();
+        $getClass = RoomsClassification::where('slug',$slug)->first();
+        $classId = $getClass->id;
+        $rooms = Rooms::where('rooms_class_id',$classId)->paginate(4);
+        return view('fe.index',compact('rooms'));
+    }
     public function __construct(VietMapProviders $vietnamMapService)
     {
         $this->VietMapProviders = $vietnamMapService;
     }
     public function index()
     {
-        $rooms = Rooms::orderByDesc('vip_package_id')->orderByDesc('created_at')->get();
-
+        $rooms = Rooms::orderByDesc('vip_package_id')->orderByDesc('created_at')->paginate(7);
         return view('fe.index',compact('rooms'));
     }
     public function indexBlog(){
-        $blogs = Blogs::all();
+        $blogs = Blogs::paginate(5);
         return view('fe.tintuc',compact('blogs'));
     }
     public function getRoom($slug)
@@ -73,6 +81,35 @@ class IndexController extends Controller
 
         $blog = Blogs::where('slug',$slug)->first();
         return view('fe.baiviet',compact('blog'));
+    }
+    public function searchRooms(Request $request)
+    {
+        // Lấy các giá trị tìm kiếm
+        $roomClass = $request->input('room_class');
+        $provinceId = $request->input('province_id');
+        $price = $request->input('price');
+        $area = $request->input('area');
+
+        // Xây dựng query để lọc kết quả
+        $query = Rooms::query();
+
+        if ($roomClass) {
+            $query->where('rooms_class_id', $roomClass);
+        }
+        if ($provinceId) {
+            $query->where('province', $provinceId);
+        }
+        if ($price) {
+            $query->where('price', $price);
+        }
+        if ($area) {
+            $query->where('area', $area);
+        }
+
+        // Lấy kết quả tìm kiếm
+        $rooms = $query->get();
+        // Chuyển kết quả sang dạng JSON để trả về cho AJAX
+        return view('fe.fitler_price',[$rooms]);
     }
 }
 

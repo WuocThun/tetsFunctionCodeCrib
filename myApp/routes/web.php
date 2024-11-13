@@ -19,7 +19,9 @@ Route::get('/tin-tuc',[IndexController::class,'indexBlog'])->name('indexBlog');
 Route::get('/phong/{slug}',[IndexController::class,'getRoom'])->name('getRoom');
 Route::get('/dich-vu',[IndexController::class,'dichvu'])->name('dichvu');
 Route::get('/bo-loc/phong',[IndexController::class,'fitlerPrice'])->name('boloc');
+Route::get('/dich-vu/{slug}',[IndexController::class,'getClassIndex'])->name('laydichvu');
 Route::get('/tin-tuc/{slug}',[IndexController::class,'getBlog'])->name('getBlog');
+Route::get('/tim-kiem/phong',[IndexController::class,'searchRooms'])->name('searchRooms');
 
 // Route group với middleware 'auth' và tiền tố 'admin'
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
