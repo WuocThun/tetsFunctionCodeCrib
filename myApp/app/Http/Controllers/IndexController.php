@@ -24,9 +24,6 @@ class IndexController extends Controller
     {
         return view('fe.login');
     }
-    public function postLogin(Request $request){
-
-    }
     public function getRegister()
     {
         return view('fe.register');
