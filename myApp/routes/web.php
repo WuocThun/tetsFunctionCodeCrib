@@ -13,63 +13,80 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\VIPController;
 use App\Http\Controllers\IndexController;
-Route::get('/',[IndexController::class,'index'] ) ->name('welcome');
-Route::get('/tin-tuc',[IndexController::class,'indexBlog'])->name('indexBlog');
+use App\Http\Controllers\TwoFactorController;
+
+Route::get('/', [IndexController::class, 'index'])->name('welcome');
+Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
+     ->name('indexBlog');
 //Route::get('/{room-slug}',[IndexController::class,'getRoom'])->name('getRoom');
-Route::get('/phong/{slug}',[IndexController::class,'getRoom'])->name('getRoom');
-Route::get('/dich-vu',[IndexController::class,'dichvu'])->name('dichvu');
-Route::get('/bo-loc/phong',[IndexController::class,'fitlerPrice'])->name('boloc');
-Route::get('/dich-vu/{slug}',[IndexController::class,'getClassIndex'])->name('laydichvu');
-Route::get('/tin-tuc/{slug}',[IndexController::class,'getBlog'])->name('getBlog');
-Route::get('/tim-kiem/phong',[IndexController::class,'searchRooms'])->name('searchRooms');
-Route::get('/dang-nhap',[IndexController::class,'getLogin'])->name('getLogin');
-Route::get('/dang-ky',[IndexController::class,'getRegister'])->name('getReginster');
+Route::get('/phong/{slug}', [IndexController::class, 'getRoom'])
+     ->name('getRoom');
+Route::get('/dich-vu', [IndexController::class, 'dichvu'])->name('dichvu');
+Route::get('/bo-loc/phong', [IndexController::class, 'fitlerPrice'])
+     ->name('boloc');
+Route::get('/dich-vu/{slug}', [IndexController::class, 'getClassIndex'])
+     ->name('laydichvu');
+Route::get('/tin-tuc/{slug}', [IndexController::class, 'getBlog'])
+     ->name('getBlog');
+Route::get('/tim-kiem/phong', [IndexController::class, 'searchRooms'])
+     ->name('searchRooms');
+Route::get('/dang-nhap', [IndexController::class, 'getLogin'])
+     ->name('getLogin');
+Route::get('/dang-ky', [IndexController::class, 'getRegister'])
+     ->name('getReginster');
+Route::resource('xac-minh',TwoFactorController::class)->names('xac-minh');
+
 
 // Route group với middleware 'auth' và tiền tố 'admin'
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
-    Route::get("/", [AdminController::class, 'index'])->name('index');
-    //Phân quyền đành cho ADMIN
-    Route::get('/addRole', [PermissionController::class, 'getAssgin'])
-         ->name('addRole')->middleware('permission:create role');
-    Route::get('/allUser', [PermissionController::class, 'getAllUser'])
-         ->name('allUser')->middleware('permission:create role');
-    Route::get('/getAssgin/{id}', [PermissionController::class, 'assgin'])
-         ->name('assgin')->middleware('permission:assign role');
-    Route::post('/insert_roles/{id}',
-        [PermissionController::class, 'insert_roles'])
-         ->name('insert_roles')->middleware('permission:assign role');
-    Route::get('/permission/{id}', [PermissionController::class, 'permission'])
-         ->name('permission')->middleware('permission:assign role');
-    Route::post('/insert_permission/{id}',
-        [PermissionController::class, 'insert_permission'])
-         ->name('insert_permission')->middleware('permission:assign role');
-    Route::post('/insert_permission',
-        [PermissionController::class, 'add_permisission'])
-         ->name('add_permisission')->middleware('permission:assign role');
-    Route::resource('/createUser', PermissionController::class)
-         ->names('user')->middleware('permission:create role');
-    Route::post('/permissions/{user}/assign-role',
-        [PermissionController::class, 'assignRole'])
-         ->name('assignRole')
-         ->middleware('permission:assign role');
-    Route::post('/permissions/{user}/revoke-role',
-        [PermissionController::class, 'revokeRole'])
-         ->name('revokeRole')
-         ->middleware('permission:revoke role');
-    Route::get('blogs/get_pending_blogs',
-        [BlogsController::class, 'get_pending_blogs'])
-         ->name('get_pending_blogs')->middleware('permission:manager blogs');
-    Route::PUT('blogs/accept_blog/{id}',
-        [BlogsController::class, 'accept_blog'])
-         ->name('blogs.accept_blog')->middleware('permission:manager blogs');
-    Route::PUT('blogs/decline_blog/{id}',
-        [BlogsController::class, 'decline_blog'])
-         ->name('blogs.decline_blog')->middleware('permission:manager blogs');
-    Route::get('blogs/preview_blogs/{id}',
-        [BlogsController::class, 'preview_blogs'])
-         ->name('blogs.preview_blogs')->middleware('permission:add blogs'); });
+        Route::get("/", [AdminController::class, 'index'])->name('index');
+        //Phân quyền đành cho ADMIN
+        Route::get('/addRole', [PermissionController::class, 'getAssgin'])
+             ->name('addRole')->middleware('permission:create role');
+        Route::get('/allUser', [PermissionController::class, 'getAllUser'])
+             ->name('allUser')->middleware('permission:create role');
+        Route::get('/getAssgin/{id}', [PermissionController::class, 'assgin'])
+             ->name('assgin')->middleware('permission:assign role');
+        Route::post('/insert_roles/{id}',
+            [PermissionController::class, 'insert_roles'])
+             ->name('insert_roles')->middleware('permission:assign role');
+        Route::get('/permission/{id}',
+            [PermissionController::class, 'permission'])
+             ->name('permission')->middleware('permission:assign role');
+        Route::post('/insert_permission/{id}',
+            [PermissionController::class, 'insert_permission'])
+             ->name('insert_permission')->middleware('permission:assign role');
+        Route::post('/insert_permission',
+            [PermissionController::class, 'add_permisission'])
+             ->name('add_permisission')->middleware('permission:assign role');
+        Route::resource('/createUser', PermissionController::class)
+             ->names('user')->middleware('permission:create role');
+        Route::post('/permissions/{user}/assign-role',
+            [PermissionController::class, 'assignRole'])
+             ->name('assignRole')
+             ->middleware('permission:assign role');
+        Route::post('/permissions/{user}/revoke-role',
+            [PermissionController::class, 'revokeRole'])
+             ->name('revokeRole')
+             ->middleware('permission:revoke role');
+        Route::get('blogs/get_pending_blogs',
+            [BlogsController::class, 'get_pending_blogs'])
+             ->name('get_pending_blogs')
+             ->middleware('permission:manager blogs');
+        Route::PUT('blogs/accept_blog/{id}',
+            [BlogsController::class, 'accept_blog'])
+             ->name('blogs.accept_blog')
+             ->middleware('permission:manager blogs');
+        Route::PUT('blogs/decline_blog/{id}',
+            [BlogsController::class, 'decline_blog'])
+             ->name('blogs.decline_blog')
+             ->middleware('permission:manager blogs');
+        Route::get('blogs/preview_blogs/{id}',
+            [BlogsController::class, 'preview_blogs'])
+             ->name('blogs.preview_blogs')->middleware('permission:add blogs');
+    });
     //? BLOGS CONTROLLER
 
     // Resource route cho BlogsController, kiểm tra quyền truy cập
@@ -99,16 +116,18 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
             [BlogsController::class, 'destroy'])->name('blogs.destroy')
              ->middleware('permission:delete blogs');
 
-
     });
-//    ROOM CORE
+    //    ROOM CORE
     Route::group(['middleware' => ['auth']], function () {
-        Route::get('/core',[AdminController::class,'adminCore'])->name('dashboard');
-        Route::get('/phong/dang-tin-moi', [RoomController::class, 'createCore'])->name('roomsCore.createCore');
-        Route::post('phong/dang-tin-moi',[RoomController::class,'storeCore'])->name('roomsCore.createCore');
+        Route::get('/core', [AdminController::class, 'adminCore'])
+             ->name('dashboardCore');
+        Route::get('/phong/dang-tin-moi', [RoomController::class, 'createCore'])
+             ->name('roomsCore.createCore');
+        Route::post('phong/dang-tin-moi', [RoomController::class, 'storeCore'])
+             ->name('roomsCore.createCore');
 
     });
-//
+    //
     // Resource route cho RoomController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/rooms/index', [RoomController::class, 'index'])
@@ -154,22 +173,42 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
             return view('admin.content.payment.payment');
         })->name('payment');
 
-
         Route::prefix('payment')->group(function () {
-            Route::get('mbbank', [PaymentController::class, 'index'])->name('payment.mbbank');
-            Route::get('historyPayment', [PaymentController::class, 'getHistoryPayment'])->name('payment.historyPayment');
-            Route::post('mbbank/createPaymentLink', [PaymentController::class, 'createPaymentLink'])->name('payment.mbbank.createPaymentLink');
-            Route::get('mbbank/success', [PaymentController::class, 'successPayment'])->name('payment.mbbank.success');
-            Route::post('mbbank/success', [PaymentController::class, 'successPayment'])->name('payment.mbbank.success');
-            Route::get('mbbank/cancel', [PaymentController::class, 'cancelPayment'])->name('payment.mbbank.cancel');
-            Route::post('mbbank/create',[PaymentController::class,'createOrder'])->name('payment.mbbank.create');
-            Route::get('mbbank/create/{id}', [PaymentController::class, 'getPaymentLinkInfoOfOrder']);
-            Route::put('mbbank/create/{id}', [PaymentController::class, 'cancelPaymentLinkOfOrder']);
-            Route::put('mbbank/payos', [PaymentController::class, 'handlePayOSWebhook'])->name('payment.mbbank.payos');
+            Route::get('mbbank', [PaymentController::class, 'index'])
+                 ->name('payment.mbbank');
+            Route::get('historyPayment',
+                [PaymentController::class, 'getHistoryPayment'])
+                 ->name('payment.historyPayment');
+            Route::post('mbbank/createPaymentLink',
+                [PaymentController::class, 'createPaymentLink'])
+                 ->name('payment.mbbank.createPaymentLink');
+            Route::get('mbbank/success',
+                [PaymentController::class, 'successPayment'])
+                 ->name('payment.mbbank.success');
+            Route::post('mbbank/success',
+                [PaymentController::class, 'successPayment'])
+                 ->name('payment.mbbank.success');
+            Route::get('mbbank/cancel',
+                [PaymentController::class, 'cancelPayment'])
+                 ->name('payment.mbbank.cancel');
+            Route::post('mbbank/create',
+                [PaymentController::class, 'createOrder'])
+                 ->name('payment.mbbank.create');
+            Route::get('mbbank/create/{id}',
+                [PaymentController::class, 'getPaymentLinkInfoOfOrder']);
+            Route::put('mbbank/create/{id}',
+                [PaymentController::class, 'cancelPaymentLinkOfOrder']);
+            Route::put('mbbank/payos',
+                [PaymentController::class, 'handlePayOSWebhook'])
+                 ->name('payment.mbbank.payos');
         });
         Route::group(['middleware' => ['auth']], function () {
-            Route::get('/rooms/{room}/vip-packages', [VIPController::class, 'showVIPPackages'])->name('vip.packages');
-            Route::post('/rooms/{room}/vip-purchase/{vipPackageId}', [VIPController::class, 'purchaseVIPPackage'])->name('vip.purchase');
+            Route::get('/rooms/{room}/vip-packages',
+                [VIPController::class, 'showVIPPackages'])
+                 ->name('vip.packages');
+            Route::post('/rooms/{room}/vip-purchase/{vipPackageId}',
+                [VIPController::class, 'purchaseVIPPackage'])
+                 ->name('vip.purchase');
 
         });
     });
@@ -177,9 +216,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 //? END BLOGS CONTROLLER
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])

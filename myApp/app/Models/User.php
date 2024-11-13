@@ -22,6 +22,8 @@ class User extends Authenticatable
         'avatar',
         'balance',
         'password',
+        'code',
+        'expire_at',
     ];
 
     /**
@@ -54,6 +56,20 @@ class User extends Authenticatable
     public function activateVIPStatus()
     {
         $this->is_vip = true;
+        $this->save();
+    }
+    public function genarateCode()
+    {
+        $this->timestamps = false;
+        $this->code       = rand(1000, 9999);
+        $this->expire_at  = now()->addMinute(10);
+        $this->save();
+    }
+    public  function restCode()
+    {
+        $this->timestamps = false;
+        $this->code       = null;
+        $this->expire_at  = null;
         $this->save();
     }
 }
