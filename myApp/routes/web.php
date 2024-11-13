@@ -22,6 +22,10 @@ Route::get('/bo-loc/phong',[IndexController::class,'fitlerPrice'])->name('boloc'
 Route::get('/dich-vu/{slug}',[IndexController::class,'getClassIndex'])->name('laydichvu');
 Route::get('/tin-tuc/{slug}',[IndexController::class,'getBlog'])->name('getBlog');
 Route::get('/tim-kiem/phong',[IndexController::class,'searchRooms'])->name('searchRooms');
+Route::get('/dang-nhap',[IndexController::class,'getLogin'])->name('getLogin');
+Route::post('/dang-nhap',[IndexController::class,'postLogin'])->name('postLogin');
+Route::get('/dang-ky',[IndexController::class,'getRegister'])->name('getReginster');
+Route::post('/dang-ky',[IndexController::class,'postRegister'])->name('postRegister');
 
 // Route group với middleware 'auth' và tiền tố 'admin'
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

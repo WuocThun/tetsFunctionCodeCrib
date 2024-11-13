@@ -20,6 +20,17 @@ class IndexController extends Controller
 //        $clasRoom =RoomsClassification::take(3)->get();
 //        return view ('fe.inc.header',compact('clasRoom'));
 //    }
+    public function getLogin()
+    {
+        return view('fe.login');
+    }
+    public function postLogin(Request $request){
+
+    }
+    public function getRegister()
+    {
+        return view('fe.register');
+    }
     public function fitlerPrice()
     {
         return view('fe.fitler_price');
