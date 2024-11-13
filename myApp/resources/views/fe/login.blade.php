@@ -8,20 +8,25 @@
 <div class="login-container">
     <div class="form">
         <h1>Đăng nhập</h1>
-        <form>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
             <div class="form-group">
-                <label for="phone">SỐ ĐIỆN THOẠI</label>
-                <input type="text" id="phone" placeholder="Nhập số điện thoại">
+                <label for="email">Email</label>
+                <input type="text"  name="email" id="phone" placeholder="Nhập số điện thoại">
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
             </div>
             <div class="form-group">
                 <label for="password">MẬT KHẨU</label>
-                <input type="password" id="password" placeholder="Nhập mật khẩu">
+                <input name="password" type="password" id="password" placeholder="Nhập mật khẩu">
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
             </div>
             <button type="submit" id="loginbtn">Đăng nhập</button>
         </form>
         <div class="footer-links">
             <a href="#">Bạn quên mật khẩu?</a>
-            <a href="register.html">Tạo tài khoản mới</a>
+            <a href="{{route('getReginster')}}">Tạo tài khoản mới</a>
         </div>
     </div>
 </div>
