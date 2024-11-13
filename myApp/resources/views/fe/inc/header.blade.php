@@ -15,10 +15,12 @@
         </nav>
         <div class="user-options">
             <button class="btn">Yêu thích</button>
-            <a href="{{route('admin.index')}}" style="text-decoration: none;">
+            <a href="{{route('getLogin')}}" style="text-decoration: none;">
                 <button class="btn">Đăng nhập</button></a>
-            <a href="{{route('admin.roomsCore.createCore')}}" style="text-decoration: none;">
-            <button class="btn highlight">Đăng tin miễn phí</button></a>
+            <a href="{{route('getReginster')}}" style="text-decoration: none;">
+                <button class="btn highlight">Đăng ký</button></a>
+{{--            <a href="{{route('admin.roomsCore.createCore')}}" style="text-decoration: none;">--}}
+{{--            <button class="btn highlight">Đăng tin miễn phí</button></a>--}}
         </div>
     </div>
 </header>
