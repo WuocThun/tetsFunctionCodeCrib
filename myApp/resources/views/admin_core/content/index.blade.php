@@ -5,14 +5,7 @@
 @section('main')
     <main role="main" class="ml-sm-auto col">
 
-        <div class="user_quick_info js-mobile-user-quick-info">
-            <p style="margin-top: 0; margin-bottom: 5px;">Xin chào <strong>{{auth()->user()->name}}</strong>. Mã tài khoản:
-                <strong>{{auth()->id()}}</strong>
-            </p>
-            <p style="margin-bottom: 0;">Số dư TK của bạn là: <strong>{{number_format(auth()->user()->balance,0,',', '.')}} VND</strong></p>
-        </div>
-
-
+    @include('admin_core.inc.sub_main')
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('welcome')}}">Code Crib</a></li>
@@ -30,7 +23,7 @@
             Đăng tin mới</a>
 
         <div class="list-group dashboard_list_menu mt-4">
-            <a class="list-group-item" href="tin-dang.html">
+            <a class="list-group-item" href="{{route('admin.phongcuatoi')}}">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -50,7 +43,7 @@
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
             </a>
-            <a class="list-group-item" href="nap-tien.html">
+            <a class="list-group-item" href="{{route('admin.trangChuNapThe')}}">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -67,7 +60,7 @@
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
             </a>
-            <a class="list-group-item" href="lich-su-nap-tien.html">
+            <a class="list-group-item" href="{{route('admin.lichSuNapThe')}}">
                 <svg
                     xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

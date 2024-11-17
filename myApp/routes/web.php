@@ -14,6 +14,8 @@ use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\VIPController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\ReviewController;
+
 
 Route::get('/', [IndexController::class, 'index'])->name('welcome');
 Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
@@ -35,6 +37,7 @@ Route::get('/dang-nhap', [IndexController::class, 'getLogin'])
 Route::get('/dang-ky', [IndexController::class, 'getRegister'])
      ->name('getReginster');
 Route::resource('xac-minh',TwoFactorController::class)->names('xac-minh');
+Route::post('/gui-binh-luan', [ReviewController::class, 'store'])->name('reviews.store');
 
 
 // Route group với middleware 'auth' và tiền tố 'admin'
@@ -121,13 +124,19 @@ Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(f
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/core', [AdminController::class, 'adminCore'])
              ->name('dashboardCore');
+        Route::get('/phong/phong-cua-toi',[RoomController::class,'myRoomsCore'])->name('phongcuatoi');
         Route::get('/phong/dang-tin-moi', [RoomController::class, 'createCore'])
              ->name('roomsCore.createCore');
         Route::post('phong/dang-tin-moi', [RoomController::class, 'storeCore'])
              ->name('roomsCore.createCore');
-
+        Route::get('lich-su-thanh-toan', [RoomController::class, 'getPaymentRoom'])
+             ->name('getPaymentRoom');
     });
     //
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('/nap-the',[PaymentController::class,'indexPayment'])->name('trangChuNapThe');
+        Route::get('/nap-the/lich-su',[PaymentController::class,'getHistoryPayment'])->name('lichSuNapThe');
+    });
     // Resource route cho RoomController, kiểm tra quyền truy cập
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/rooms/index', [RoomController::class, 'index'])
@@ -209,7 +218,8 @@ Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(f
             Route::post('/rooms/{room}/vip-purchase/{vipPackageId}',
                 [VIPController::class, 'purchaseVIPPackage'])
                  ->name('vip.purchase');
-
+            Route::post('/activate-vip', [VIPController::class, 'activateVip']);
+            Route::post('/deactivate-vip', [VIPController::class, 'deactivateVip']);
         });
     });
 });
@@ -219,7 +229,6 @@ Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(f
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
          ->name('profile.edit');

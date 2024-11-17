@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -13,7 +12,7 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
 
-   public function transferPayment()
+    public function transferPayment()
    {
        return view('admin.content.payment.transfer_payment');
    }

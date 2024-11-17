@@ -8,10 +8,21 @@
 {{--@section('hotZone')--}}
 {{--@include('fe.inc.hot_zone')--}}
 {{--@endsection--}}
+<style>
+    p {
+        max-width: 100%; /* Giới hạn chiều rộng */
+        max-height: 150px; /* Giới hạn chiều cao */
+        overflow-y: auto; /* Hiển thị thanh cuộn dọc nếu cần */
+        word-wrap: break-word; /* Chia nhỏ từ để không bị tràn */
+    }
+
+</style>
 @section('main')
     @php
         $images = json_decode($room->image, true);
             $styles = $room->vipPackage->getDisplayStyles();
+            $styles = $room->vipPackage->getDisplayStyles();
+
     @endphp
 
 
@@ -97,11 +108,13 @@
                         <p>No images available</p>
                     @endif
 
-                    <b class="title_room" style="font-size: 20px;">
-                        {{$room->title}}
-                    </b>
+{{--                    <b class="title_room" style="font-size: 20px;">--}}
+{{--                        {{$room->title}}--}}
+{{--                    </b>--}}
 
-                    <div class="address">
+                        <h3 style="color: {{ $styles['color'] }}; font-weight: {{ $styles['fontWeight'] }}; text-transform: {{ $styles['textTransform'] }};" >{{$room->title}}</h3>
+
+                        <div class="address">
                         <div class="iconaddress"></div>
                         <span>
                     <img class="addr_icone" id="addr_icone" width="10px" height="10px" src="{{asset('uploads/maps-and-flags.png')}}">
@@ -127,8 +140,9 @@
                     </div>
 
                     <h3 style="margin-top: 20px">Thông tin mô tả</h3>
-                    <div>
-                        @php
+
+                        <div class="content-container">
+                            @php
                             echo($room->description);
                         @endphp                </div>
                     <table class="table table table-striped">
@@ -239,9 +253,10 @@
                     {{--                        </div>--}}
                     {{--                    </div>--}}
                     {{--                </a>--}}
+                    @include('fe.inc.comment')
                 </div>
             </div>
-@include('fe.inc.fitler_price_right')
+@include('fe.inc.fitler_blogs_right')
         </div>
     </section>
 @endsection

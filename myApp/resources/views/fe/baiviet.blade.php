@@ -101,7 +101,7 @@
               <figure style="text-align: center">
                 <img
                   src="{{asset('uploads/blogs/'.$blog->image)}}"
-                  alt="Quy định an toàn phòng cháy chữa cháy tại các nhà trọ cho thuê"
+                  alt= {{$blog->title}}
                   width="960"
                   height="720"
                 />

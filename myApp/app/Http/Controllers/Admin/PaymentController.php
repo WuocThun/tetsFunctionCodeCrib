@@ -18,6 +18,9 @@ class PaymentController extends Controller
     //        $this->payOSApiKey =env('PAYOS_API_KEY');
     //        $this->payOSChecksumKey= env('PAYOS_CHECKSUM_KEY');
     //    }
+    public function indexPayment(){
+        return view('admin_core.content.payments.index');
+    }
     public function createPaymentLink(Request $request)
     {
         $data         = $request->all();
@@ -189,14 +192,15 @@ class PaymentController extends Controller
 //        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
 //        echo $YOUR_DOMAIN;
 
-        return view('admin.content.payment.checkout');
+        return view('admin_core.content.payments.checkout');
     }
 
    public function getHistoryPayment()
    {
        $getUserId = auth()->id();
-       $orderPayment = OrderPayment::where('user_id',$getUserId)->get();
-       return view('admin.content.payment.history', compact('orderPayment'));
+       $orderPayment = OrderPayment::where('user_id',$getUserId)->orderBy('id','desc')->paginate(7);
+       $getAllPayment = OrderPayment::all();
+       return view('admin_core.content.payments.history_payment', compact('orderPayment','getAllPayment'));
    }
 
 }

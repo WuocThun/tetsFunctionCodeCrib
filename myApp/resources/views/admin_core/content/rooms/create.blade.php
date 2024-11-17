@@ -5,19 +5,11 @@
 @section('main')
 
     <main role="main" class="ml-sm-auto col">
-        <div class="user_quick_info js-mobile-user-quick-info">
-            <p style="margin-top: 0; margin-bottom: 5px;">Xin chào <strong>{{auth()->user()->name}}</strong>. Mã tài khoản:
-                <strong>{{auth()->id()}}</strong>
-            </p>
-            <p style="margin-bottom: 0;">Số dư TK của bạn là: <strong>{{number_format(auth()->user()->balance,0,',', '.')}} VND</strong></p>
-        </div>
-
-
-
+        @include('admin_core.inc.sub_main')
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('welcome')}}">Code Crib</a></li>
-                <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Quản lý</a>
+                <li class="breadcrumb-item"><a href="{{route('admin.dashboardCore')}}">Quản lý</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Đăng tin mới</li>
             </ol>

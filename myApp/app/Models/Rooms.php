@@ -33,7 +33,7 @@ class Rooms extends Model
         ];
     public function vipPurchases()
     {
-        return $this->hasMany(VIPPurchase::class);
+        return $this->hasMany(VIPPurchase::class, 'room_id');
     }
     public function hasActiveVIP()
     {
@@ -63,6 +63,12 @@ class Rooms extends Model
     public function vipBenefits()
     {
         return $this->belongsToMany(VipBenefits::class, 'room_vip_benefits')->withPivot('enabled');
+    }
+    public function deactivateVip()
+    {
+        $this->vip_status = 0;  // Đặt lại trạng thái VIP của phòng về 0 (thường)
+        $this->vip_package_id = 1; // Đặt lại gói VIP của phòng về gói mặc định
+        $this->save();
     }
 
 }

@@ -1,26 +1,33 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Xác thực 2 bước để truy cập vào người dùng.') }}
-    </div>
+@extends('fe.layouts.app')
+@section('header')
+    @include('fe.inc.header')
+@endsection
 
+@section('main')
     <form method="POST" action="{{ route('xac-minh.store') }}">
         @csrf
 
-        <div>
-            <x-input-label for="code" :value="__('Nhập mã Code bạn nhận được')" />
+        <div class="container">
+            <div class="form-group ">
+                <label for="email">Nhập mã số xác thực</label>
+                <input type="text" name="code" id="phone" placeholder="Nhập số điện thoại">
+                <x-input-error :messages="$errors->get('code')" class="mt-2"/>
+            </div>
 
-            <x-text-input id="code" class="block mt-1 w-full"
-                            type="text"
-                            name="code"
-                            required  />
+            <button type="submit" id="loginbtn">Xác thực</button>
 
-            <x-input-error :messages="$errors->get('code')" class="mt-2" />
         </div>
+        {{--        <div>--}}
+        {{--            <button>--}}
+        {{--                {{ __('Xác nhận') }}--}}
+        {{--            </button>--}}
+        {{--        </div>--}}
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Xác nhận') }}
-            </x-primary-button>
-        </div>
+
     </form>
-</x-guest-layout>
+@endsection
+
+@section('footer')
+    @include('fe.inc.footer')
+@endsection
+

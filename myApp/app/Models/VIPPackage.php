@@ -19,13 +19,14 @@ class VIPPackage extends Model
     {
         return $this->belongsToMany(VIPBenefits::class, 'vip_package_benefit', 'vip_package_id', 'vip_benefit_id');
     }
+
     public function getDisplayStyles()
     {
         return [
             'color' => $this->font_color,
             'fontWeight' => $this->font_weight,
             'textTransform' => $this->text_transform,
-            'fontSize'=> $this->font_size
+            'fontSize'=> $this->font_size,
         ];
     }
 }

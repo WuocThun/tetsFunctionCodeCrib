@@ -5,24 +5,24 @@
             <div class="user_avatar center"><img src="{{asset('uploads/defaultAvatar.jpg')}}"></div>
             <div class="user_meta">
                 <div class="inner">
-                    <div class="user_name">van trung</div>
-                    <div class="user_verify" style="color: #555; font-size: 0.9rem;">0582686301</div>
+                    <div class="user_name">{{Auth::user()->name}}</div>
+                    <div class="user_verify" style="color: #555; font-size: 0.9rem;">{{Auth::user()->phone_number}}</div>
                 </div>
             </div>
         </a>
         <ul>
-            <li><span>Mã thành viên:</span> <span style="font-weight: 700;"> 145617</span></li>
-            <li><span>TK Chính:</span> <span style="font-weight: 700;"> 0</span></li>
+            <li><span>Mã thành viên:</span> <span style="font-weight: 700;"> {{Auth::user()->id}}</span></li>
+            <li><span>TK Chính:</span> <span style="font-weight: 700;"> {{ number_format(Auth::user()->balance, 0, ',', '.') }}</span></li>
 
         </ul>
         <div class="row">
             <div class="col">
-                <a class="btn btn-warning" href="nap-tien.html">Nạp
+                <a class="btn btn-warning" href="{{route('admin.trangChuNapThe')}}">Nạp
                     tiền</a>
             </div>
             <div class="col">
 
-                <a class="btn btn-danger" href="dang-tin-moi.html">Đăng
+                <a class="btn btn-danger" href="{{route('admin.roomsCore.createCore')}}">Đăng
                     tin</a>
             </div>
         </div>
@@ -30,7 +30,7 @@
 
     <ul class="nav-sidebar">
         <li class="nav-item">
-            <a class="nav-link " href="./tin-dang.html">
+            <a class="nav-link " href="{{route('admin.phongcuatoi')}}">
                 <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round" class="feather feather-file-text">
@@ -43,19 +43,19 @@
                 Quản lý tin đăng
             </a>
         </li>
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link " href="cap-nhat-thong-tin-ca-nhan.html">--}}
+{{--                <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"--}}
+{{--                     stroke="currentColor" stroke-width="2" stroke-linecap="round"--}}
+{{--                     stroke-linejoin="round" class="feather feather-edit">--}}
+{{--                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>--}}
+{{--                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>--}}
+{{--                </svg>--}}
+{{--                Sửa thông tin cá nhân--}}
+{{--            </a>--}}
+{{--        </li>--}}
         <li class="nav-item">
-            <a class="nav-link " href="cap-nhat-thong-tin-ca-nhan.html">
-                <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" class="feather feather-edit">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                </svg>
-                Sửa thông tin cá nhân
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " href="nap-tien.html">
+            <a class="nav-link " href="{{route('admin.trangChuNapThe')}}">
                 <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round" class="feather feather-dollar-sign">
@@ -66,7 +66,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="lich-su-nap-tien.html">
+            <a class="nav-link " href="{{route('admin.lichSuNapThe')}}">
                 <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round" class="feather feather-clock">
@@ -77,7 +77,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="lich-su-thanh-toan.html">
+            <a class="nav-link " href="{{route('admin.getPaymentRoom')}}">
                 <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round" class="feather feather-calendar">
@@ -113,17 +113,41 @@
                 Liên hệ
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link js-user-logout" href="thoat">
-                <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" class="feather feather-log-out">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                Thoát
-            </a>
-        </li>
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link js-user-logout" href="thoat">--}}
+{{--                <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"--}}
+{{--                     stroke="currentColor" stroke-width="2" stroke-linecap="round"--}}
+{{--                     stroke-linejoin="round" class="feather feather-log-out">--}}
+{{--                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>--}}
+{{--                    <polyline points="16 17 21 12 16 7"></polyline>--}}
+{{--                    <line x1="21" y1="12" x2="9" y2="12"></line>--}}
+{{--                </svg>--}}
+{{--                Thoát--}}
+{{--            </a>--}}
+{{--        </li>--}}
+        <a class="nav-link js-user-logout" href="javascript:void(0)"
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <svg xmlns="" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" class="feather feather-log-out">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 1 2 2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Thoát
+        </a>
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+            @csrf
+        </form>
+
     </ul>
 </nav>
+{{--<form method="POST" action="{{ route('logout') }}">--}}
+{{--    @csrf--}}
+
+{{--    <x-dropdown-link :href="route('logout')"--}}
+{{--                     onclick="event.preventDefault();--}}
+{{--                                                this.closest('form').submit();">--}}
+{{--        {{ __('Log Out') }}--}}
+{{--    </x-dropdown-link>--}}
+{{--</form>--}}

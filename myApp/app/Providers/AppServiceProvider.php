@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Models\RoomsClassification;
 use App\Models\Rooms;
+use App\Models\Blogs;
 use App\Providers\VietMapProviders;
 use Illuminate\Support\ServiceProvider;
 
@@ -53,12 +54,14 @@ class AppServiceProvider extends ServiceProvider
 
             // Lấy danh sách phòng để truyền vào navbar
             $clasRoom = RoomsClassification::take(3)->get();
+            $randomBlogs = Blogs::inRandomOrder()->take(2)->get();
 
             // Truyền các dữ liệu vào view
             $view->with([
                 'clasRoom' => $clasRoom,
                 'provinceData' => $allProvinceData, // Truyền mảng các tỉnh vào view
                 'randomRooms' => $randomRooms,
+                'randomBlogs' =>$randomBlogs,
             ]);
         });
         //Bộ lọc

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\RoomsClassification;
+use App\Models\VIPPurchase;
+use App\Models\VIPPackage;
 use App\Models\Rooms;
 use App\Providers\VietMapProviders;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +24,24 @@ class RoomController extends Controller
     public function __construct(VietMapProviders $vietnamMapService)
     {
         $this->VietMapProviders = $vietnamMapService;
+    }
+    public function getPaymentRoom(){
+        $getIdUser = auth()->id();
+        $getVipPur= VIPPurchase::where('user_id', $getIdUser)
+                               ->orderBy('vip_package_id', 'desc') ->distinct('package_id')
+                               ->get();
+//            $pack = VIPPackage::where('id',$getPackId)->get();
+
+
+//        dd($getVipPur);
+return view('admin_core.lich-su-thanh-toan',compact('getVipPur'));
+    }
+    public function myRoomsCore()
+    {
+        $user_id = auth()->id();
+        $rooms    = Rooms::where('user_id', $user_id)->get();
+//dd($room);
+        return view('admin_core.content.rooms.index', compact('rooms'));
     }
     public function createCore()
     {

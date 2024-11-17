@@ -29,4 +29,22 @@
 
         </ul>
     </div>
+    <div class="newstr">
+        <h3>Tin ngẫu nhiên</h3>
+        <ul>
+                @foreach($randomBlogs as $blogs)
+            <li>
+                <a href="{{route('getRoom',$blogs->slug)}}">
+                    <img src=" {{asset('uploads/fe/img/room1.jpg')}} " alt="Phòng trọ mới" />
+                    <div>
+                        <span class="post-meta">{{ \Illuminate\Support\Str::limit($blogs->title, 15, '...') }}</span>
+{{--                        <span class="post-price">{{number_format($room->price,0,',', '.')}} nghìn/tháng</span>--}}
+{{--                        <span class="post-time">{{$room->}}</span>--}}
+                    </div>
+                </a>
+            </li>
+            @endforeach
+
+        </ul>
+    </div>
 </div>

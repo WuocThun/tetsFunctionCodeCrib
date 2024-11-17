@@ -146,7 +146,7 @@ class VIPController extends Controller
         $user->balance -= $vipPackage->price;
         $user->save();
 
-        $startDate = Carbon::now();
+        $startDate = Carbon::now('Asia/Ho_Chi_Minh');
         $endDate = $startDate->copy()->addDays($vipPackage->duration_days);
 
         VIPPurchase::create([
@@ -164,6 +164,57 @@ class VIPController extends Controller
         $room->save();
 
         return redirect()->back()->with('success', 'VIP package purchased successfully!');
+    }
+    public function activateVip(Request $request)
+    {
+        // Kiểm tra thông tin từ request
+        $vipPurchase = VIPPurchase::create([
+            'user_id' => $request->user_id,
+            'room_id' => $request->room_id,
+            'vip_package_id' => $request->vip_package_id,
+            'start_date' => now(),
+            'end_date' => now()->addDays(30),  // Gói VIP 30 ngày
+            'status' => 'active',
+        ]);
+
+        // Cập nhật trạng thái phòng
+        $room = Rooms::find($request->room_id);
+        if ($room) {
+            $room->vip_status = 1;  // Kích hoạt trạng thái VIP
+            $room->vip_package_id = $request->vip_package_id;
+            $room->save();
+        }
+
+        return response()->json(['message' => 'Gói VIP đã được kích hoạt', 'data' => $vipPurchase]);
+    }
+
+    public function deactivateVip(Request $request)
+    {
+        $vipPurchase = VIPPurchase::where('room_id', $request->room_id)
+                                  ->where('user_id', $request->user_id)
+                                  ->first();
+
+        if ($vipPurchase) {
+            $vipPurchase->status = 'expired';
+            $vipPurchase->save();
+
+            // Cập nhật trạng thái VIP của phòng
+            $room = $vipPurchase->room;
+            if ($room) {
+                $room->deactivateVip();  // Tắt VIP cho phòng
+            }
+
+            return response()->json(['message' => 'Gói VIP đã bị tắt']);
+        }
+
+        return response()->json(['message' => 'Không tìm thấy gói VIP để tắt']);
+    }
+    public function showNotifications()
+    {
+        // Lấy tất cả thông báo chưa đọc của người dùng hiện tại
+        $notifications = Auth::user()->notifications; // Sử dụng phương thức notifications để lấy tất cả thông báo
+
+        return view('admin_core.user.notifications', compact('notifications'));
     }
     public function showVIPPackages($roomId)
     {
