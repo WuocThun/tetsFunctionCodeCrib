@@ -12,7 +12,9 @@
 </style>
 <div class="container mt-5">
     <h1 class="text-center">Đánh Giá Sản Phẩm</h1>
-
+    @error('g-recaptcha-response')
+    <span class="text-danger">{{ $message }}</span>
+    @enderror
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -51,11 +53,20 @@
             </div>
         @endif
 
-        <!-- Nhận xét -->
+{{--        <!-- Nhận xét -->--}}
         <div class="mb-3">
             <label for="comment" class="form-label">Nhận xét</label>
             <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
         </div>
+{{--        <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>--}}
+        <div class="g-recaptcha" data-sitekey="6LeCx4EqAAAAEdkbDxZv8oyCGgqkefz6Y1zQhHl"></div>
+
+        <br/>
+        @if($errors->has('g-recaptcha-response'))
+            <span class="invalid-feedback" style="display:block">
+	<strong>{{$errors->first('g-recaptcha-response')}}</strong>
+</span>
+        @endif
 
         <!-- Nút Gửi -->
         <div class="d-grid">
@@ -88,3 +99,7 @@
         });
     });
 </script>
+{{--<script src="https://www.google.com/recaptcha/api.js" async defer></script>--}}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+{{--<script src="{{asset('style/js/fe.js')}}"></script>--}}

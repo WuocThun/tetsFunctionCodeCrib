@@ -15,8 +15,8 @@ use App\Http\Controllers\admin\VIPController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\ReviewController;
-
-
+use App\Http\Controllers\Admin\WheelController;
+use App\Http\Controllers\WhishlistController;
 Route::get('/', [IndexController::class, 'index'])->name('welcome');
 Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
      ->name('indexBlog');
@@ -38,8 +38,14 @@ Route::get('/dang-ky', [IndexController::class, 'getRegister'])
      ->name('getReginster');
 Route::resource('xac-minh',TwoFactorController::class)->names('xac-minh');
 Route::post('/gui-binh-luan', [ReviewController::class, 'store'])->name('reviews.store');
-
-
+Route::get('404',function (){
+    return view('404');
+});
+Route::group(['middleware' => ['auth']], function () {
+    Route::post('wishlist/add', [WhishlistController::class, 'addWishlist'])->name('wishlist.add');
+    Route::post('/wishlist/remove', [WhishlistController::class, 'removeWishlist'])->name('wishlist.remove');
+    Route::get('/wishlist', [WhishlistController::class, 'listWish'])->name('wishlist.list');
+});
 // Route group với middleware 'auth' và tiền tố 'admin'
 Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
@@ -222,6 +228,12 @@ Route::middleware('auth','two_factor')->prefix('admin')->name('admin.')->group(f
             Route::post('/deactivate-vip', [VIPController::class, 'deactivateVip']);
         });
     });
+    Route::resource('vong-quay-may-man',WheelController::class)->names('wheel');
+    Route::post('/spin-wheel/reward', [WheelController::class, 'reward'])->name('spin-wheel.reward');
+    Route::get('/spin-wheel/reward', [WheelController::class, 'reward'])->name('spin-wheel.reward');
+    Route::post('/spin-wheel', [WheelController::class, 'spin'])->name('spin.wheel');
+
+
 });
 
 //? END BLOGS CONTROLLER

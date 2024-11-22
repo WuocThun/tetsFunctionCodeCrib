@@ -7,12 +7,16 @@
     <title>Admin Dashboard</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('style/css/admin.css')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script>
         CKEDITOR.replace('editor1');
     </script>
     <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.js"></script>
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>--}}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body class="desktop dashboard quan-ly dang-tin dang-tin-moi">
@@ -63,5 +67,4 @@
         document.getElementById('convert_slug').value = slug;
     }
 </script>
-
 </html>

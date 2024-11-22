@@ -18,6 +18,12 @@
     }
 </style>
     <section class="search-results">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="container search-results-container">
             <div class="results-left">
                 <h2>Tổng {{count($rooms)}} kết quả</h2>
@@ -46,20 +52,14 @@
                             <div class="contact-options">
                                 <button class="btn  call-btn">Gọi {{$room1->phone_number}}</button>
                                 <a href="https://zalo.me/{{ $room1->phone_number }}" target="_blank"> <button class="btn zalo-btn">Nhắn Zalo</button> </a>
+{{--                                <a href="{{ route('wishlist.add', ['room_id' => $room1->id]) }}" > <button data-room-id="{{ $room1->id }}"  class=" add-to-wishlist btn zalo-btn">Thêm vào danh sách yêu thiích</button> </a>--}}
+                                <button data-room-id="{{ $room1->id }}" class="add-to-wishlist btn zalo-btn">Thêm vào danh sách yêu thích</button>
+
                             </div>
                         </div>
                     </div>
                 </a>
                 @endforeach
-{{--                <div class="pagination">--}}
-{{--                    <button class="prev">« Trang trước</button>--}}
-{{--                    <button class="active">1</button>--}}
-{{--                    <button>1</button>--}}
-{{--                    <button>3</button>--}}
-{{--                    <button>4</button>--}}
-{{--                    <button>5</button>--}}
-{{--                    <button class="next">» Trang sau »</button>--}}
-{{--                </div>--}}
                 <div class="pagination">
                     @if ($rooms->onFirstPage())
                         <button class="prev" disabled>« Trang trước</button>
@@ -84,6 +84,136 @@
         </div>
 
     </section>
+<script>
+    {{--document.addEventListener('DOMContentLoaded', function () {--}}
+    {{--    document.querySelectorAll('.add-to-wishlist').forEach(function (button) {--}}
+    {{--        button.addEventListener('click', function (e) {--}}
+    {{--            e.preventDefault();--}}
+
+    {{--            let roomId = this.dataset.roomId; // Lấy room_id từ thuộc tính data--}}
+
+    {{--            fetch('{{ route("wishlist.add") }}', {--}}
+    {{--                method: 'POST',--}}
+    {{--                headers: {--}}
+    {{--                    'Content-Type': 'application/json',--}}
+    {{--                    'X-CSRF-TOKEN': '{{ csrf_token() }}',--}}
+    {{--                },--}}
+    {{--                body: JSON.stringify({ room_id: roomId }), // Gửi dữ liệu room_id--}}
+    {{--            })--}}
+    {{--                .then(response => response.json())--}}
+    {{--                .then(data => {--}}
+    {{--                    if (data.status === 'success') {--}}
+    {{--                        showPopup(data.message, 'success');--}}
+    {{--                    } else {--}}
+    {{--                        showPopup(data.message, 'error');--}}
+    {{--                    }--}}
+    {{--                })--}}
+    {{--                .catch(error => {--}}
+    {{--                    console.error('Error:', error);--}}
+    {{--                    showPopup('Đã xảy ra lỗi. Vui lòng thử lại sau.', 'error');--}}
+    {{--                });--}}
+    {{--        });--}}
+    {{--    });--}}
+
+    {{--    // Hàm hiển thị popup--}}
+    {{--    function showPopup(message, type) {--}}
+    {{--        const popup = document.createElement('div');--}}
+    {{--        popup.className = `popup-message ${type}`;--}}
+    {{--        popup.innerText = message;--}}
+
+    {{--        document.body.appendChild(popup);--}}
+
+    {{--        // Tự động ẩn popup sau 3 giây--}}
+    {{--        setTimeout(() => {--}}
+    {{--            popup.remove();--}}
+    {{--        }, 3000);--}}
+    {{--    }--}}
+    {{--});--}}
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.add-to-wishlist').forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của trình duyệt
+
+                let roomId = this.dataset.roomId;
+
+                fetch('{{ route("wishlist.add") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({ room_id: roomId }),
+                })
+                    .then(response => {
+                        const contentType = response.headers.get('content-type');
+                        if (!contentType || !contentType.includes('application/json')) {
+                            throw new Error('Server did not return JSON');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            showPopup(data.message, 'success');
+                        } else {
+                            showPopup(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showPopup('Đã xảy ra lỗi. Vui lòng thử lại sau.', 'error');
+                    });
+            });
+        });
+
+        function showPopup(message, type) {
+            const popup = document.createElement('div');
+            popup.className = `popup-message ${type}`;
+            popup.innerText = message;
+
+            document.body.appendChild(popup);
+
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
+        }
+    });
+
+
+
+</script>
+
+<style>
+    .popup-message {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        color: #fff;
+        border-radius: 5px;
+        z-index: 9999;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .popup-message.success {
+        background-color: #4caf50;
+    }
+
+    .popup-message.error {
+        background-color: #f44336;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 @endsection
 @section('overView')
     @include('fe.inc.over_view')

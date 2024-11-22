@@ -70,5 +70,9 @@ class Rooms extends Model
         $this->vip_package_id = 1; // Đặt lại gói VIP của phòng về gói mặc định
         $this->save();
     }
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 
 }

@@ -51,8 +51,7 @@ class IndexController extends Controller
     }
     public function index()
     {
-//       $time = Carbon::now('Asia/Ho_Chi_Minh');
-//        var_dump($time);
+
         $rooms = Rooms::orderByDesc('vip_package_id')->orderByDesc('created_at')->paginate(7);
         return view('fe.index',compact('rooms'));
     }

@@ -1000,5 +1000,92 @@ label {
 }
 
 
+.navbar {
 
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #0078d7;
+}
+
+.navbar-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.logo .highlight {
+    color: red;
+}
+
+.logo p {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.user-info .icon {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-dang-tin {
+    background-color: red;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.icon a{
+    color: black;
+    text-decoration: none;
+}
+/* Menu dưới */
+.navbar-bottom {
+    width: 100%;
+    background-color: #0078d7;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.navbar-bottom a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.navbar-bottom a:hover {
+    text-decoration: underline;
+}
+.flexinfo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.imguser{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-image: url(/Demo/img/image-removebg-preview\ \(2\).png);
+    background-size: cover;
+    background-color: #cecece;
+}
 

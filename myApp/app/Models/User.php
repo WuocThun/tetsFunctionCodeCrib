@@ -72,4 +72,9 @@ class User extends Authenticatable
         $this->expire_at  = null;
         $this->save();
     }
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
 }

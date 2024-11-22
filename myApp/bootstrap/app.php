@@ -16,7 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'two_factor' => \App\Http\Middleware\TwoFactor::class,
-
+            'providers' => [
+                Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
+            ],
+//            'spin.cooldown' => \App\Http\Middleware\CheckSpinCooldown::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
