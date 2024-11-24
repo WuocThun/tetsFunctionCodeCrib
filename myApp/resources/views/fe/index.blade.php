@@ -52,7 +52,6 @@
                             <div class="contact-options">
                                 <button class="btn  call-btn">Gọi {{$room1->phone_number}}</button>
                                 <a href="https://zalo.me/{{ $room1->phone_number }}" target="_blank"> <button class="btn zalo-btn">Nhắn Zalo</button> </a>
-{{--                                <a href="{{ route('wishlist.add', ['room_id' => $room1->id]) }}" > <button data-room-id="{{ $room1->id }}"  class=" add-to-wishlist btn zalo-btn">Thêm vào danh sách yêu thiích</button> </a>--}}
                                 <button data-room-id="{{ $room1->id }}" class="add-to-wishlist btn zalo-btn">Thêm vào danh sách yêu thích</button>
 
                             </div>
@@ -85,50 +84,7 @@
 
     </section>
 <script>
-    {{--document.addEventListener('DOMContentLoaded', function () {--}}
-    {{--    document.querySelectorAll('.add-to-wishlist').forEach(function (button) {--}}
-    {{--        button.addEventListener('click', function (e) {--}}
-    {{--            e.preventDefault();--}}
 
-    {{--            let roomId = this.dataset.roomId; // Lấy room_id từ thuộc tính data--}}
-
-    {{--            fetch('{{ route("wishlist.add") }}', {--}}
-    {{--                method: 'POST',--}}
-    {{--                headers: {--}}
-    {{--                    'Content-Type': 'application/json',--}}
-    {{--                    'X-CSRF-TOKEN': '{{ csrf_token() }}',--}}
-    {{--                },--}}
-    {{--                body: JSON.stringify({ room_id: roomId }), // Gửi dữ liệu room_id--}}
-    {{--            })--}}
-    {{--                .then(response => response.json())--}}
-    {{--                .then(data => {--}}
-    {{--                    if (data.status === 'success') {--}}
-    {{--                        showPopup(data.message, 'success');--}}
-    {{--                    } else {--}}
-    {{--                        showPopup(data.message, 'error');--}}
-    {{--                    }--}}
-    {{--                })--}}
-    {{--                .catch(error => {--}}
-    {{--                    console.error('Error:', error);--}}
-    {{--                    showPopup('Đã xảy ra lỗi. Vui lòng thử lại sau.', 'error');--}}
-    {{--                });--}}
-    {{--        });--}}
-    {{--    });--}}
-
-    {{--    // Hàm hiển thị popup--}}
-    {{--    function showPopup(message, type) {--}}
-    {{--        const popup = document.createElement('div');--}}
-    {{--        popup.className = `popup-message ${type}`;--}}
-    {{--        popup.innerText = message;--}}
-
-    {{--        document.body.appendChild(popup);--}}
-
-    {{--        // Tự động ẩn popup sau 3 giây--}}
-    {{--        setTimeout(() => {--}}
-    {{--            popup.remove();--}}
-    {{--        }, 3000);--}}
-    {{--    }--}}
-    {{--});--}}
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.add-to-wishlist').forEach(function (button) {
             button.addEventListener('click', function (e) {

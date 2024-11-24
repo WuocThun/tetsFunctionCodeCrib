@@ -154,7 +154,7 @@ class WheelController extends Controller
                 default:
                     return redirect()->back()->with('error', 'Phần thưởng không hợp lệ!');
             }
-            $user->last_spin_at = now();
+            $user->last_spin_at = now('Asia/Ho_Chi_Minh');
             // Lưu thay đổi
             $user->save();
 

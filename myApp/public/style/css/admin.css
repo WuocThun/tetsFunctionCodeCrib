@@ -7,7 +7,57 @@ nav {
 
   /* background-image: linear-gradient(-100deg, rgba(34, 206, 48, 0.774), rgba(41, 199, 194, 0.774)); */
 }
+.room-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
 
+.room-card .card-header {
+    color: #fff;
+    padding: 15px;
+    font-size: 18px;
+    position: relative;
+}
+
+.room-card .logo {
+    max-width: 50px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.room-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.room-status {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.room-info button {
+    margin-right: 5px;
+}
+
+.room-type-btn {
+    font-size: 12px;
+    padding: 3px 10px;
+}
+
+.actions button {
+    width: 40px;
+    height: 40px;
+}
+
+.actions .btn-purple {
+    background-color: #6f42c1;
+    color: #fff;
+}
+.status-room{
+    padding: 4px 2px;
+}
 h3 {
   color: rgb(0, 0, 0);
   background-color: #ffffff;
@@ -32,6 +82,25 @@ thead {
   color: #fff;
   font-size: 1rem;
   text-align: center;
+}
+.card-footer {
+    font-size: 14px;
+    font-weight: 500; /* Tăng độ đậm nhẹ cho chữ */
+    background-color: #f8f9fa; /* Màu nền sáng */
+    border-top: 1px solid #ddd; /* Thêm đường kẻ phân cách */
+    padding: 10px 15px; /* Khoảng cách bên trong */
+}
+
+.card-footer .col-md-6 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px; /* Thêm khoảng cách giữa các cột */
+}
+
+.card-footer p {
+    margin: 0; /* Loại bỏ khoảng cách mặc định của thẻ <p> */
+    color: #333; /* Màu chữ tối hơn */
 }
 
 .btn-danger {
