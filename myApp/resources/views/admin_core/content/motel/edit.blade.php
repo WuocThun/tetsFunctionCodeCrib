@@ -16,6 +16,16 @@
                 {{ session('error') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('welcome')}}">Code Crib</a></li>
@@ -38,10 +48,14 @@
                                 <label class="text-dark" for="">Tên phòng</label> <label>*</label>
                                 <input class="nameform form-control" value="{{$motel->name }}"
                                        name="name" type="text"/>
+                                <input type="number" hidden value="{{$invoice->old_water ?? $motel->default_water}}" name="old_water">
+                                <input type="number" hidden value="{{$invoice->old_electric ?? $motel->default_electric}}" name="old_electric">
+                                <input type="number" hidden value="{{$invoice->new_electric ?? null}}" name="new_electric">
+                                <input type="number" hidden value="{{$invoice->new_water ?? null}}" name="new_water">
                             </div>
                             <div class="form-group">
                                 <label class="text-dark">Tiền phòng (Tr/Tháng)</label> <label>*</label>
-                                <input class="nameform form-control currency-input" id="money" value="{{$motel->money}}"
+                                <input class="nameform form-control $invoice" id="money" value="{{$motel->money}}"
                                        name="money" type="text"/>
                             </div>
                             <div class="row">
@@ -49,7 +63,7 @@
                                     <div class="form-group">
                                         <label class="text-dark" for="">Số điện hiện tại (kW)</label> <label>*</label>
                                         <input class="nameform form-control" value="{{$motel->default_electric}}"
-                                               name="default_electric" type="number" min="1" step="1"/>
+                                               name="default_electric" type="number" min="1" max="{{$invoice->new_electric ?? null}}" step="1"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -57,13 +71,13 @@
                                         <label class="text-dark" for="">Số nước hiện tại (m/<sup>3</sup>)</label>
                                         <label>*</label>
                                         <input class="nameform form-control" value="{{$motel->default_water}}"
-                                               name="default_water" type="number" min="1" step="1"/>
+                                               name="default_water" type="number" min="1" max="{{$invoice->new_water ?? null}}" step="1"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="text-dark" for="">Số tiền điện trên 1kW</label> <label>*</label>
-                                        <input class="nameform form-control currency-input"
+                                        <input class="nameform form-control $invoice"
                                                value="{{$motel->money_electric}}" name="money_electric" type="text"
                                                min="1" step="1"/>
                                     </div>
@@ -72,7 +86,7 @@
                                     <div class="form-group">
                                         <label class="text-dark" for="">Số tiền nước trên 1m/<sup>3</sup></label>
                                         <label>*</label>
-                                        <input class="nameform form-control currency-input"
+                                        <input class="nameform form-control $invoice"
                                                value="{{$motel->money_water}}" name="money_water" type="text" min="1"
                                                step="1"/>
                                     </div>
@@ -80,7 +94,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="text-dark" for="">Tiền Wifi</label>
-                                        <input class="nameform form-control currency-input"
+                                        <input class="nameform form-control $invoice"
                                                value="{{$motel->money_wifi}}" name="money_wifi" type="text" min="0"
                                                step="1"/>
                                     </div>
@@ -88,7 +102,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="text-dark" for="">Tiền rác + phụ thu</label>
-                                        <input class="nameform form-control currency-input"
+                                        <input class="nameform form-control $invoice"
                                                value="{{$motel->money_another}}" name="money_another" type="text"
                                                min="0" step="1"/>
                                     </div>
@@ -169,84 +183,7 @@
             });
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Chọn tất cả các input cần định dạng
-            const currencyInputs = document.querySelectorAll('.currency-input');
 
-            currencyInputs.forEach(input => {
-                // Ngăn nhập ký tự không phải số
-                input.addEventListener('keydown', function (e) {
-                    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
-
-                    // Cho phép các phím số, phím điều hướng và phím chức năng
-                    if ((e.key >= '0' && e.key <= '9') || allowedKeys.includes(e.key)) {
-                        return; // Hợp lệ
-                    }
-
-                    e.preventDefault(); // Ngăn chặn ký tự không hợp lệ
-                });
-
-                // Định dạng lại số khi nhập
-                input.addEventListener('input', function () {
-                    let value = this.value.replace(/,/g, ''); // Loại bỏ dấu `,`
-                    if (isNaN(value)) {
-                        this.value = '';
-                        return;
-                    }
-                    this.value = Number(value).toLocaleString('en-US'); // Thêm dấu `,`
-                });
-
-                // Chuyển giá trị về định dạng không dấu `,` khi rời khỏi ô nhập liệu
-                input.addEventListener('blur', function () {
-                    this.value = this.value.replace(/,/g, '');
-                });
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const moneyInput = document.getElementById('money');
-            // const moneyInput = document.getElementById('money');
-
-            // Ngăn chặn nhập ký tự không hợp lệ
-            moneyInput.addEventListener('keydown', function (e) {
-                // Danh sách các phím hợp lệ (số, phím điều hướng, xóa, dấu chấm/dấu phẩy)
-                const allowedKeys = [
-                    'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab',
-                ];
-
-                // Cho phép nhập các số (phím số và phím numpad)
-                if ((e.key >= '0' && e.key <= '9') || allowedKeys.includes(e.key)) {
-                    return; // Hợp lệ, không làm gì
-                }
-
-                // Nếu không hợp lệ, ngăn sự kiện nhập
-                e.preventDefault();
-            });
-
-            // Định dạng lại giá trị nhập vào khi có sự thay đổi
-            moneyInput.addEventListener('input', function () {
-                // Lấy giá trị hiện tại và loại bỏ các dấu ',' nếu có
-                let value = this.value.replace(/,/g, '');
-
-                // Nếu giá trị không phải là số thì đặt về chuỗi rỗng
-                if (isNaN(value)) {
-                    this.value = '';
-                    return;
-                }
-
-                // Định dạng lại số với dấu phân cách hàng nghìn
-                this.value = Number(value).toLocaleString('en-US');
-            });
-
-            // Trước khi gửi form, chuyển giá trị về định dạng không dấu ','
-            moneyInput.addEventListener('blur', function () {
-                this.value = this.value.replace(/,/g, '');
-            });
-        });
-    </script>
 
 @endsection
 

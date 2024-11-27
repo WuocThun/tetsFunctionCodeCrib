@@ -35,4 +35,8 @@ class Motel extends Model
     {
         return $this->hasMany(UserMotel::class, 'motel_id');
     }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'motel_id');
+    }
 }

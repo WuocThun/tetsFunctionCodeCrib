@@ -13,6 +13,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="row">
             @foreach($motels as $motel)
                 <div class="modal fade" id="addMemberModal{{$motel->id}}" tabindex="-1" aria-labelledby="addMemberModalLabel{{$motel->id}}" aria-hidden="true">
@@ -60,7 +65,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <div class="card room-card">
                         <!-- Header -->
@@ -74,7 +78,7 @@
                             <div class="room-info my-3">
                                 <div class="row mb-2">
                                     <div class="col-md-6">
-                                        <button class="btn btn-secondary rounded-circle status-room">
+                                        <button class="btn btn-primary rounded-circle status-room">
                                             Hiện có: {{ $motel->users_count }} người
                                         </button>
                                     </div>

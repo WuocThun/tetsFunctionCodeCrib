@@ -12,11 +12,13 @@ class Invoice extends Model
     protected $table = 'invoices';
     protected $fillable = [
         'motel_id',
+        'user_id',
         'new_electric',
         'old_electric',
         'new_water',
         'old_water',
         'electric_fee',
+        'all_money',
         'water_fee',
         'total_amount',
         'status',
@@ -24,6 +26,7 @@ class Invoice extends Model
         'money_electric',
         'money',
         'money_another',
+        'prepay',
     ];
     public function motel()
     {

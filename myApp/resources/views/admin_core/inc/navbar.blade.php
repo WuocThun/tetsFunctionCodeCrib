@@ -82,7 +82,8 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <li><a class="dropdown-item" href="{{route('admin.motel.index')}}">Danh sách các phòng trọ</a></li>
-            <li><a class="dropdown-item" href="#">Lịch sử nạp tiền</a></li>
+            <li><a class="dropdown-item" href="{{route('admin.invoices.getIndexInvoice')}}">Danh sách các hoá đơn</a></li>
+            <li><a class="dropdown-item" href="{{route('admin.invoices.motelReport')}}">Báo cáo</a></li>
             <li><a class="dropdown-item" href="#">Lịch sử thanh toán</a></li>
         </ul>
     </div>

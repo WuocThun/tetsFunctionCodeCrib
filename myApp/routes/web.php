@@ -277,10 +277,12 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/phong/them-nguoi-dung/{id}',
                  [MotelController::class, 'addUserMotel'])->name('motel.addUserMotel');
              Route::post('/them-nguoi-dung/{id}',[MotelController::class, 'storeUserMotel'])->name('motel.storeUserMotel');
-
              Route::post('/invoices/create', [InvoiceController::class, 'createInvoice'])->name('invoices.create');
              Route::get('/invoices/pay/{id}', [InvoiceController::class, 'payInvoice'])->name('invoices.pay');
-
+             Route::get('/phong/bao-cao', [InvoiceController::class, 'motelReport'])->name('invoices.motelReport');
+             Route::post('/invoices/pay/{id}', [InvoiceController::class, 'acceptPay'])->name('invoices.acceptPay');
+             Route::post('/invoices/prepay', [InvoiceController::class, 'prepay'])->name('invoices.prepay');
+             Route::get('/invoices/list', [InvoiceController::class, 'getIndexInvoice'])->name('invoices.getIndexInvoice');
          });
 
      });
