@@ -39,24 +39,20 @@
             <label for="">LOẠI TÀI KHOẢN</label>
             <div class="role">
                 <div class="checkrole">
-                    <label for="roleUser">
-                        <input type="radio" value="" id="roleUser">
-                        Tìm kiếm
-                    </label>
-                </div>
-                <div class="checkrole">
-                    <label for="roleUser">
-                        <input type="radio"  value="" id="roleUser">
+                    <label for="roleLandlord">
+                        <input type="radio" name="role" value="houseRenter" id="roleLandlord">
                         Chủ trọ
                     </label>
                 </div>
                 <div class="checkrole">
-                    <label for="roleUser">
-                        <input type="radio" value="" id="roleUser">
-                        Môi giới
+                    <label for="roleBroker">
+                        <input type="radio" name="role" value="viewer" id="roleBroker">
+                        Người thuê trọ
                     </label>
                 </div>
             </div>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+
             <button type="submit" id="loginbtn">Đăng nhập</button>
         </form>
         <div class="footer-links">

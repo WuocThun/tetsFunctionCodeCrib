@@ -24,7 +24,7 @@
             <button type="submit" id="loginbtn">Đăng nhập</button>
         </form>
         <div class="footer-links">
-            <a href="#">Bạn quên mật khẩu?</a>
+            <a href="{{ route('forgetpass')}} ">Bạn quên mật khẩu?</a>
             <a href="{{route('getReginster')}}">Tạo tài khoản mới</a>
         </div>
     </div>

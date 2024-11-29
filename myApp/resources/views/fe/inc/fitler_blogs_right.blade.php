@@ -1,8 +1,15 @@
 <div class="results-right">
+
+    <div class="filter-section">
+        <h3>Đặt cọc để xem phòng </h3>
+        <ul>
+            <label for="">Giá tiền</label>
+            <input type="number" name="prepay" id="">
+        </ul>
+    </div>
     <div class="filter-section">
         <h3>Danh mục cho thuê</h3>
         <ul>
-{{--            <li>Cho thuê phòng trọ (77,318)</li>--}}
             <li> <a class="filer_blogs" href="{{ url('/bo-loc/phong?min_price=0&max_price=1000000') }}">Dưới 1 triệu</a></li>
             <li>  <a class="filer_blogs" href="{{ url('/bo-loc/phong?min_price=1000000&max_price=2000000') }}"> 1 triệu - 2 triệu</a></li>
             <li> <a class="filer_blogs" href="{{ url('/bo-loc/phong?min_price=2000000&max_price=3000000') }}">2 triệu - 3 triệu</a></li>

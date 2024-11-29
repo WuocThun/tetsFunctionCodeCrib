@@ -23,7 +23,9 @@ class User extends Authenticatable
         'balance',
         'password',
         'code',
+        'card_id_number',
         'expire_at',
+        'motel_id',
     ];
 
     /**
@@ -75,6 +77,26 @@ class User extends Authenticatable
     public function wishlist()
     {
         return $this->hasMany(Wishlist::class);
+    }
+    public function motels_request()
+    {
+        return $this->belongsToMany(Motel::class, 'motel_user', 'user_id', 'motel_id')
+                    ->withTimestamps();
+    }
+
+    public function motel()
+    {
+        return $this->belongsTo(Motel::class, 'motel_id');
+    }
+    public function roomRequests()
+    {
+        return $this->hasMany(RoomRequest::class);
+    }
+    public function motels()
+    {
+        return $this->belongsToMany(Motel::class, 'room_requests')
+                    ->withPivot('status')
+                    ->withTimestamps();
     }
 
 }

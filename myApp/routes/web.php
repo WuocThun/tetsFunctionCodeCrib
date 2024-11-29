@@ -19,6 +19,9 @@ use App\Http\Controllers\Admin\WheelController;
 use App\Http\Controllers\WhishlistController;
 use App\Http\Controllers\Admin\MotelController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Exports\InvoiceExport;
+use App\Http\Controllers\RoomRequestController;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', [IndexController::class, 'index'])->name('welcome');
 Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
@@ -27,6 +30,7 @@ Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
 Route::get('/phong/{slug}', [IndexController::class, 'getRoom'])
      ->name('getRoom');
 Route::get('/dich-vu', [IndexController::class, 'dichvu'])->name('dichvu');
+Route::get('/quen-mat-khau', [IndexController::class, 'forgetpass'])->name('forgetpass');
 Route::get('/bo-loc/phong', [IndexController::class, 'fitlerPrice'])
      ->name('boloc');
 Route::get('/dich-vu/{slug}', [IndexController::class, 'getClassIndex'])
@@ -39,6 +43,8 @@ Route::get('/dang-nhap', [IndexController::class, 'getLogin'])
      ->name('getLogin');
 Route::get('/dang-ky', [IndexController::class, 'getRegister'])
      ->name('getReginster');
+Route::get('/phong-tro-con-trong', [RoomRequestController::class, 'index'])
+     ->name('room-requests.index');
 Route::resource('xac-minh', TwoFactorController::class)->names('xac-minh');
 Route::post('/gui-binh-luan', [ReviewController::class, 'store'])
      ->name('reviews.store');
@@ -53,7 +59,12 @@ Route::group(['middleware' => ['auth']], function () {
          ->name('wishlist.remove');
     Route::get('/wishlist', [WhishlistController::class, 'listWish'])
          ->name('wishlist.list');
+    Route::post('/room-requests', [RoomRequestController::class, 'store'])->name('room-requests.store');
+    Route::patch('/room-requests/{id}/accept', [RoomRequestController::class, 'accept'])->name('room-requests.accept');
+    Route::patch('/room-requests/{id}/reject', [RoomRequestController::class, 'reject'])->name('room-requests.reject');
+
 });
+
 // Route group với middleware 'auth' và tiền tố 'admin'
 Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
      ->group(function () {
@@ -283,6 +294,15 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::post('/invoices/pay/{id}', [InvoiceController::class, 'acceptPay'])->name('invoices.acceptPay');
              Route::post('/invoices/prepay', [InvoiceController::class, 'prepay'])->name('invoices.prepay');
              Route::get('/invoices/list', [InvoiceController::class, 'getIndexInvoice'])->name('invoices.getIndexInvoice');
+             Route::get('/export-invoices', function () {
+                 return Excel::download(new InvoiceExport, 'invoices.xlsx');
+             })->name('export.invoices');
+//             Route::get('/motel/{id}/access', [MotelController::class, 'accessRoomForm'])->name('motel.access.form');
+             Route::get('/room-access', [MotelController::class, 'roomAccess'])->name('motel.access.form');
+             Route::post('/motel/leave', [MotelController::class, 'leaveRoom'])->name('motel.leave');
+             Route::post('/motel/{id}/access', [MotelController::class, 'accessRoom'])->name('motel.access');
+             Route::post('/check-passcode', [MotelController::class, 'checkPasscode'])->name('check.passcode');
+
          });
 
      });

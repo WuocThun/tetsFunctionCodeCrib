@@ -36,6 +36,10 @@ class IndexController extends Controller
     {
         return view('fe.dichvu');
     }
+    public function forgetpass()
+    {
+        return view('fe.forgetpass');
+    }
     public function getClassIndex($slug)
     {
 

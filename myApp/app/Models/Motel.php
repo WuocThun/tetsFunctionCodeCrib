@@ -31,12 +31,45 @@ class Motel extends Model
             'password',
             'total_member',
         ];
+//    public function roomRequests()
+//    {
+//        return $this->belongsToMany(User::class, 'room_requests')
+//                    ->withPivot('status')
+//                    ->withTimestamps(); // Include pivot fields like 'status' and timestamps
+//    }
+
     public function users()
     {
-        return $this->hasMany(UserMotel::class, 'motel_id');
+        return $this->hasMany(User::class, 'motel_id');
     }
+    public function usersRequest()
+    {
+        return $this->belongsToMany(User::class, 'room_requests', 'motel_id', 'user_id')
+                    ->withTimestamps();
+    }
+public function getInvoicesBy($id)
+{
+    $motelId = $id;
+    $getInvoices = Invoice::where('motel_id', $motelId)->get();
+    return $getInvoices;
+}
+        public function roomRequests()
+    {
+        return $this->hasMany(RoomRequest::class);
+    }
+
+    public function userMotel()
+    {
+        return $this->hasMany(UserMotel::class, 'motel_id', 'id');
+
+    }
+//    public function invoices()
+//    {
+//        return $this->hasMany(Invoice::class, 'motel_id');
+//    }
     public function invoices()
     {
-        return $this->hasMany(Invoice::class, 'motel_id');
+        return $this->hasMany(Invoice::class);
     }
+
 }

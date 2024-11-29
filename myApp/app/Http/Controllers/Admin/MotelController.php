@@ -5,17 +5,95 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Motel;
 use App\Models\UserMotel;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 // Import thư viện Str
 
 class MotelController extends Controller
 {
+//    public function accessRoomForm($id)
+//    {
+//        $motel = Motel::findOrFail($id);
+//        return view('admin_core.cotent.motel.access', compact('motel'));
+//    }
+    public function roomAccess()
+    {
+        $getUserId = Auth::id();
+        $getUser = User::findOrFail($getUserId);
+//        dd ($getUserId);
+        $motel = Motel::find($getUser->motel_id);
+//        dd($motels);
+        return view('admin_core.content.motel.room-access', compact('motel'));
+    }
+    public function checkPasscode(Request $request)
+    {
+        // Lấy phòng dựa trên motel_id
+        $motel = Motel::find($request->motel_id);
 
+        // Kiểm tra nếu không có phòng
+        if (!$motel) {
+            return back()->with('error', 'Phòng không tồn tại.');
+        }
+
+        // Kiểm tra passcode
+        if ($motel && $motel->password === $request->password) {
+            // Mật khẩu đúng
+            session()->put("motel_unlocked_{$motel->id}", true);
+            return redirect()->back()->with('success', 'Bạn đã mở khoá thành công!');
+        } else {
+            // Mật khẩu sai
+            return redirect()->back()->with('error', 'Mật khẩu không chính xác!');
+        }
+    }
+
+
+    public function accessRoom(Request $request, $id)
+    {
+        $motel = Motel::findOrFail($id);
+
+        // Kiểm tra xem password có đúng không
+        if ($motel->password !== $request->input('password')) {
+            return back()->with('error', 'Mã password không đúng.');
+        }
+
+        // Kiểm tra nếu người dùng đã được chấp nhận vào phòng
+        $user = auth()->user();
+        if ($user->motel_id !== $motel->id) {
+            return back()->with('error', 'Bạn không có quyền truy cập phòng này.');
+        }
+
+        // Cho phép truy cập phòng nếu password đúng
+        return redirect()->route('motel.details', $motel->id); // Bạn có thể tạo route xem chi tiết phòng ở đây
+    }
+    public function leaveRoom(Request $request)
+    {
+        // Lấy thông tin người dùng đang đăng nhập
+        $user = auth()->user();
+
+        // Kiểm tra nếu người dùng không thuộc phòng nào
+        if (!$user->motel_id) {
+            return back()->with('error', 'Bạn không thuộc phòng nào để rời khỏi.');
+        }
+
+        // Lấy thông tin phòng của người dùng
+        $motel = Motel::find($user->motel_id);
+
+        // Nếu không tìm thấy phòng
+        if (!$motel) {
+            return back()->with('error', 'Phòng bạn muốn rời không tồn tại.');
+        }
+
+        // Xóa liên kết giữa người dùng và phòng
+        $user->update(['motel_id' => null]);
+
+        return back()->with('success', 'Bạn đã rời khỏi phòng thành công.');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -40,14 +118,17 @@ class MotelController extends Controller
             'name'         => 'required|string|max:255',
             'phone_number' => 'required|digits:10',
             'password'     => 'required',
+            'email'     => 'required',
+            'cardIdNumber'     => 'required',
         ], [
                 'phone_number.required' => 'Số điện thoại phải đủ 10 số',
+                'phone_number.digits' => 'Số điện thoại phải đủ 10 số',
             ]
         );
         $getMotelId = $id;
         $motel      = Motel::findOrFail($data['motel_id']);
         //        dd ($motel->total_member);
-        $currentMemberCount = UserMotel::where('motel_id', $data['motel_id'])
+        $currentMemberCount = User::where('motel_id', $data['motel_id'])
                                        ->count();
         // Giới hạn số lượng thành viên tối đa là 4
         if ($currentMemberCount >= $motel->total_member) {
@@ -56,12 +137,22 @@ class MotelController extends Controller
         }
 
         // Lưu thành viên vào cơ sở dữ liệu
-        $member               = new UserMotel();
-        $member->motel_id     = $data['motel_id'];
-        $member->name         = $data['name'];
-        $member->phone_number = $data['phone_number'];
-        $member->password     = $data['password']; // Mã hóa mật khẩu
-        $member->save();
+//        $member               = new UserMotel();
+//        $member->motel_id     = $data['motel_id'];
+//        $member->name         = $data['name'];
+//        $member->phone_number = $data['phone_number'];
+//        $member->password     = $data['password']; // Mã hóa mật khẩu
+//        $member->save();
+
+        $user           = new User();
+        $user->password = Hash::make($data['password']);
+        $user->email    = $data['email'];
+        $user->phone_number    = $data['phone_number'];
+        $user->motel_id     = $data['motel_id'];
+        $user->name     = $data['name'];
+        $user->card_id_number     = $data['cardIdNumber'];
+        $user->save();
+        $user->assignRole('viewer');
 
         // Chuyển hướng về trang trước hoặc trả về thông báo thành công
         return redirect()->back()->with('success',
@@ -73,7 +164,7 @@ class MotelController extends Controller
         $motelId  = $id;
         $getMotel = Motel::findOrFail($id);
 
-        $getUserRentMotel = UserMotel::where('motel_id', $motelId)->get();
+        $getUserRentMotel = User::where('motel_id', $motelId)->get();
 
         return view('admin_core.content.motel.addUserMotel',
             compact('getMotel', 'getUserRentMotel'));
@@ -220,7 +311,7 @@ class MotelController extends Controller
             $invoice->money_electric = $request->money_electric;
             $invoice->water_fee = $water_fee;
             $invoice->electric_fee = $electric_fee;
-            $total_amout = $water_fee +$electric_fee +$request->money;
+            $total_amout = $water_fee +$electric_fee +$request->money + $request->money_another +$request->money_wifi;
             $invoice->total_amount = $total_amout;
             $invoice->money_another = $request->money_wifi+ $request->money_another;
 

@@ -32,4 +32,5 @@ class Invoice extends Model
     {
         return $this->belongsTo(Motel::class);
     }
+
 }

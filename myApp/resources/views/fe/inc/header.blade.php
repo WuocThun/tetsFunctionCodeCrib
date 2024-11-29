@@ -1,7 +1,7 @@
 {{--<header class="sticky-top">--}}
 {{--    <div class="container header-container">--}}
 {{--        <div class="logo">--}}
-{{--            <img src="https://phongtro123.com/images/logo.png" alt="Phongtro123 Logo">--}}
+{{--            <img src="https://CodeCrib.com/images/logo.png" alt="CodeCrib Logo">--}}
 {{--        </div>--}}
 
 {{--        <div class="user-options ">--}}
@@ -128,6 +128,7 @@
                 @foreach($clasRoom as $class => $cl)
                     <li class="mx-3"><a class="" href="{{ route('laydichvu', $cl->slug) }}">{{ $cl->title }}</a></li>
                 @endforeach
+                <li class="mx-3"><a class="" href="{{ route('room-requests.index') }}">Phòng trọ còn trống</a></li>
                 <li class="mx-3"><a class="" href="{{ route('indexBlog') }}">Tin tức</a></li>
                 <li class="mx-3"><a class="" href="{{ route('dichvu') }}">Dịch vụ</a></li>
             </ul>

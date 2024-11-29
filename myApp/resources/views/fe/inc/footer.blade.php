@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Phongtro123. Tất cả quyền được bảo lưu.</p>
+            <p>&copy; 2024 CodeCrib. Tất cả quyền được bảo lưu.</p>
         </div>
     </div>
 </footer>

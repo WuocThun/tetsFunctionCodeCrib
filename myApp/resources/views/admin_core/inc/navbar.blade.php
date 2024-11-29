@@ -75,19 +75,21 @@
             <li><a class="dropdown-item" href="{{route('admin.wheel.index')}}">Vòng quay may mắn</a></li>
         </ul>
     </div>
-    @role('houseRent||admin')
     <div class="dropdown mb-1" >
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
             Quản lý phòng trọ
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="{{route('admin.motel.index')}}">Danh sách trọ của bạn</a></li>
+            @role('houseRenter||admin')
             <li><a class="dropdown-item" href="{{route('admin.motel.index')}}">Danh sách các phòng trọ</a></li>
             <li><a class="dropdown-item" href="{{route('admin.invoices.getIndexInvoice')}}">Danh sách các hoá đơn</a></li>
             <li><a class="dropdown-item" href="{{route('admin.invoices.motelReport')}}">Báo cáo</a></li>
             <li><a class="dropdown-item" href="#">Lịch sử thanh toán</a></li>
+            @endrole
+
         </ul>
     </div>
-    @endrole
     <div class="dropdown mb-1" >
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
             Người dùng

@@ -69,7 +69,8 @@ class InvoiceController extends Controller
                 'money_water'    => 'required|integer',
                 'money_electric' => 'required|integer',
                 'money'          => 'required|integer',
-                'money_another'  => 'required|integer',
+                'money_another'  => 'integer',
+                'money_wifi'  => 'integer',
             ]);
 
             // Kiểm tra xem phòng trọ này đã có hóa đơn chưa
@@ -86,7 +87,7 @@ class InvoiceController extends Controller
                             * $validated['money_electric'];
             $water_fee    = ($validated['new_water'] - $validated['old_water'])
                             * $validated['money_water'];
-            $total_amount = $electric_fee + $water_fee + $validated['money'];
+            $total_amount = $electric_fee + $water_fee + $validated['money'] + $validated['money_another'];
 
             // Tạo hóa đơn
             $invoice = Invoice::create([
@@ -123,7 +124,10 @@ class InvoiceController extends Controller
             ['user_id', '=', $getUserId],
             ['status', '=', 'paid'],
         ])->get();
-        $totalAmount = $invoices->sum('total_amount');
+//        $totalAmount = $invoices->sum('total_amount');
+        $totalAmount = $invoices->sum(function ($invoice) {
+            return $invoice->all_money - $invoice->electric_fee - $invoice->water_fee;
+        });
         $totalElectric = $invoices->sum(function ($invoice) {
             return ($invoice->new_electric - $invoice->old_electric) * $invoice->electric_fee;
         });
