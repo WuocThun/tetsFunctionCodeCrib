@@ -186,6 +186,7 @@ class VIPController extends Controller
         }
 
         return response()->json(['message' => 'Gói VIP đã được kích hoạt', 'data' => $vipPurchase]);
+
     }
 
     public function deactivateVip(Request $request)

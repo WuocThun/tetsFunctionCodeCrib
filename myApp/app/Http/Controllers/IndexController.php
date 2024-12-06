@@ -66,7 +66,7 @@ class IndexController extends Controller
     public function getRoom($slug)
     {
         $room = Rooms::where('slug',$slug)->first();
-
+        $utilities = $room->utilities;
         $getUserId = $room->user_id;
         $getClassRoom = $room->rooms_class_id;
         $getVipPackages =$room->vip_package_id;
@@ -87,7 +87,7 @@ class IndexController extends Controller
         $getDistrict = $this->VietMapProviders->getDistrictData($room->province);
         $provinceData = json_decode($getProvince->getContent(), true);
 
-        return view('fe.chitiet',compact('room','findUser','timePosted','ClassRoom','provinceData','getDistrict','vipPackages'));
+        return view('fe.chitiet',compact('room','findUser','timePosted','ClassRoom','provinceData','getDistrict','vipPackages','utilities'));
     }
     public function getBlog($slug)
     {

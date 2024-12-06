@@ -1,7 +1,5 @@
-@extends('admin_core.layouts.app')
-@section('navbar')
-    @include('admin_core.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
 
     <main role="main" class="ml-sm-auto col">

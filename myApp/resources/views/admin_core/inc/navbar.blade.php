@@ -49,8 +49,8 @@
             Quản lý các bài đăng
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Đăng tin mới</a></li>
-            <li><a class="dropdown-item" href="#">Các tin đã đăng</a></li>
+            <li><a class="dropdown-item" href="{{route('admin.roomsCore.createCore')}}">Đăng tin mới</a></li>
+            <li><a class="dropdown-item" href="{{route('admin.phongcuatoi')}}">Các tin đã đăng</a></li>
             <li><a class="dropdown-item" href="#">Các tin đang đợi duyệt</a></li>
             @role('admin')
             <li><a class="dropdown-item" href="#">Tất cả các phòng hiện có</a></li>

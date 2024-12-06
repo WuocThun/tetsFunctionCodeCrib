@@ -1,7 +1,5 @@
-@extends('admin_core.layouts.app')
-@section('navbar')
-    @include('admin_core.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
 
     <main role="main" class="ml-sm-auto col">
@@ -25,14 +23,6 @@
                 {{ session('error') }}
             </div>
         @endif
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{route('welcome')}}">Code Crib</a></li>
-                <li class="breadcrumb-item"><a href="{{route('admin.dashboardCore')}}">Quản lý</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">Thêm phòng quản lý</li>
-            </ol>
-        </nav>
         <form action="{{route('admin.motel.store')}}" method="post" enctype="multipart/form-data">
             @csrf
         <div class="row">

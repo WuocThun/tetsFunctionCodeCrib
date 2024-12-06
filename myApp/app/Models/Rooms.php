@@ -74,5 +74,10 @@ class Rooms extends Model
     {
         return $this->hasMany(Wishlist::class);
     }
+    // Model Room
+    public function utilities()
+    {
+        return $this->belongsToMany(Utility::class, 'room_utilities', 'room_id', 'utility_id');
+    }
 
 }

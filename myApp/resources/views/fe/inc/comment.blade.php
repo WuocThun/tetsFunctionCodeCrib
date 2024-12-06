@@ -59,14 +59,14 @@
             <textarea class="form-control" id="comment" name="comment" rows="4" required></textarea>
         </div>
 {{--        <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>--}}
-        <div class="g-recaptcha" data-sitekey="6LeCx4EqAAAAEdkbDxZv8oyCGgqkefz6Y1zQhHl"></div>
+{{--        <div class="g-recaptcha" data-sitekey="6LeCx4EqAAAAEdkbDxZv8oyCGgqkefz6Y1zQhHl"></div>--}}
 
         <br/>
-        @if($errors->has('g-recaptcha-response'))
-            <span class="invalid-feedback" style="display:block">
-	<strong>{{$errors->first('g-recaptcha-response')}}</strong>
-</span>
-        @endif
+{{--        @if($errors->has('g-recaptcha-response'))--}}
+{{--            <span class="invalid-feedback" style="display:block">--}}
+{{--	<strong>{{$errors->first('g-recaptcha-response')}}</strong>--}}
+{{--</span>--}}
+{{--        @endif--}}
 
         <!-- Nút Gửi -->
         <div class="d-grid">

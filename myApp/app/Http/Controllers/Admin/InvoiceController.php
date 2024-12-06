@@ -117,27 +117,115 @@ class InvoiceController extends Controller
                 'Hóa đơn cho phòng trọ này đã tồn tại!');
         }
     }
-    public function motelReport()
+//    public function motelReport(Request $request)
+//    {
+//        // Lấy ID của người dùng đang đăng nhập
+//        $getUserId = Auth::id();
+//        $allMotels  = Motel::where('user_id', $getUserId)->get();
+//        // Lấy thông tin các hóa đơn đã thanh toán của người dùng
+//        $invoices = Invoice::where([
+//            ['user_id', '=', $getUserId],
+//            ['status', '=', 'paid'],
+//        ])->get();
+//
+//        // Tính tổng tiền phải trả cho người dùng (bao gồm các chi phí ngoài tiền điện, nước)
+//        $totalAmount = $invoices->sum(function ($invoice) {
+//            return $invoice->all_money ;
+//        });
+//
+//        // Tính tổng tiền điện (sự chênh lệch giữa điện cũ và điện mới nhân với mức phí)
+//        $totalElectric = $invoices->sum(function ($invoice) {
+//            return  $invoice->electric_fee;
+//        });
+//
+//        // Tính tổng tiền nước (sự chênh lệch giữa nước cũ và nước mới nhân với mức phí)
+//        $totalWater = $invoices->sum(function ($invoice) {
+//            return  $invoice->water_fee;
+//        });
+//
+//        // Lấy thông tin về các motel của người dùng
+//        $motels = Motel::where('user_id', $getUserId)->get();
+//
+//        // Tính toán tổng số tiền liên quan đến các motel
+//        $totalMotelIncome = $motels->sum('money'); // Tổng tiền phòng cho các motel
+//        $totalElectricIncome = $motels->sum('money_electric'); // Tổng tiền điện
+//        $totalWaterIncome = $motels->sum('money_water'); // Tổng tiền nước
+//        $totalWifiIncome = $motels->sum('money_wifi'); // Tổng tiền wifi
+//        $totalOtherIncome = $motels->sum('money_another'); // Tổng các khoản phí khác
+//
+//        // Truyền dữ liệu vào view
+//        return view('admin_core.content.motel.report', [
+//            'totalAmount' => $totalAmount,
+//            'totalElectric' => $totalElectric,
+//            'totalWater' => $totalWater,
+//            'invoices' => $invoices,
+//            'allMotels' =>$allMotels,
+//            'motels' => $motels,
+//            'totalMotelIncome' => $totalMotelIncome,
+//            'totalElectricIncome' => $totalElectricIncome,
+//            'totalWaterIncome' => $totalWaterIncome,
+//            'totalWifiIncome' => $totalWifiIncome,
+//            'totalOtherIncome' => $totalOtherIncome,
+//        ]);
+//
+//    }
+    public function motelReport(Request $request)
     {
+        // Lấy ID của người dùng đang đăng nhập
         $getUserId = Auth::id();
-        $invoices = Invoice::where([
+        $allMotels = Motel::where('user_id', $getUserId)->get();
+
+        // Lấy thông tin từ bộ lọc
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $motelId = $request->input('motel_id');
+
+        // Lọc hóa đơn theo điều kiện
+        $invoicesQuery = Invoice::where([
             ['user_id', '=', $getUserId],
             ['status', '=', 'paid'],
-        ])->get();
-//        $totalAmount = $invoices->sum('total_amount');
-        $totalAmount = $invoices->sum(function ($invoice) {
-            return $invoice->all_money - $invoice->electric_fee - $invoice->water_fee;
-        });
-        $totalElectric = $invoices->sum(function ($invoice) {
-            return ($invoice->new_electric - $invoice->old_electric) * $invoice->electric_fee;
-        });
-        $totalWater = $invoices->sum(function ($invoice) {
-            return ($invoice->new_water - $invoice->old_water) * $invoice->water_fee;
-        });
+        ]);
+
+        if ($startDate) {
+            $invoicesQuery->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $invoicesQuery->whereDate('created_at', '<=', $endDate);
+        }
+
+        if ($motelId) {
+            $invoicesQuery->where('motel_id', $motelId);
+        }
+
+        $invoices = $invoicesQuery->get();
+
+        // Tổng hợp dữ liệu cần thiết
+        $totalAmount = $invoices->sum('all_money');
+        $totalElectric = $invoices->sum('electric_fee');
+        $totalWater = $invoices->sum('water_fee');
+
+        $motels = Motel::where('user_id', $getUserId)->get();
+        $totalMotelIncome = $motels->sum('money');
+        $totalElectricIncome = $motels->sum('money_electric');
+        $totalWaterIncome = $motels->sum('money_water');
+        $totalWifiIncome = $motels->sum('money_wifi');
+        $totalOtherIncome = $motels->sum('money_another');
 
         // Truyền dữ liệu vào view
-        return view('admin_core.content.motel.report', compact('totalAmount', 'totalElectric', 'totalWater', 'invoices'));
-
+        return view('admin_core.content.motel.report', [
+            'totalAmount' => $totalAmount,
+            'totalElectric' => $totalElectric,
+            'totalWater' => $totalWater,
+            'invoices' => $invoices,
+            'allMotels' => $allMotels,
+            'motels' => $motels,
+            'totalMotelIncome' => $totalMotelIncome,
+            'totalElectricIncome' => $totalElectricIncome,
+            'totalWaterIncome' => $totalWaterIncome,
+            'totalWifiIncome' => $totalWifiIncome,
+            'totalOtherIncome' => $totalOtherIncome,
+        ]);
     }
     public function payInvoice($id)
     {

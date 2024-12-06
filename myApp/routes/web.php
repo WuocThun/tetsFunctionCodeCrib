@@ -30,7 +30,8 @@ Route::get('/tin-tuc', [IndexController::class, 'indexBlog'])
 Route::get('/phong/{slug}', [IndexController::class, 'getRoom'])
      ->name('getRoom');
 Route::get('/dich-vu', [IndexController::class, 'dichvu'])->name('dichvu');
-Route::get('/quen-mat-khau', [IndexController::class, 'forgetpass'])->name('forgetpass');
+Route::get('/quen-mat-khau', [IndexController::class, 'forgetpass'])
+     ->name('forgetpass');
 Route::get('/bo-loc/phong', [IndexController::class, 'fitlerPrice'])
      ->name('boloc');
 Route::get('/dich-vu/{slug}', [IndexController::class, 'getClassIndex'])
@@ -59,9 +60,12 @@ Route::group(['middleware' => ['auth']], function () {
          ->name('wishlist.remove');
     Route::get('/wishlist', [WhishlistController::class, 'listWish'])
          ->name('wishlist.list');
-    Route::post('/room-requests', [RoomRequestController::class, 'store'])->name('room-requests.store');
-    Route::patch('/room-requests/{id}/accept', [RoomRequestController::class, 'accept'])->name('room-requests.accept');
-    Route::patch('/room-requests/{id}/reject', [RoomRequestController::class, 'reject'])->name('room-requests.reject');
+    Route::post('/room-requests', [RoomRequestController::class, 'store'])
+         ->name('room-requests.store');
+    Route::patch('/room-requests/{id}/accept',
+        [RoomRequestController::class, 'accept'])->name('room-requests.accept');
+    Route::patch('/room-requests/{id}/reject',
+        [RoomRequestController::class, 'reject'])->name('room-requests.reject');
 
 });
 
@@ -162,7 +166,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('roomsCore.createCore');
              Route::post('phong/dang-tin-moi',
                  [RoomController::class, 'storeCore'])
-                  ->name('roomsCore.createCore');
+                  ->name('roomsCore.storeCore');
              Route::get('lich-su-thanh-toan',
                  [RoomController::class, 'getPaymentRoom'])
                   ->name('getPaymentRoom');
@@ -192,13 +196,16 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/rooms/allRooms', [RoomController::class, 'allRooms'])
                   ->name('rooms.allRooms')->middleware('permission:all blogs');
              Route::get('/rooms/myRooms', [RoomController::class, 'myRooms'])
-                  ->name('rooms.myRooms')->middleware('permission:all blogs');
+                  ->name('rooms.myRooms');
              Route::post('/rooms/store', [RoomController::class, 'store'])
                   ->name('rooms.store')->middleware('permission:all blogs');
-             Route::get('rooms/{blog}/edit', [RoomController::class, 'edit'])
-                  ->name('rooms.edit')->middleware('permission:all blogs');
-             Route::put('rooms/{blog}', [RoomController::class, 'update'])
+             Route::get('rooms/{id}/edit', [RoomController::class, 'edit'])
+                  ->name('rooms.edit');
+             Route::put('rooms/{id}', [RoomController::class, 'update'])
                   ->name('rooms.update')->middleware('permission:edit blogs');
+             Route::post('room/{id}/accecpt',[RoomController::class,'accpectRoom'])->name('room.accpectRoom');
+             Route::post('room/{id}/denial',[RoomController::class,'denialRoom'])->name('room.denialRoom');
+             Route::get('room/report',[RoomController::class,'report'])->name('room.report');
              Route::delete('rooms/{blog}',
                  [RoomController::class, 'destroy'])->name('rooms.destroy')
                   ->middleware('permission:delete blogs');
@@ -275,8 +282,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('motel.index');
              Route::get('/them-phong-tro', [MotelController::class, 'create'])
                   ->name('motel.create');
-             Route::get('/them-phong-tro', [MotelController::class, 'create'])
-                  ->name('motel.create');
+
              Route::post('/them-phong-tro', [MotelController::class, 'store'])
                   ->name('motel.store');
              Route::get('/phong-tro/cap-nhat/{id}',
@@ -286,29 +292,50 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::delete('/phong-tro/xoa/{id}',
                  [MotelController::class, 'destroy'])->name('motel.destroy');
              Route::get('/phong/them-nguoi-dung/{id}',
-                 [MotelController::class, 'addUserMotel'])->name('motel.addUserMotel');
-             Route::post('/them-nguoi-dung/{id}',[MotelController::class, 'storeUserMotel'])->name('motel.storeUserMotel');
-             Route::post('/invoices/create', [InvoiceController::class, 'createInvoice'])->name('invoices.create');
-             Route::get('/invoices/pay/{id}', [InvoiceController::class, 'payInvoice'])->name('invoices.pay');
-             Route::get('/phong/bao-cao', [InvoiceController::class, 'motelReport'])->name('invoices.motelReport');
-             Route::post('/invoices/pay/{id}', [InvoiceController::class, 'acceptPay'])->name('invoices.acceptPay');
-             Route::post('/invoices/prepay', [InvoiceController::class, 'prepay'])->name('invoices.prepay');
-             Route::get('/invoices/list', [InvoiceController::class, 'getIndexInvoice'])->name('invoices.getIndexInvoice');
+                 [MotelController::class, 'addUserMotel'])
+                  ->name('motel.addUserMotel');
+             Route::post('/them-nguoi-dung/{id}',
+                 [MotelController::class, 'storeUserMotel'])
+                  ->name('motel.storeUserMotel');
+             Route::post('/invoices/create',
+                 [InvoiceController::class, 'createInvoice'])
+                  ->name('invoices.create');
+             Route::get('/invoices/pay/{id}',
+                 [InvoiceController::class, 'payInvoice'])
+                  ->name('invoices.pay');
+             Route::get('/phong/bao-cao',
+                 [InvoiceController::class, 'motelReport'])
+                  ->name('invoices.motelReport');
+             Route::post('/invoices/pay/{id}',
+                 [InvoiceController::class, 'acceptPay'])
+                  ->name('invoices.acceptPay');
+             Route::post('/invoices/prepay',
+                 [InvoiceController::class, 'prepay'])->name('invoices.prepay');
+             Route::get('/invoices/list',
+                 [InvoiceController::class, 'getIndexInvoice'])
+                  ->name('invoices.getIndexInvoice');
              Route::get('/export-invoices', function () {
-                 return Excel::download(new InvoiceExport, 'invoices.xlsx');
+                 return Excel::download(new InvoiceExport(), 'invoices.xlsx');
              })->name('export.invoices');
-//             Route::get('/motel/{id}/access', [MotelController::class, 'accessRoomForm'])->name('motel.access.form');
-             Route::get('/room-access', [MotelController::class, 'roomAccess'])->name('motel.access.form');
-             Route::post('/motel/leave', [MotelController::class, 'leaveRoom'])->name('motel.leave');
-             Route::post('/motel/{id}/access', [MotelController::class, 'accessRoom'])->name('motel.access');
-             Route::post('/check-passcode', [MotelController::class, 'checkPasscode'])->name('check.passcode');
+             //             Route::get('/motel/{id}/access', [MotelController::class, 'accessRoomForm'])->name('motel.access.form');
+             Route::get('/room-access', [MotelController::class, 'roomAccess'])
+                  ->name('motel.access.form');
+             Route::post('/motel/leave', [MotelController::class, 'leaveRoom'])
+                  ->name('motel.leave');
+             Route::post('/motel/{id}/access',
+                 [MotelController::class, 'accessRoom'])->name('motel.access');
+             Route::post('/check-passcode',
+                 [MotelController::class, 'checkPasscode'])
+                  ->name('check.passcode');
 
          });
 
      });
 
 //? END BLOGS CONTROLLER
-
+Route::get('test',function (){
+    return view('admin_core.content.test');
+});
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');

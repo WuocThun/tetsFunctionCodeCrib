@@ -19,6 +19,10 @@ class VIPPackage extends Model
     {
         return $this->belongsToMany(VIPBenefits::class, 'vip_package_benefit', 'vip_package_id', 'vip_benefit_id');
     }
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'vip_package_id');
+    }
 
     public function getDisplayStyles()
     {

@@ -1,7 +1,5 @@
-@extends('admin_core.layouts.app')
-@section('navbar')
-    @include('admin_core.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
 
     <main role="main" class="ml-sm-auto col">
@@ -22,68 +20,7 @@
         @endif
         @if(isset($motel))
             <div class="row">
-                <div class="modal fade" id="addMemberModal{{$motel->id}}" tabindex="-1"
-                     aria-labelledby="addMemberModalLabel{{$motel->id}}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addMemberModalLabel{{$motel->id}}">Thông tin hoá đơn</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="{{ route('admin.invoices.create') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="motel_id" value="{{ $motel->id }}">
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <label for="new_electric_{{$motel->id}}" class="form-label text-dark">Chỉ số
-                                                điện mới:</label>
-                                            <input type="number" class="form-control" name="new_electric"
-                                                   min="{{$motel->default_electric}}" required>
-                                            <input type="number" hidden class="form-control" name="money_water"
-                                                   value="{{$motel->money_water}}" required>
-                                            <input type="number" hidden class="form-control" name="money_electric"
-                                                   value="{{$motel->money_electric}}" required>
-                                            <input type="number" hidden class="form-control" name="money"
-                                                   value="{{$motel->money}}" required>
-                                            <input type="number" hidden class="form-control" name="money_another"
-                                                   value="{{$motel->money_another}}" required>
-                                            <input type="number" hidden class="form-control" name="money_wifi"
-                                                   value="{{$motel->money_wifi}}" required>
-
-
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <label for="old_electric_{{$motel->id}}" class="form-label text-dark">Chỉ số
-                                                điện cũ:</label>
-                                            <input type="number" class="form-control"
-                                                   value="{{$motel->default_electric}}" name="old_electric" readonly>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <label for="new_water_{{$motel->id}}" class="form-label text-dark">Chỉ số
-                                                nước mới:</label>
-                                            <input type="number" class="form-control" name="new_water"
-                                                   min="{{$motel->default_water}}" required>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <label for="old_water_{{$motel->id}}" class="form-label text-dark">Chỉ số
-                                                nước cũ:</label>
-                                            <input type="number" class="form-control" value="{{$motel->default_water}}"
-                                                   name="old_water" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng
-                                        </button>
-                                        <button type="submit" class="btn btn-info">Tạo hoá đơn</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-4 mb-3">
                     <div class="card room-card">
                         <!-- Header -->
@@ -158,9 +95,6 @@
                                                 <i class="fas fa-receipt"></i>
                                             </button>
                                         @endif
-                                        <button class="btn btn-purple" data-bs-toggle="modal"
-                                                data-bs-target="#addMemberModal{{$motel->id}}">
-                                            <i class="fas fa-file-invoice"></i></button>
 
                                         <form action="{{ route('admin.motel.leave') }}"
                                               method="POST" style="display: inline;">

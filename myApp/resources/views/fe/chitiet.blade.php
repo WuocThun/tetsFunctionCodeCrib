@@ -108,43 +108,29 @@
                         <p>No images available</p>
                     @endif
 
-{{--                    <b class="title_room" style="font-size: 20px;">--}}
-{{--                        {{$room->title}}--}}
-{{--                    </b>--}}
+                    {{--                    <b class="title_room" style="font-size: 20px;">--}}
+                    {{--                        {{$room->title}}--}}
+                    {{--                    </b>--}}
 
-                        <h3 style="color: {{ $styles['color'] }}; font-weight: {{ $styles['fontWeight'] }}; text-transform: {{ $styles['textTransform'] }};" >{{$room->title}}</h3>
+                        <h3 class="mt-3" style="color: {{ $styles['color'] }}; font-weight: {{ $styles['fontWeight'] }}; text-transform: {{ $styles['textTransform'] }};">{{$room->title}}</h3>
 
-                        <div class="address">
-                        <div class="iconaddress"></div>
-                        <span>
-                    <img class="addr_icone" id="addr_icone" width="10px" height="10px" src="{{asset('uploads/maps-and-flags.png')}}">
-                        </span>
-                        <span style="margin-left: 10px">Địa chỉ: {{$room->full_address}} </span>
-                    </div>
+                        <div class="address mb-3">
+                            <img class="addr_icone" id="addr_icone" width="10px" height="10px" src="{{asset('uploads/maps-and-flags.png')}}">
+                            <span class="ms-2">Địa chỉ: {{$room->full_address}}</span>
+                        </div>
 
-                    <div class="attributes">
-                        <div class="iconprice"></div>
-                        <span
-                            style="
-                  color: #16c784;
-                  font-weight: bold;
-                  font-size: 18px;
-                  margin-left: 10px;
-                ">{{number_format($room->price,0,',', '.')}} nghìn/tháng</span>
-                        <div class="iconacreage"></div>
-                        <span style="margin-left: 10px"> {{$room->area}} m <sup>2</sup></span>
-                        <div class="iconclock"></div>
-                        <span style="margin-left: 10px">{{ $timePosted }}</span>
-                        <div class="iconhastag"></div>
-                        <span style="margin-left: 10px">Mã phòng: {{$room->id}}</span>
-                    </div>
-
+                        <div class="attributes mb-3">
+                            <span class="badge bg-success">{{number_format($room->price,0,',', '.')}} nghìn/tháng</span>
+                            <span class="ms-2">{{$room->area}} m<sup>2</sup></span>
+                            <span class="ms-2">{{$timePosted}}</span>
+                            <span class="ms-2">Mã phòng: {{$room->id}}</span>
+                        </div>
                     <h3 style="margin-top: 20px">Thông tin mô tả</h3>
-
-                        <div class="content-container">
-                            @php
+                    <div class="content-container">
+                        @php
                             echo($room->description);
-                        @endphp                </div>
+                        @endphp
+                    </div>
                     <table class="table table table-striped">
                         <tbody>
                         <tr>
@@ -202,7 +188,21 @@
                         </tr>
                         </tbody>
                     </table>
+                    <br>
+                    <br>
+                    <div class="mb-4">
+                        <h3 class="border-danger border-bottom">Các tiện ích hiện có</h3>
+                        <div class="row">
+                            @foreach($room->utilities as $utility)
+                                <div class="col-md-4">
+                                    <p>{{ $utility->name }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <h3>Thông tin liên hệ</h3>
+
                     <table class="table table table-striped">
                         <tr>
                             <td class="name">Liên hệ:</td>
@@ -256,7 +256,7 @@
                     @include('fe.inc.comment')
                 </div>
             </div>
-@include('fe.inc.fitler_blogs_right')
+            @include('fe.inc.fitler_blogs_right')
         </div>
     </section>
 @endsection

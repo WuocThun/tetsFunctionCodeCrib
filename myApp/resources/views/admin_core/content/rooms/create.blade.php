@@ -19,11 +19,9 @@
             <h1 class="h1">Đăng tin mới</h1>
         </div>
 
-        <!-- <div class="alert alert-danger mb-5" role="alert">
-        </div> -->
 
 
-        <form id="form_dangtin" action="{{route('admin.roomsCore.createCore')}}" class="form-horizontal js-form-submit-data js-frm-manage-post" enctype="multipart/form-data">
+        <form id="form_dangtin" action="{{route('admin.roomsCore.storeCore')}}" method="POST" class="form-horizontal js-form-submit-data js-frm-manage-post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 @if ($errors->any())
@@ -210,9 +208,9 @@
                         <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <select class="form-control" id="post_cat" name="gender_rental">
-                                    <option value="Tất cả">-- Tất cả --</option>
-                                    <option value="Nam">Nam</option>
-                                    <option value="Nữ">Nữ</option>
+                                    <option value="0">-- Tất cả --</option>
+                                    <option value="1">Nam</option>
+                                    <option value="2">Nữ</option>
                                 </select>
                             </div>
                         </div>
@@ -228,7 +226,7 @@
                             <div class="form-group">
                                 <div for="browse_photos" class="browse_photos js-dropzone"><i
                                         class="icon-upload-image">
-                                        <input type="file" name="image" id="" multiple>
+                                        <input type="file" name="image[]" id="" multiple>
                                     </i><span class="js-btn-chon-anh">Thêm
                                                     Ảnh</span></div>
                             </div>

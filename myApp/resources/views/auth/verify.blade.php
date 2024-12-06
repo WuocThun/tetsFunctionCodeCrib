@@ -10,7 +10,7 @@
         <div class="container">
             <div class="form-group ">
                 <label for="email">Nhập mã số xác thực</label>
-                <input type="text" name="code" id="phone" placeholder="Nhập số điện thoại">
+                <input type="text" name="code" id="phone" placeholder="Nhập mã số xác thực">
                 <x-input-error :messages="$errors->get('code')" class="mt-2"/>
             </div>
 

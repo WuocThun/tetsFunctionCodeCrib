@@ -14,6 +14,6 @@ class AdminController extends Controller
     }
     public  function adminCore()
     {
-        return view("admin_core.content.index");
+        return view("admin_core.content.test    ");
     }
 }

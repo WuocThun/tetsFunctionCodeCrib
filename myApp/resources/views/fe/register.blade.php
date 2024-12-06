@@ -6,7 +6,7 @@
 @section('main')
 <div class="login-container">
     <div class="form">
-        <h1>Đăng nhập</h1>
+        <h1>Đăng ký</h1>
         <form method="POST" action="{{ route('register') }}">
             @csrf
             <div class="form-group">
@@ -53,7 +53,7 @@
             </div>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
 
-            <button type="submit" id="loginbtn">Đăng nhập</button>
+            <button type="submit" id="loginbtn">Đăng ký</button>
         </form>
         <div class="footer-links">
             <a href="#">Bạn quên mật khẩu?</a>
