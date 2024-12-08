@@ -203,30 +203,6 @@ public function report()
 
         return view('admin.content.rooms.my_room', compact('room','vipPackages'));
     }
-//    public function myRooms()
-//    {
-//        $user_id = auth()->id(); // Lấy ID người dùng hiện tại
-//
-//        // Lấy các phòng của người dùng hiện tại, sắp xếp theo ID giảm dần
-//        $room = Rooms::where('user_id', $user_id)->orderBy('id', 'desc')->get();
-//
-//        // Khởi tạo một mảng để lưu các gói VIP cho từng phòng
-//        $vipPackagesForRooms = [];
-//
-//        foreach ($room as $room1) {
-//            // Lấy gói VIP hiện tại của phòng
-//            $currentVIPPackageId1 = $room1->vip_package_id ?? 0;
-//
-//            // Lấy các gói VIP có ID lớn hơn gói VIP hiện tại của phòng
-//            $vipPackages = VIPPackage::where('id', '>', $currentVIPPackageId1)->get();
-//
-//            // Lưu các gói VIP tương ứng với phòng
-//            $currentVIPPackageId[$room1->id] = $vipPackages;
-//        }
-//
-//        // Truyền dữ liệu vào view
-//        return view('admin.content.rooms.my_room', compact('room', 'vipPackages'));
-//    }
 
     public function allRooms()
     {

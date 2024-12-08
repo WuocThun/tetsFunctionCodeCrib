@@ -63,6 +63,21 @@ public function getInvoicesBy($id)
         return $this->hasMany(UserMotel::class, 'motel_id', 'id');
 
     }
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'motel_id');
+    }
+    public function tenants()
+    {
+        return $this->hasManyThrough(
+            User::class,          // Model bạn muốn lấy
+            Contract::class,      // Model trung gian
+            'motel_id',           // Khóa ngoại trong bảng `contracts`
+            'id',                 // Khóa chính trong bảng `users`
+            'id',                 // Khóa chính trong bảng `motels`
+            'user_id'             // Khóa ngoại trong bảng `contracts`
+        );
+    }
 //    public function invoices()
 //    {
 //        return $this->hasMany(Invoice::class, 'motel_id');

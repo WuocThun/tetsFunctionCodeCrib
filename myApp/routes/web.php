@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\MotelController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Exports\InvoiceExport;
 use App\Http\Controllers\RoomRequestController;
+use App\Http\Controllers\Admin\ContractController;
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', [IndexController::class, 'index'])->name('welcome');
@@ -278,6 +279,15 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          Route::post('/spin-wheel', [WheelController::class, 'spin'])
               ->name('spin.wheel');
          Route::group(['middleware' => ['auth']], function () {
+             Route::get('contracts/create', [ContractController::class, 'create'])->name('contracts.create');
+             Route::post('contracts', [ContractController::class, 'store'])->name('contracts.store');
+             Route::get('contracts', [ContractController::class, 'index'])->name('contracts.index');
+             Route::post('contracts/update/{id}', [ContractController::class, 'update'])->name('contracts.update');
+             Route::post('/contracts/{id}/cancel', [ContractController::class, 'deleteContract'])->name('contracts.cancel');
+             Route::get('/motel/report', [MotelController::class, 'report'])->name('statistics');
+
+         });
+         Route::group(['middleware' => ['auth']], function () {
              Route::get('/danh-sach-day-tro', [MotelController::class, 'index'])
                   ->name('motel.index');
              Route::get('/them-phong-tro', [MotelController::class, 'create'])
@@ -327,7 +337,6 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::post('/check-passcode',
                  [MotelController::class, 'checkPasscode'])
                   ->name('check.passcode');
-
          });
 
      });

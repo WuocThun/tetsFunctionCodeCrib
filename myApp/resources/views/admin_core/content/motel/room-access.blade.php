@@ -72,7 +72,6 @@
 
                                                 <button type="submit" class="btn btn-primary">Kiểm Tra</button>
                                             </form>
-
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -82,6 +81,46 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade" id="viewContract{{ $motel->id }}" tabindex="-1"
+                                 aria-labelledby="viewContractLabel{{ $motel->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewContractLabel{{ $motel->id }}">Xem hợp đồng {{ $motel->name }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if ($motel->contracts->isNotEmpty())
+                                                @foreach ($motel->contracts as $contract)
+                                                    <p><strong>Tên người thuê:</strong> {{ $contract->tenant_name }}</p>
+                                                    <p><strong>Tên chủ trọ:</strong> {{ $contract->owner_name }}</p>
+                                                    <p><strong>Ngày bắt đầu:</strong> {{ $contract->start_date }}</p>
+                                                    <p><strong>Ngày kết thúc:</strong> {{ $contract->end_date }}</p>
+
+                                                    @if ($contract->contract_image)
+                                                        <p><strong>Ảnh chứng minh:</strong></p>
+                                                        @foreach (json_decode($contract->contract_image, true) as $image)
+                                                            <img src="{{ asset('uploads/contracts/' . $image) }}" alt="Hợp đồng" style="width: 100%; max-width: 300px; margin-bottom: 10px;">
+                                                        @endforeach
+                                                    @endif
+
+                                                    @if ($contract->contract_file)
+                                                        <p><strong>Hợp đồng file:</strong>
+                                                            <a href="{{ asset($contract->contract_file) }}" target="_blank">Xem file hợp đồng</a>
+                                                        </p>
+                                                    @endif
+
+                                                    <hr>
+                                                @endforeach
+                                            @else
+                                                <p>Hợp đồng chưa được chủ phòng tạo</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="room-info my-3">
                                 @if (session("motel_unlocked_{$motel->id}"))
                                     <div class="actions d-flex justify-content-between">
@@ -95,6 +134,10 @@
                                                 <i class="fas fa-receipt"></i>
                                             </button>
                                         @endif
+                                        <button class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#viewContract{{$motel->id}}">
+                                            <i  class='fas fa-file-contract'></i>
+                                        </button>
 
                                         <form action="{{ route('admin.motel.leave') }}"
                                               method="POST" style="display: inline;">
@@ -109,6 +152,7 @@
                                     <p class="text-danger">Bạn cần nhập đúng mật khẩu để mở khóa phòng.</p>
                                 @endif
                             </div>
+
                             <div class="card-footer text-center row">
                                 <div class="col-md-6  ">
                                     <p>Ngày tính

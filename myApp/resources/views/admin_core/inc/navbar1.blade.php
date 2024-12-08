@@ -40,13 +40,32 @@
                 <a class="collapse-item" href="{{route('admin.rooms.myRooms')}}">Phòng của tôi</a>
                 @role('admin')
                 <a class="collapse-item" href="{{route('admin.rooms.getPendingRooms')}}">Phòng đang đợi duyệt</a>
-
                 <a class="collapse-item" href="{{route('admin.rooms.allRooms')}}">Danh sách các phòng</a>
                 <a class="collapse-item" href="{{route('admin.room.report')}}">Thống kê phòng</a>
                 @endrole
             </div>
         </div>
     </li>
+
+
+    @role('admin')
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo1"
+           aria-expanded="true" aria-controls="collapseTwo1">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quản lý hợp đồng</span>
+        </a>
+        <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Hợp đồng</h6>
+                <a class="collapse-item" href="{{route('admin.roomsCore.createCore')}}">Đăng tin cho thuê phòng</a>
+                <a class="collapse-item" href="{{route('admin.rooms.myRooms')}}">Phòng của tôi</a>
+            </div>
+        </div>
+    </li>
+
+    @endrole
+
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
@@ -79,9 +98,9 @@
                 <a class="collapse-item" href="{{route('admin.invoices.motelReport')}}">Báo cáo tài chính</a>
                 @endrole
                 @role('admin')
-                <a class="collapse-item" href="#">Duyệt phòng</a>
+                <a class="collapse-item" href=""></a>
                 <a class="collapse-item" href="#">Duyệt bình luận</a>
-                <a class="collapse-item" href="#">Báo cáo các phòng</a>
+                <a class="collapse-item" href="{{route('admin.statistics')}}">Báo cáo các phòng</a>
                 @endrole
             </div>
         </div>

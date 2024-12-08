@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contract;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use App\Models\User;
@@ -12,7 +13,7 @@ use App\Models\Motel;
 use App\Models\UserMotel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\DB;
 // Import thư viện Str
 
 class MotelController extends Controller
@@ -99,14 +100,22 @@ class MotelController extends Controller
      */
     public function index()
     {
+
         $userId      = Auth::id();
         $getAllMotel = Motel::where('user_id', $userId)->orderBy('id', 'desc')
                             ->get();
-        $motels      = Motel::withCount('users')
-                            ->where('user_id', $userId)
-                            ->orderBy('id', 'desc')
-                            ->get();
-
+//        $motels = Motel::with(['contracts.tenant'])
+//                       ->withCount(['users', 'contracts'])
+//                       ->where('user_id', $userId)
+//                       ->orderBy('id', 'desc')
+//                       ->get();
+        $motels = Motel::with(['contracts' => function ($query) {
+            $query->with('tenant'); // Lấy thông tin người thuê qua quan hệ tenant
+        }])
+                       ->withCount(['users', 'contracts']) // Đếm số lượng users và contracts
+                       ->where('user_id', $userId)
+                       ->orderBy('id', 'desc')
+                       ->get();
         return view('admin_core.content.motel.index',
             compact('getAllMotel', 'motels'));
     }
@@ -158,7 +167,46 @@ class MotelController extends Controller
         return redirect()->back()->with('success',
             'Thành viên đã được thêm thành công');
     }
+    public function report()
+    {
+        // Thống kê người dùng
+        $totalUsers = User::count();
+        $totalVipUsers = User::where('is_vip', 1)->count();
+        $usersWithoutMotel = User::whereNull('motel_id')->count();
+        $usersWithVerifiedEmail = User::whereNotNull('email_verified_at')->count();
 
+        // Thống kê phòng trọ
+        $totalMotels = Motel::count();
+        $motelsByStatus = Motel::select('status', DB::raw('count(*) as total_by_status'))
+                               ->groupBy('status')
+                               ->get();
+
+        // Thống kê hợp đồng
+        $totalContracts = Contract::count();
+        $contractsByStatus = Contract::select('status', DB::raw('count(*) as total_by_status'))
+                                     ->groupBy('status')
+                                     ->get();
+
+        // Thống kê hợp đồng mới theo tháng
+        $contractsPerMonth = Contract::select(DB::raw('MONTH(created_at) as month'), DB::raw('count(*) as contracts_per_month'))
+                                     ->groupBy(DB::raw('MONTH(created_at)'))
+                                     ->get();
+
+
+        // Truyền dữ liệu vào view
+        return view('admin_core.content.motel.motel_report', compact(
+            'totalUsers',
+            'totalVipUsers',
+            'usersWithoutMotel',
+            'usersWithVerifiedEmail',
+            'totalMotels',
+            'motelsByStatus',
+            'totalContracts',
+            'contractsByStatus',
+            'contractsPerMonth',
+//            'motelsPerMonth'
+        ));
+    }
     public function addUserMotel(Request $request, string $id)
     {
         $motelId  = $id;

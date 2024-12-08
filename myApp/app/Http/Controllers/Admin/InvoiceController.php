@@ -240,7 +240,6 @@ class InvoiceController extends Controller
     {
         $getUserId = Auth::id();
         $invoices = Invoice::where('user_id', $getUserId)->with('motel')->get();
-
         return view('admin_core.content.motel.list', compact('invoices'));
     }
     public function prepay(Request $request)
