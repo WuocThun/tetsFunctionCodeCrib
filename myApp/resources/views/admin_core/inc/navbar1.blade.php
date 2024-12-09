@@ -98,8 +98,7 @@
                 <a class="collapse-item" href="{{route('admin.invoices.motelReport')}}">Báo cáo tài chính</a>
                 @endrole
                 @role('admin')
-                <a class="collapse-item" href=""></a>
-                <a class="collapse-item" href="#">Duyệt bình luận</a>
+                <h6 class="collapse-header">Nâng cao</h6>
                 <a class="collapse-item" href="{{route('admin.statistics')}}">Báo cáo các phòng</a>
                 @endrole
             </div>

@@ -10,6 +10,7 @@ use App\Providers\VietMapProviders;
 use Carbon\Carbon;
 use App\Models\RoomsClassification;
 use App\Models\VIPPackage;
+use App\Models\UserRequest;
 use Illuminate\Support\Facades\View;
 
 class IndexController extends Controller
@@ -62,6 +63,12 @@ class IndexController extends Controller
     public function indexBlog(){
         $blogs = Blogs::paginate(5);
         return view('fe.tintuc',compact('blogs'));
+    }
+    public function viewRequests()
+    {
+//        $requests = UserRequest::orderBy('id','desc')->paginate(5);
+        $requests = UserRequest::with('user', 'motel')->latest()->paginate(7);
+        return view('fe.kiemnguoioghep', compact('requests'));
     }
     public function getRoom($slug)
     {

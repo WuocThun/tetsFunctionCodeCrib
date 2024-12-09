@@ -25,7 +25,7 @@ class ContractController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'contract_image' => 'nullable|array',
-            'contract_image.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'contract_image.*' => 'image',
         ]);
 
         $data = $request->all();

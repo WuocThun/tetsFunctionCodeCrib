@@ -25,6 +25,7 @@ class User extends Authenticatable
         'code',
         'card_id_number',
         'expire_at',
+        'rand_code_user',
         'motel_id',
     ];
 

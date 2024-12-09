@@ -25,6 +25,58 @@
         @endif
         <form action="{{route('admin.motel.store')}}" method="post" enctype="multipart/form-data">
             @csrf
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="province">Tỉnh:</label>
+                        <select id="province" name="province" class="form-control">
+                            <option value="">Chọn tỉnh</option>
+                            @foreach ($provinces['results'] as $province)
+                                <option
+                                    value="{{ $province['province_id'] }}">{{ $province['province_name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="district">Quận:</label>
+                        <select name="district" id="district" class="form-control" disabled>
+                            <option value="">Chọn quận</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="ward">Phường:</label>
+                        <select id="ward" name="ward" class="form-control" disabled>
+                            <option value="">Chọn phường</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="street">Tên đường:</label>
+                        <input type="text" id="street" class="form-control"
+                               placeholder="Nhập tên đường..."/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="selectedInfo">Địa chỉ chính xác:</label>
+                        <input class="nameform form-control" name="full_address" type="text"
+                               id="selectedInfo" readonly/>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="maps" style="width:100%; height:300px;margin-bottom: 30px;">
+                        <iframe width="100%" height="100%" id="map" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                </div>
+            </div>
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
@@ -184,6 +236,62 @@
                     this.value = this.value.replace(/,/g, '');
                 });
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#province').change(function () {
+                var provinceId = $(this).val();
+                $('#district').prop('disabled', true).empty().append('<option value="">Chọn quận</option>');
+                $('#ward').prop('disabled', true).empty().append('<option value="">Chọn phường</option>');
+
+                if (provinceId) {
+                    $.get('https://vapi.vnappmob.com/api/province/district/' + provinceId, function (data) {
+                        $.each(data.results, function (index, district) {
+                            $('#district').append('<option value="' + district.district_id + '">' + district.district_name + '</option>');
+                        });
+                        $('#district').prop('disabled', false);
+                    });
+                }
+                updateMap();
+            });
+
+            $('#district').change(function () {
+                var districtId = $(this).val();
+                $('#ward').prop('disabled', true).empty().append('<option value="">Chọn phường</option>');
+
+                if (districtId) {
+                    $.get('https://vapi.vnappmob.com/api/province/ward/' + districtId, function (data) {
+                        $.each(data.results, function (index, ward) {
+                            $('#ward').append('<option value="' + ward.ward_id + '">' + ward.ward_name + '</option>');
+                        });
+                        $('#ward').prop('disabled', false);
+                    });
+                }
+                updateMap();
+            });
+
+            $('#ward, #street').on('change keyup', updateMap);
+
+            function updateMap() {
+                var provinceName = $('#province option:selected').val() ? $('#province option:selected').text() : '';
+                var districtName = $('#district option:selected').val() ? $('#district option:selected').text() : '';
+                var wardName = $('#ward option:selected').val() ? $('#ward option:selected').text() : '';
+                var streetName = $('#street').val();
+
+                var fullAddress = `${streetName}${wardName ? ', ' + wardName : ''}${districtName ? ' ' + districtName : ''}${provinceName ? ', ' + provinceName : ''}`;
+
+                $('#selectedInfo').val(fullAddress);
+                $('input[name="full_address"]').val(fullAddress);
+                $('#province_get').val(provinceName);
+                $('input[name="province"]').val(provinceName);
+
+                if (fullAddress) {
+                    const encodedAddress = encodeURIComponent(fullAddress);
+                    const mapSrc = `https://maps.google.com/maps?width=1260&height=3000&hl=en&q=${encodedAddress}&t=&z=12&ie=UTF8&iwloc=B&output=embed`;
+                    $('#map').attr('src', mapSrc);
+                }
+            }
         });
     </script>
 

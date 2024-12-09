@@ -50,7 +50,6 @@
                                 {{--                            <p>{{ \Illuminate\Support\Str::limit($motel->description, 15, '...') }}</p>--}}
                                 <div class="contact-options">
                                     <button class="btn  call-btn ">Gọi {{$motel->phone_number}}</button>
-{{--                                    <button data-room-id="{{ $motel->id }}" class="add-to-wishlist btn btn-warning zalo-btn">Yêu cầu tham gia phòng</button>--}}
                                     <form action="{{ route('room-requests.store') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="motel_id" value="{{ $motel->id }}">

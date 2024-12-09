@@ -75,12 +75,13 @@
                                            id="selectedInfo" readonly/>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-12">
                                 <div id="maps" style="width:100%; height:300px;margin-bottom: 30px;">
                                     <iframe width="100%" height="100%" id="map" frameborder="0" scrolling="no"></iframe>
                                 </div>
+                        </div>
+                        <div class="row">
+
 
                                 <div class="card mb-5"
                                      style="color: #856404; background-color: #fff3cd; border-color: #ffeeba;">

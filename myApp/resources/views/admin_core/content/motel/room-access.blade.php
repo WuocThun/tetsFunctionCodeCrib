@@ -18,6 +18,15 @@
                 {{ session('error') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         @if(isset($motel))
             <div class="row">
 
@@ -120,6 +129,84 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade" id="shareHome{{ $motel->id }}" tabindex="-1"
+                                 aria-labelledby="shareHomeLabel{{ $motel->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="shareHomeLabel{{ $motel->id }}">Đăng tin kiếm người ở ghép: <strong> {{ $motel->name }} </strong></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{route('admin.requests.create')}}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="motel_id" class="form-label">Phòng Trọ</label>
+                                                        <select class="form-select" name="motel_id" required>
+    {{--                                                        @foreach ($userMotels as $motel)--}}
+                                                                <option value="{{ $motel->id }}">{{ $motel->name }}</option>
+    {{--                                                        @endforeach--}}
+                                                        </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Tiêu Đề</label>
+                                                    <input type="text" class="form-control" name="title" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="description" class="form-label">Mô Tả</label>
+                                                    <textarea class="form-control" name="description" rows="4"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="contract_image" class="form-label">Tải ảnh phòng hiện tại</label>
+                                                    <input type="file" class="form-control" id="contract_image"
+                                                           name="image[]" multiple>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Đăng Bài</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="invitedUser{{ $motel->id }}" tabindex="-1"
+                                 aria-labelledby="invitedUserLabel{{ $motel->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="invitedUserLabel{{ $motel->id }}">Mời người dùng vào phòng: <strong> {{ $motel->name }} </strong></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Form tìm kiếm người dùng -->
+                                            <form id="searchUserForm{{ $motel->id }}">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="rand_code_user" class="form-label">Nhập mã người dùng</label>
+                                                    <input type="text" class="form-control" id="rand_code_user{{ $motel->id }}" name="rand_code_user" required>
+                                                </div>
+                                                <button type="button" class="btn btn-primary" onclick="searchUser({{ $motel->id }})">Tìm kiếm</button>
+                                            </form>
+
+                                            <!-- Hiển thị kết quả tìm kiếm -->
+                                            <div id="userInfo{{ $motel->id }}" style="display: none;">
+                                                <hr>
+                                                <h5>Thông tin người dùng</h5>
+                                                <p id="userName{{ $motel->id }}"></p>
+                                                <p id="userEmail{{ $motel->id }}"></p>
+                                                <p id="userPhone{{ $motel->id }}"></p>
+
+                                                <!-- Gửi lời mời -->
+                                                <form action="{{ route('invite-user') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="motel_id" value="{{ $motel->id }}">
+                                                    <input type="hidden" id="user_id{{ $motel->id }}" name="user_id">
+                                                    <button type="submit" class="btn btn-success">Mời tham gia</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="room-info my-3">
                                 @if (session("motel_unlocked_{$motel->id}"))
@@ -137,6 +224,14 @@
                                         <button class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#viewContract{{$motel->id}}">
                                             <i  class='fas fa-file-contract'></i>
+                                        </button>
+                                        <button class="btn btn-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#shareHome{{$motel->id}}">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                        <button class="btn btn-warning position-relative" data-bs-toggle="modal"
+                                                data-bs-target="#invitedUser{{$motel->id}}">
+                                            <i class="fas fa-plus"></i>
                                         </button>
 
                                         <form action="{{ route('admin.motel.leave') }}"
@@ -188,9 +283,39 @@
                 </div>
 
             </div>
+
         @endif
     </main>
+    <script>
+        function searchUser(motelId) {
+            const randCode = document.getElementById(`rand_code_user${motelId}`).value;
 
+            fetch('{{ route("search-user") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ rand_code_user: randCode }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        document.getElementById(`userInfo${motelId}`).style.display = 'block';
+                        document.getElementById(`userName${motelId}`).innerText = `Tên: ${data.user.name}`;
+                        document.getElementById(`userEmail${motelId}`).innerText = `Email: ${data.user.email}`;
+                        document.getElementById(`userPhone${motelId}`).innerText = `Số điện thoại: ${data.user.phone_number}`;
+                        document.getElementById(`user_id${motelId}`).value = data.user.id;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+    </script>
 @endsection
 
 

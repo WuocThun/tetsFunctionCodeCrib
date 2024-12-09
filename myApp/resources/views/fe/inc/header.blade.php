@@ -86,7 +86,7 @@
 
             <div class="flexinfo">
                 <span>Xin chào, <b>{{ Auth::user()->name }}</b></span>
-                <span>Mã tài khoản: {{ Auth::id() }}</span>
+                <span>Mã tài khoản: {{ Auth::user()->rand_code_user }}</span>
                 <span>TK Chính: <b>{{ number_format(Auth::user()->balance, 0, ',', '.') }} VNĐ</b></span>
             </div>
             <span class="icon"><a href="{{route('wishlist.list')}}">Yêu thích</a></span>
@@ -128,7 +128,8 @@
                 @foreach($clasRoom as $class => $cl)
                     <li class="mx-3"><a class="" href="{{ route('laydichvu', $cl->slug) }}">{{ $cl->title }}</a></li>
                 @endforeach
-                <li class="mx-3"><a class="" href="{{ route('room-requests.index') }}">Phòng trọ còn trống</a></li>
+                <li class="mx-3"><a class="" href="{{ route('room-requests.index') }}">Đăng ký phòng trọ</a></li>
+                <li class="mx-3"><a class="" href="{{ route('viewRequests') }}">Đăng ký ở ghép</a></li>
                 <li class="mx-3"><a class="" href="{{ route('indexBlog') }}">Tin tức</a></li>
                 <li class="mx-3"><a class="" href="{{ route('dichvu') }}">Dịch vụ</a></li>
             </ul>

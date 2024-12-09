@@ -45,6 +45,8 @@ Route::get('/dang-nhap', [IndexController::class, 'getLogin'])
      ->name('getLogin');
 Route::get('/dang-ky', [IndexController::class, 'getRegister'])
      ->name('getReginster');
+Route::get('/viewRequests', [IndexController::class, 'viewRequests'])
+     ->name('viewRequests');
 Route::get('/phong-tro-con-trong', [RoomRequestController::class, 'index'])
      ->name('room-requests.index');
 Route::resource('xac-minh', TwoFactorController::class)->names('xac-minh');
@@ -67,6 +69,8 @@ Route::group(['middleware' => ['auth']], function () {
         [RoomRequestController::class, 'accept'])->name('room-requests.accept');
     Route::patch('/room-requests/{id}/reject',
         [RoomRequestController::class, 'reject'])->name('room-requests.reject');
+    Route::post('/search-user', [RoomRequestController::class, 'searchUser'])->name('search-user');
+    Route::post('/invite-user', [RoomRequestController::class, 'inviteUser'])->name('invite-user');
 
 });
 
@@ -285,6 +289,8 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::post('contracts/update/{id}', [ContractController::class, 'update'])->name('contracts.update');
              Route::post('/contracts/{id}/cancel', [ContractController::class, 'deleteContract'])->name('contracts.cancel');
              Route::get('/motel/report', [MotelController::class, 'report'])->name('statistics');
+             Route::post('/requests/create', [MotelController::class, 'createRequest'])->name('requests.create');
+
 
          });
          Route::group(['middleware' => ['auth']], function () {
