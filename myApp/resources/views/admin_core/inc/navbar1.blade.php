@@ -123,7 +123,7 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Sự kiện</h6>
-                <a class="collapse-item" href="#">Vòng quay may mắn</a>
+                <a class="collapse-item" href="{{route('admin.wheel.index')}}">Vòng quay may mắn</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Nạp tiền</h6>
                 <a class="collapse-item" href="#">Nạp tiền vào tài khoản</a>
