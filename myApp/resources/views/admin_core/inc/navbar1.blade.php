@@ -126,10 +126,10 @@
                 <a class="collapse-item" href="{{route('admin.wheel.index')}}">Vòng quay may mắn</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Nạp tiền</h6>
-                <a class="collapse-item" href="#">Nạp tiền vào tài khoản</a>
-                <a class="collapse-item" href="#">Lịch sử nạp tiền</a>
+                <a class="collapse-item" href="{{route('admin.trangChuNapThe')}}">Nạp tiền vào tài khoản</a>
+                <a class="collapse-item" href="{{route('admin.lichSuNapThe')}}">Lịch sử nạp tiền</a>
                 @role('admin')
-                <a class="collapse-item" href="#">Báo cáo nạp tiền</a>
+                <a class="collapse-item" href="{{route('admin.payment.report')}}">Báo cáo nạp tiền</a>
                 @endrole
             </div>
         </div>
@@ -143,7 +143,7 @@
         <div id="collapseUser" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Quản lý tài khoản</h6>
-                <a class="collapse-item" href="#">Sửa thông tin cá nhân</a>
+                <a class="collapse-item" href="{{route('admin.users.edit',[auth()->id()])}}">Sửa thông tin cá nhân</a>
                 <a class="collapse-item" href="#">Đổi mật khẩu</a>
                 <div class="collapse-divider"></div>
 

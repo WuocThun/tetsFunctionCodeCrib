@@ -1,4 +1,4 @@
-@extends('admin_core.layouts.app')
+@extends('admin_core.layouts.test')
 @section('navbar')
     @include('admin_core.inc.navbar')
 @endsection
@@ -14,14 +14,14 @@
         </nav>
         <div class="main-box">
 
-            <div class="note alert alert-success js-promotion-payment-daily" role="alert">
-                <p><strong>Khuyến mãi:</strong></p>
-                <ul>
-                    <li>Nạp từ 50.000 đến dưới 1.000.000 tặng <strong>10%</strong></li>
-                    <li>Nạp từ 1.000.000 đến dưới 2.000.000 tặng <strong>20%</strong></li>
-                    <li>Nạp từ 2.000.000 trở lên tặng <strong>25%</strong></li>
-                </ul>
-            </div>
+{{--            <div class="note alert alert-success js-promotion-payment-daily" role="alert">--}}
+{{--                <p><strong>Khuyến mãi:</strong></p>--}}
+{{--                <ul>--}}
+{{--                    <li>Nạp từ 50.000 đến dưới 1.000.000 tặng <strong>10%</strong></li>--}}
+{{--                    <li>Nạp từ 1.000.000 đến dưới 2.000.000 tặng <strong>20%</strong></li>--}}
+{{--                    <li>Nạp từ 2.000.000 trở lên tặng <strong>25%</strong></li>--}}
+{{--                </ul>--}}
+{{--            </div>--}}
 
             <div class="payment-form">
                 <form action="{{ route('admin.payment.mbbank.createPaymentLink') }}" method="post">
@@ -55,35 +55,6 @@
 
     </main>
 
-    <div class="col-md-3 d-none d-md-block">
-        <div class="card mb-3">
-            <div class="card-body">
-                <div>Số dư tài khoản</div>
-                <h3 class="heading" style="margin-top: 0; margin-bottom: 0; color: #28a745;">
-                    <strong>{{number_format(auth()->user()->balance,0,',', '.')}} VND</strong>
-                </h3>
-            </div>
-        </div>
-        <a class="btn btn-secondary btn-block" href="./lich-su-nap-tien.html">Lịch sử nạp tiền <svg
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="feather feather-chevron-right">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg></a>
-        <a class="btn btn-secondary btn-block" href="./lich-su-thanh-toan.html">Lịch sử thanh toán
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" class="feather feather-chevron-right">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg></a>
-        <a class="btn btn-secondary btn-block" href="https://phongtro123.com/bang-gia-dich-vu">Bảng
-            giá dịch vụ <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                             stroke-linecap="round" stroke-linejoin="round"
-                             class="feather feather-chevron-right">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg></a>
-    </div>
 
 @endsection
 @section('script')

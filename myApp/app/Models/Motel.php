@@ -61,11 +61,7 @@ public function getInvoicesBy($id)
         return $this->hasMany(RoomRequest::class);
     }
 
-    public function userMotel()
-    {
-        return $this->hasMany(UserMotel::class, 'motel_id', 'id');
 
-    }
     public function contracts()
     {
         return $this->hasMany(Contract::class, 'motel_id');

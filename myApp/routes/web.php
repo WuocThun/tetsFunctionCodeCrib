@@ -183,6 +183,9 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/nap-the/lich-su',
                  [PaymentController::class, 'getHistoryPayment'])
                   ->name('lichSuNapThe');
+             Route::get('/nap-the/bao-cao',
+                 [PaymentController::class, 'report'])
+                  ->name('payment.report');
          });
          // Resource route cho RoomController, kiểm tra quyền truy cập
          Route::group(['middleware' => ['auth']], function () {
@@ -228,6 +231,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('user.transferPayment');
              Route::post('transferPayment', [UserController::class, 'store'])
                   ->name('balance.store');
+
+             Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+             Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
              Route::get('/payment', function () {
                  return view('admin.content.payment.payment');
              })->name('payment');

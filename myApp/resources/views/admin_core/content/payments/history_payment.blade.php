@@ -1,4 +1,4 @@
-@extends('admin_core.layouts.app')
+@extends('admin_core.layouts.test')
 @section('navbar')
     @include('admin_core.inc.navbar')
 @endsection

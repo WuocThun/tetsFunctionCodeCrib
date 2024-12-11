@@ -1,6 +1,5 @@
-
 @extends('fe.layouts.app')
-@section('title','Chi tiết bài viết')
+@section('title','Quên mật khẩu')
 @section('header')
     @include('fe.inc.header')
 @endsection
@@ -8,16 +7,22 @@
     <div class="login-container">
         <div class="form">
             <h1>Quên mật khẩu</h1>
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('password.email') }}">
                 @csrf
                 <div class="form-group">
-                    <label for="password">Vui lòng nhập Email</label>
-                    <input name="password" type="password" id="password" placeholder="Nhập mật Email">
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    <label for="email">Vui lòng nhập Email</label>
+                    <input name="email" type="email" id="email" required placeholder="Nhập mật Email" class="mt-3">
+{{--                    @error('email')--}}
+{{--                    <span class="text-red-500">{{ $message }}</span>--}}
+{{--                    @enderror--}}
+                                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
                 </div>
-                <button type="submit" id="loginbtn">Gửi</button>
+                <div class="mt-4">
+                    <button type="submit" class="btn-primary btn">Gửi liên kết đặt lại mật khẩu</button>
+                </div>
             </form>
+
             <div class="footer-links">
                 <a href="{{route('getLogin')}}">Đã có tài khoản?</a>
                 <a href="{{route('getReginster')}}">Tạo tài khoản mới</a>
