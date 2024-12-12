@@ -144,9 +144,11 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Quản lý tài khoản</h6>
                 <a class="collapse-item" href="{{route('admin.users.edit',[auth()->id()])}}">Sửa thông tin cá nhân</a>
-                <a class="collapse-item" href="#">Đổi mật khẩu</a>
-                <div class="collapse-divider"></div>
-
+                <a class="collapse-item" href="{{route('admin.password.edit')}}">Đổi mật khẩu</a>
+                @role('admin')
+                <h6 class="collapse-header">Theo dõi tài khoản</h6>
+                <a class="collapse-item" href="{{route('admin.user.report')}}">Thống kê tài khoản</a>
+                @endrole
             </div>
         </div>
     </li>
@@ -154,18 +156,22 @@
     @role('admin')
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{route('admin.reportSystem')}}">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Thống kê tài khoản</span></a>
+            <span>Thống kê toàn hệ thống</span></a>
     </li>
-
     <!-- Nav Item - Tables -->
     <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{route('admin.utilities.index')}}">
             <i class="fas fa-fw fa-table"></i>
-            <span>Thống kê tin phòng</span></a>
+            <span>Tiện ích phòng</span></a>
     </li>
-@endrole
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.rooms_classification.index')}}">
+            <i class="fa fa-list"></i>
+            <span>Phân loại phòng</span></a>
+    </li>
+    @endrole
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

@@ -75,8 +75,6 @@
 <header class="navbar">
     <div class="navbar-top">
         <div class="logo">
-{{--            <span>PHONGTRO</span><span class="highlight">123</span>.com--}}
-{{--            <p>Kênh thông tin phòng trọ số 1 Việt Nam</p>--}}
             <img class="img-fluid" src="{{asset('uploads/logoCodeCrib.png')}}">
         </div>
         @if (Auth::check())

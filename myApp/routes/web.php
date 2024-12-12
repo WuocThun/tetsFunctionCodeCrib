@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\VIPController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\TwoFactorController;
+use App\Http\Controllers\Admin\UtilityController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\WheelController;
 use App\Http\Controllers\WhishlistController;
@@ -80,6 +81,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          Route::group(['middleware' => ['auth']], function () {
              // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
              Route::get("/", [AdminController::class, 'index'])->name('index');
+             Route::get("/reportSystem", [AdminController::class, 'reportSystem'])->name('reportSystem');
              //Phân quyền đành cho ADMIN
              Route::get('/addRole', [PermissionController::class, 'getAssgin'])
                   ->name('addRole')->middleware('permission:create role');
@@ -189,6 +191,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          });
          // Resource route cho RoomController, kiểm tra quyền truy cập
          Route::group(['middleware' => ['auth']], function () {
+             Route::resource('tien-ich',UtilityController::class)->names('utilities');
+
+         });
+         Route::group(['middleware' => ['auth']], function () {
              Route::get('/rooms/index', [RoomController::class, 'index'])
                   ->name('rooms.index')->middleware('permission:all blogs');
              Route::get('/rooms/create', [RoomController::class, 'create'])
@@ -231,6 +237,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('user.transferPayment');
              Route::post('transferPayment', [UserController::class, 'store'])
                   ->name('balance.store');
+             Route::get('/update-password', [ProfileController::class, 'editPassword'])->name('password.edit');
+             Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+             Route::get('/user-report', [UserController::class, 'report'])->name('user.report');
+             Route::delete('/users/{id}', [UserController::class, 'deleteUser'])->name('users.delete');
 
              Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
              Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');

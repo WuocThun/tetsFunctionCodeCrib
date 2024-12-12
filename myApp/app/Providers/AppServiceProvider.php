@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer([
             'fe.inc.header',
+            'fe.inc.hot_zone',
             'fe.inc.search_bar',
             'fe.inc.fitler_blogs_right',
         ], function ($view) {

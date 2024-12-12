@@ -12,11 +12,10 @@
                 <div class="form-group">
                     <label for="email">Vui lòng nhập Email</label>
                     <input name="email" type="email" id="email" required placeholder="Nhập mật Email" class="mt-3">
-{{--                    @error('email')--}}
-{{--                    <span class="text-red-500">{{ $message }}</span>--}}
-{{--                    @enderror--}}
-                                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
-
+                    {{--                    @error('email')--}}
+                    {{--                    <span class="text-red-500">{{ $message }}</span>--}}
+                    {{--                    @enderror--}}
+                    <x-input-error :messages="$errors->get('email')" class="mt-2"/>
                 </div>
                 <div class="mt-4">
                     <button type="submit" class="btn-primary btn">Gửi liên kết đặt lại mật khẩu</button>
@@ -24,7 +23,7 @@
             </form>
 
             <div class="footer-links">
-                <a href="{{route('getLogin')}}">Đã có tài khoản?</a>
+                <a href="{{route('getLogin')}}">Đăng nhập?</a>
                 <a href="{{route('getReginster')}}">Tạo tài khoản mới</a>
             </div>
         </div>

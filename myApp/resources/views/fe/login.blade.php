@@ -12,7 +12,7 @@
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text"  name="email" id="phone" placeholder="Nhập số điện thoại">
+                <input type="text"  name="email" id="phone" placeholder="Nhập Email">
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
             <div class="form-group">

@@ -13,7 +13,7 @@ class RoomsClassificationController extends Controller
      */
     public function index()
     {
-        $getRoomsClassification = RoomsClassification::all();
+        $getRoomsClassification = RoomsClassification::withCount('rooms')->get();
         return view('admin.content.rooms_classification.index',compact('getRoomsClassification'));
     }
 

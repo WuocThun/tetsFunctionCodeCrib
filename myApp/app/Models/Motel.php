@@ -66,6 +66,8 @@ public function getInvoicesBy($id)
     {
         return $this->hasMany(Contract::class, 'motel_id');
     }
+
+
     public function tenants()
     {
         return $this->hasManyThrough(
