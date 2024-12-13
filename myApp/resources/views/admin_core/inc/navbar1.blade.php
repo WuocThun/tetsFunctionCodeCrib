@@ -46,25 +46,44 @@
             </div>
         </div>
     </li>
-
-
-    @role('admin')
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo1"
-           aria-expanded="true" aria-controls="collapseTwo1">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Quản lý hợp đồng</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2"
+           aria-expanded="true" aria-controls="collapseTwo2">
+            <i class="fa fa-blog"></i>
+            <span>Đăng tin tức</span>
         </a>
-        <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Hợp đồng</h6>
-                <a class="collapse-item" href="{{route('admin.roomsCore.createCore')}}">Đăng tin cho thuê phòng</a>
-                <a class="collapse-item" href="{{route('admin.rooms.myRooms')}}">Phòng của tôi</a>
+                <h6 class="collapse-header">Tin cho tức</h6>
+                <a class="collapse-item" href="{{route('admin.blogs.create')}}">Đăng tin tức</a>
+                <a class="collapse-item" href="{{route('admin.blogs.myblogs')}}">Tin tức của tôi</a>
+                @role('admin')
+                <a class="collapse-item" href="{{route('admin.blogs.index')}}">Tất cả tin tức</a>
+                {{--                <a class="collapse-item" href="{{route('admin.blogs.preview_blogs')}}">Danh sách chờ duyệt</a>--}}
+                <a class="collapse-item" href="{{route('admin.get_pending_blogs')}}">Duyệt tin tức</a>
+                <a class="collapse-item" href="{{route('admin.blog.statistics')}}">Thống kê</a>
+                @endrole
             </div>
         </div>
     </li>
 
-    @endrole
+
+{{--    @role('admin')--}}
+{{--    <li class="nav-item">--}}
+{{--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo1"--}}
+{{--           aria-expanded="true" aria-controls="collapseTwo1">--}}
+{{--            <i class="fa fa-receipt"></i> <span>Quản lý hợp đồng</span>--}}
+{{--        </a>--}}
+{{--        <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">--}}
+{{--            <div class="bg-white py-2 collapse-inner rounded">--}}
+{{--                <h6 class="collapse-header">Hợp đồng</h6>--}}
+{{--                <a class="collapse-item" href="{{route('admin.roomsCore.createCore')}}">Đăng tin cho thuê phòng</a>--}}
+{{--                <a class="collapse-item" href="{{route('admin.rooms.myRooms')}}">Phòng của tôi</a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </li>--}}
+
+{{--    @endrole--}}
 
 
     <!-- Nav Item - Utilities Collapse Menu -->
@@ -170,6 +189,11 @@
         <a class="nav-link" href="{{route('admin.rooms_classification.index')}}">
             <i class="fa fa-list"></i>
             <span>Phân loại phòng</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.allUser')}}">
+            <i class="fa fa-list"></i>
+            <span>Quản lý người dùng</span></a>
     </li>
     @endrole
     <!-- Divider -->

@@ -2,13 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Models\UserRequest;
+use App\Providers\VietMapProviders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Models\RoomsClassification;
 use App\Models\Rooms;
 use App\Models\Blogs;
+use Illuminate\Support\Facades\DB;
 use App\Models\Motel;
-use App\Providers\VietMapProviders;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,7 +34,6 @@ class AppServiceProvider extends ServiceProvider
     {
         View::composer([
             'fe.inc.header',
-            'fe.inc.hot_zone',
             'fe.inc.search_bar',
             'fe.inc.fitler_blogs_right',
         ], function ($view) {
@@ -45,8 +47,7 @@ class AppServiceProvider extends ServiceProvider
             foreach ($provincesIds as $provinceId) {
                 // Gọi API để lấy thông tin tỉnh
                 $vietMapProvider = app(VietMapProviders::class);
-                $getProvince
-                                 = $vietMapProvider->getProvinceData($provinceId);
+                $getProvince = $vietMapProvider->getProvinceData($provinceId);
 
                 // Giải mã JSON trả về
                 $provinceData = json_decode($getProvince->getContent(), true);
@@ -60,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
 
+
             // Lấy danh sách phòng để truyền vào navbar
             $clasRoom    = RoomsClassification::take(3)->get();
             $randomBlogs = Blogs::inRandomOrder()->take(2)->get();
@@ -68,10 +70,68 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'clasRoom'     => $clasRoom,
                 'provinceData' => $allProvinceData,
-                // Truyền mảng các tỉnh vào view
                 'randomRooms'  => $randomRooms,
                 'randomBlogs'  => $randomBlogs,
             ]);
+        });
+//        View::composer([
+//            'fe.inc.hot_zone',
+//        ], function ($view) {
+//
+//            $provincesIds = Rooms::select('province',
+//                DB::raw('count(*) as room_count'))
+//                                 ->groupBy('province')  // Group by tỉnh thành
+//                                 ->orderByDesc('room_count')  // Sắp xếp theo số lượng phòng giảm dần
+//                                 ->limit(3)  // Lấy 3 tỉnh thành có số phòng cao nhất
+//                                 ->get();
+//            foreach ($provincesIds as $provinceId) {
+//                // Gọi API để lấy thông tin tỉnh
+//                $vietMapProvider = app(VietMapProviders::class);
+//                $getProvince = $vietMapProvider->getProvinceData($provinceId->province);
+//                // Giải mã JSON trả về
+//                $provinceData = json_decode($getProvince->getContent(), true);
+//
+//                // Kiểm tra nếu dữ liệu trả về là mảng, nếu không thì tạo thành mảng
+//                if (is_array($provinceData)) {
+//                    $allProvinceData[] = $provinceData; // Thêm vào mảng kết quả
+//                } else {
+//                    $allProvinceData[]
+//                        = [$provinceData]; // Đảm bảo dữ liệu luôn là mảng
+//                }
+//                $allProvinceData1= $provinceData;
+//            }
+////        var_dump($allProvinceData1['province_name']);
+//            // Truyền các dữ liệu vào view
+//            $view->with([
+//                'provinceData' => $provinceData,
+//            ]);
+//        });
+        View::composer(['fe.inc.hot_zone'], function ($view) {
+            // Lấy 3 tỉnh thành có số lượng phòng cao nhất
+            $provinces = Rooms::select('province', DB::raw('count(*) as room_count'))
+                              ->groupBy('province')
+                              ->orderByDesc('room_count')
+                              ->limit(3)
+                              ->get();
+
+            $allProvinceData = [];
+
+            foreach ($provinces as $province) {
+                // Gọi API để lấy thông tin tỉnh
+                $vietMapProvider = app(VietMapProviders::class);
+                $response = $vietMapProvider->getProvinceData($province->province);
+
+                // Giải mã JSON trả về
+                $provinceData = json_decode($response->getContent(), true);
+
+                // Kiểm tra và thêm dữ liệu vào mảng kết quả
+                if (is_array($provinceData)) {
+                    $allProvinceData[] = $provinceData;
+                }
+            }
+
+            // Truyền dữ liệu vào view
+            $view->with('allProvinceData', $allProvinceData);
         });
         //Bộ lọc
         View::composer('fe.fitler_price', function ($view) {
@@ -103,6 +163,21 @@ class AppServiceProvider extends ServiceProvider
 
             // Lấy dữ liệu và truyền vào view
             $view->with('rooms', $rooms,);
+        });
+        View::composer('fe.inc.over_view', function ($view) {
+            // Đếm tất cả người dùng
+            $getAllUser = User::count();
+            $getAllRooms= Rooms::count();
+            $getMotel = Motel::count();
+            $getUserMotel = UserRequest::count();
+
+            // Truyền biến vào view
+            $view->with([
+                'getAllUser' => $getAllUser,
+                'getAllRooms' => $getAllRooms,
+                'getMotel' => $getMotel,
+                'getUserMotel' => $getUserMotel,
+            ]);
         });
     }
 

@@ -12,7 +12,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+    <link rel="icon" href=
+        "{{asset('uploads/logoCodeCrib.png')}}"
+          type="image/x-icon" />
     <script src="{{asset('style/js/fe.js')}}"></script>
 </head>
 <body>

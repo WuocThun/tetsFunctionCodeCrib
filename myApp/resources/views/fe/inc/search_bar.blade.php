@@ -9,7 +9,6 @@
                 <option value="{{ $cl->id }}" data-name="{{ $cl->title }}">{{ $cl->title }}</option>
             @endforeach
         </select>
-
         <select name="province" id="province-select">
             <option></option>
 

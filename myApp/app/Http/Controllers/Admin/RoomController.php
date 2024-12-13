@@ -195,6 +195,30 @@ public function report()
     public function myRooms()
     {
 
+        $provincesIds = Rooms::select('province',
+            DB::raw('count(*) as room_count'))
+                             ->groupBy('province')  // Group by tỉnh thành
+                             ->orderByDesc('room_count')  // Sắp xếp theo số lượng phòng giảm dần
+                             ->limit(3)  // Lấy 3 tỉnh thành có số phòng cao nhất
+                             ->get();
+        foreach ($provincesIds as $provinceId) {
+            // Gọi API để lấy thông tin tỉnh
+            $vietMapProvider = app(VietMapProviders::class);
+            $getProvince = $vietMapProvider->getProvinceData($provinceId->province);
+            // Giải mã JSON trả về
+            $provinceData = json_decode($getProvince->getContent(), true);
+
+            // Kiểm tra nếu dữ liệu trả về là mảng, nếu không thì tạo thành mảng
+            if (is_array($provinceData)) {
+                $allProvinceData[] = $provinceData; // Thêm vào mảng kết quả
+            } else {
+                $allProvinceData[]
+                    = [$provinceData]; // Đảm bảo dữ liệu luôn là mảng
+            }
+        }
+
+        var_dump($provinceData['province_name']);
+
         $currentVIPPackageId = $room->vip_package_id ?? 0;
         $vipPackages = VIPPackage::where('id', '>', $currentVIPPackageId)->get();
         $user_id = auth()->id();
@@ -271,6 +295,7 @@ public function report()
 
     public function getPendingRooms()
     {
+
         $room = Rooms::where('status', '=', '0')->get();
 
         return view('admin.content.rooms.pending_rooms', compact('room'));

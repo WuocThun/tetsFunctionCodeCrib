@@ -118,6 +118,8 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [BlogsController::class, 'get_pending_blogs'])
                   ->name('get_pending_blogs')
                   ->middleware('permission:manager blogs');
+             Route::get('/blog-statistics', [BlogsController::class, 'report'])->name('blog.statistics');
+
              Route::PUT('blogs/accept_blog/{id}',
                  [BlogsController::class, 'accept_blog'])
                   ->name('blogs.accept_blog')

@@ -41,7 +41,7 @@
         <ul>
                 @foreach($randomBlogs as $blogs)
             <li>
-                <a href="{{route('getRoom',$blogs->slug)}}">
+                <a href="{{route('getBlog',$blogs->slug)}}">
                     <img src=" {{asset('uploads/fe/img/room1.jpg')}} " alt="Phòng trọ mới" />
                     <div>
                         <span class="post-meta">{{ \Illuminate\Support\Str::limit($blogs->title, 15, '...') }}</span>

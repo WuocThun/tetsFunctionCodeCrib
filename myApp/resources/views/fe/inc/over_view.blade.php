@@ -5,20 +5,20 @@
 
         <div class="stats">
             <div class="stat-item">
-                <h3>116.998+</h3>
+                <h3>{{$getAllUser ?? '0'}}+</h3>
                 <p>Thành viên</p>
             </div>
             <div class="stat-item">
-                <h3>103.348+</h3>
-                <p>Tin đăng</p>
+                <h3>{{$getAllRooms ?? '0'}}+</h3>
+                <p>Tin đăng cho thuê trọ</p>
             </div>
             <div class="stat-item">
-                <h3>300.000+</h3>
-                <p>Lượt truy cập/tháng</p>
+                <h3>{{$getMotel ?? '0'}}+</h3>
+                <p>Phòng trọ cần người đăng ký</p>
             </div>
             <div class="stat-item">
-                <h3>2.500.000+</h3>
-                <p>Lượt xem/tháng</p>
+                <h3>{{$getUserMotel ??'0'}}+</h3>
+                <p>Các phòng tìm kiếm người ở ghép</p>
             </div>
         </div>
     </div>
